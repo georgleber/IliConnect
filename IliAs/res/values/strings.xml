@@ -1,0 +1,28 @@
+<resources>
+
+    <string name="app_name">IliConnect</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">IliConnect</string>
+    <string name="passwort_label">"Passwort: "</string>
+    <string name="Email_label">"Email: "</string>
+    <string name="login_button">Login</string>
+    <string name="passwort_hint">******</string>
+    <string name="email_pre">userid</string>
+    <string name="desc_logoright">FH-Aachen Logo</string>
+	<string name="desc_head">Ilias Logo</string>
+	<string name="logout">Logout</string>
+	<string name="magazin">Magazin</string>
+	<string name="uebersicht">Übersicht</string>
+	<string name="account_logout">Logout</string>
+	<string name="QR_Code">Scan QR Code</string>
+	<string name="todo_liste">Todo Liste</string>
+	<string name="Date">Montag 17.12.2012 Praktikum Fassbender</string>
+	<string name="desc_seminar">Beschreibung:</string>
+	<string name="desc_long">Dies ist ein Testseminar. Hier würde ihr Text stehen der das Seminar beschreibt.</string>
+	<string name="search_string">Kursname oder Dozent</string>
+	<string name="termine_string">Termine:</string>
+	<string name="geaendertedateien_string">Geänderte Dateien:</string>
+	<string name="qr_string">QR Scanner:</string>
+	<string name="datum_praktikum">24.12.2012 Praktikum SWE</string>
+</resources>

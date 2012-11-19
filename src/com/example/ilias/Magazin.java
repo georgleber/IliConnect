@@ -18,7 +18,7 @@ import com.example.ilias.R;
 
 
 public class Magazin extends Fragment {
-	
+	// test for git
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (container == null) {

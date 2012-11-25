@@ -56,8 +56,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, MainTabView.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        // Build notification
-        // Actions are just fake
+        // Build notification        
         Notification noti = new Notification.Builder(this)
             .setContentTitle("Kritisch")
             .setContentText("Termin SWE Praktikum läuft am 23.11.2012 ab").setSmallIcon(android.R.drawable.ic_dialog_alert)
@@ -65,7 +64,7 @@ public class MainActivity extends Activity {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         // Hide the notification after its selected
         noti.flags |= Notification.FLAG_AUTO_CANCEL;
-
+        
         notificationManager.notify(0, noti);
 	        
         
@@ -73,23 +72,23 @@ public class MainActivity extends Activity {
 }
     private void showAlertMessage(){
     	AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-    	alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-    	alertDialog.setTitle("Kursanmeldung!");
-    	alertDialog.setMessage("Wollen Sie sich zu dem Kurs: SWE anmelden?");
-    	alertDialog.setPositiveButton("Anmelden", new DialogInterface.OnClickListener() {
+    	alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+    	alertDialog.setTitle("QR Code nicht erkannt!");
+    	alertDialog.setMessage("Der eingescannte QR-Code ist ungültig.");
+    	alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "Anmeldung", Toast.LENGTH_LONG).show();
 			}
 		});
-    	alertDialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-			
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "abbruch", Toast.LENGTH_LONG).show();
-			}
-		});
+//    	alertDialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+//			
+//			public void onClick(DialogInterface dialog, int which) {
+//				// TODO Auto-generated method stub
+//				Toast.makeText(getApplicationContext(), "abbruch", Toast.LENGTH_LONG).show();
+//			}
+//		});
     	AlertDialog alertDialog1= alertDialog.create();
     	alertDialog1.show();
     }  

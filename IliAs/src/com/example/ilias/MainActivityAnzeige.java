@@ -5,6 +5,8 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,14 +30,15 @@ public class MainActivityAnzeige extends FragmentActivity  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);        
-        setContentView(R.layout.auswahlseminar);
-
+        setContentView(R.layout.auswahlseminar);        
        Intent intent = getIntent();
 
        ((TextView)(findViewById(R.id.auswahl))).setText(intent.getStringExtra("selected")+ " gewählt!");
        
+
+       final String Kurs=intent.getStringExtra("selected");
        List<String> valueList = new ArrayList<String>();		
-		valueList.add("Aufgabe 1.pdf");
+		valueList.add("Aufgabe 1.pdf "+"\"Inhalt geändert\"");
 		valueList.add("Aufgabe 2.pdf");
 		valueList.add("Aufgabe 3.pdf");
 			
@@ -51,10 +54,42 @@ public class MainActivityAnzeige extends FragmentActivity  {
 		    Toast.LENGTH_LONG).show();
 		}
 		});
+		
+		Button signout = (Button) findViewById(R.id.kurs_abmeldung);
+        signout.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				showSignoutMessage(Kurs);
+				
+				
+			}
+		});
 	  
         
         
 }
+    private void showSignoutMessage(String Kurs){
+    	AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+    	alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+    	alertDialog.setTitle("Abmeldung!");
+    	alertDialog.setMessage("Wollen Sie sich wirklich vom Kurs \""+ Kurs +"\" abmelden");
+    	alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "Anmeldung", Toast.LENGTH_LONG).show();
+			}
+		});
+    	alertDialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "abbruch", Toast.LENGTH_LONG).show();
+			}
+		});
+    	AlertDialog alertDialog1= alertDialog.create();
+    	alertDialog1.show();
+    }  
 
     //@Override
     //public boolean onCreateOptionsMenu(Menu menu) {

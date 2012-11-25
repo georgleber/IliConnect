@@ -69,7 +69,7 @@ public class Schreibtisch extends ListFragment  {
 		List<String> valueList = new ArrayList<String>();		
 		valueList.add("Software Engineering");
 		valueList.add("Bildverarbeitung");
-		valueList.add("Wissenschaftliches Arbeiten");
+		valueList.add("Wissenschaftliches Arbeiten "+"\"Inhalt geändert\"");
 			
 	  ListAdapter myListAdapter = new ArrayAdapter<String>( getActivity(), android.R.layout.simple_list_item_1, valueList);
 	  setListAdapter(myListAdapter);

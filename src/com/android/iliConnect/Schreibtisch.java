@@ -1,4 +1,4 @@
-package com.example.ilias;
+package com.android.iliConnect;
 
 import java.util.ArrayList;
 import java.util.List;

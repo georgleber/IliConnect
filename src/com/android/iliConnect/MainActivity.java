@@ -1,13 +1,15 @@
-package com.example.ilias;
+package com.android.iliConnect;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Authentification;
+import com.android.iliConnect.dataproviders.DataDownloadThread;
+import com.android.iliConnect.dataproviders.LocalDataProvider;
+import com.android.iliConnect.dataproviders.RemoteDataProvider;
+import com.android.iliConnect.models.Authentification;
+import com.example.ilias.R;
 
-import dataproviders.DataDownloadThread;
-import dataproviders.LocalDataProvider;
-import dataproviders.RemoteDataProvider;
+
 import android.widget.AdapterView.OnItemClickListener;
 import android.os.Bundle;
 import android.annotation.SuppressLint;

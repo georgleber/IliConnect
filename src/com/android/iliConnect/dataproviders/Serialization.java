@@ -1,4 +1,4 @@
-package dataproviders;
+package com.android.iliConnect.dataproviders;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import models.ClassAlias;
-import models.Settings;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,6 +28,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+
+import com.android.iliConnect.models.ClassAlias;
+import com.android.iliConnect.models.Settings;
 
 import android.util.Base64;
 import android.util.Xml;

@@ -1,4 +1,6 @@
-package com.example.ilias;
+package com.android.iliConnect;
+
+import com.example.ilias.R;
 
 import android.app.Activity;
 import android.os.Bundle;

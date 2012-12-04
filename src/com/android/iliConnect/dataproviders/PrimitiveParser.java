@@ -1,4 +1,4 @@
-package dataproviders;
+package com.android.iliConnect.dataproviders;
 public class PrimitiveParser {
 
 	/**

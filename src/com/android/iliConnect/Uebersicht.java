@@ -1,16 +1,22 @@
-package com.example.ilias;
+package com.android.iliConnect;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.example.ilias.R;
 
 
-public class QR extends Fragment {
+public class Uebersicht extends Fragment {
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -24,6 +30,7 @@ public class QR extends Fragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-		return (LinearLayout)inflater.inflate(R.layout.qr_layout, container, false);
+		return (LinearLayout)inflater.inflate(R.layout.uebersicht_layout, container, false);
 	}
+
 }

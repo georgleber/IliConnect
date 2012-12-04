@@ -1,7 +1,9 @@
-package com.example.ilias;
+package com.android.iliConnect;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.ilias.R;
 
 import android.os.Bundle;
 import android.app.Activity;

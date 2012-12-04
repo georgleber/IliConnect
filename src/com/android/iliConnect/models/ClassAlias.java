@@ -1,4 +1,4 @@
-package models;
+package com.android.iliConnect.models;
 
 public class ClassAlias {
 

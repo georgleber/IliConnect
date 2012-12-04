@@ -1,4 +1,4 @@
-package com.example.ilias;
+package com.android.iliConnect;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import com.example.ilias.R;
 
 
-public class Termine extends Fragment {
+public class QR extends Fragment {
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -24,6 +24,6 @@ public class Termine extends Fragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-		return (LinearLayout)inflater.inflate(R.layout.termine_layout, container, false);
+		return (LinearLayout)inflater.inflate(R.layout.qr_layout, container, false);
 	}
 }

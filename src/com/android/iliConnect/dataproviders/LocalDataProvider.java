@@ -1,4 +1,4 @@
-package dataproviders;
+package com.android.iliConnect.dataproviders;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,17 +9,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import com.example.ilias.MainActivity;
+import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.models.Authentification;
+import com.android.iliConnect.models.ClassAlias;
+import com.android.iliConnect.models.Desktop;
+import com.android.iliConnect.models.DesktopItem;
+import com.android.iliConnect.models.Notifications;
+import com.android.iliConnect.models.Settings;
 
 import android.app.Notification;
 import android.provider.MediaStore.Files;
 import android.widget.Toast;
-import models.Authentification;
-import models.ClassAlias;
-import models.Desktop;
-import models.DesktopItem;
-import models.Notifications;
-import models.Settings;
 
 public class LocalDataProvider {
 

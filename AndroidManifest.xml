@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
        <activity android:label="@string/app_name" android:name=".MainTabView" />
-    <activity android:label="@string/app_name" android:name=".MainActivityAnzeige" /> 
+    <activity android:label="@string/app_name" android:name="com.android.iliConnect.MainActivityAnzeige" /> 
     </application>
 
 

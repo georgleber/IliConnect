@@ -1,4 +1,4 @@
-package com.example.ilias;
+package com.android.iliConnect;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +18,8 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
+import com.android.iliConnect.PagerAdapter;
 import com.example.ilias.R;
-import com.example.ilias.PagerAdapter;
 import com.example.ilias.R.color;
 
 /*

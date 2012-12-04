@@ -1,4 +1,4 @@
-package dataproviders;
+package com.android.iliConnect.dataproviders;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.example.ilias.MainActivity;
+import com.android.iliConnect.MainActivity;
 
 import android.app.Service;
 import android.content.Context;

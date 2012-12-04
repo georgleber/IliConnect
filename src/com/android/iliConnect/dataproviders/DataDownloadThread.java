@@ -1,9 +1,9 @@
-package dataproviders;
+package com.android.iliConnect.dataproviders;
 
-import com.example.ilias.MainActivity;
+import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.models.Authentification;
 
 import android.app.ProgressDialog;
-import models.Authentification;
 
 public class DataDownloadThread extends Thread {
 

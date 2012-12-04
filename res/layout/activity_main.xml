@@ -12,14 +12,12 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical" >
 
-        
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/desc_head"
-                android:src="@drawable/headericon" />
-       
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_head"
+            android:src="@drawable/headericon" />
     </LinearLayout>
 
     <Button
@@ -37,8 +35,13 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/linearLayout1"
         android:contentDescription="@string/desc_logoright"
-        android:src="@drawable/fh_logo_rechts" />
-
+        android:src="@drawable/fh_logo_rechts"/>
+
+
+
+
+
+
     <EditText
         android:id="@+id/editText1"
         android:layout_width="wrap_content"
@@ -53,6 +56,7 @@
         <requestFocus />
     </EditText>
 
+
     <EditText
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
@@ -61,7 +65,9 @@
         android:layout_below="@+id/editText1"
         android:ems="10"
         android:hint="@string/passwort_hint"
-        android:inputType="textPassword" />
+        android:inputType="textPassword" >
+
+    </EditText>
 
     <TextView
         android:id="@+id/textView2"
@@ -81,6 +87,36 @@
         android:layout_alignBottom="@+id/editText1"
         android:layout_alignRight="@+id/textView2"
         android:text="@string/Email_label"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/testmessagebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/Testmessage" />
+
+
+    <EditText
+        android:id="@+id/urlText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/editText2"
+        android:ems="10"
+        android:hint="@string/urlHint"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/urlText"
+        android:layout_alignBottom="@+id/urlText"
+        android:layout_alignRight="@+id/textView2"
+        android:text="@string/stringurl"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

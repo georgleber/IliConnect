@@ -1,13 +1,16 @@
 package com.example.ilias;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.ilias.R;
+import com.google.zxing.Result;
 
 
 public class QR extends Fragment {
@@ -26,4 +29,8 @@ public class QR extends Fragment {
         }
 		return (LinearLayout)inflater.inflate(R.layout.qr_layout, container, false);
 	}
+	public void handleDecode(Result rawResult, Bitmap barcode)
+    {
+       Toast.makeText(this.getActivity(), "Scanned code "+ rawResult.getText(), Toast.LENGTH_LONG);
+    }
 }

@@ -148,17 +148,23 @@ function desktopItem2Xml($array,$sxml,$notifications){
     $item->addChild("description",$array[description]);
     $item->addChild("type",$array[type]);
     $item->addChild("ref_id",$array[ref_id]);
+
     if($array[type] == "exc")
     {
       $factory=new ilObjectFactory();
       $exc=$factory->getInstanceByRefId($array[ref_id]);
       require_once('Modules/Exercise/classes/class.ilExAssignment.php');
       $assarray = new ilExAssignment($exc);
+      
+      #print_r($exc);
+      #print_r($assarray);      
 
       $notify = $notifications->addChild("Notification");
       $notify->addChild("title",$assarray->getTitle());
       $notify->addChild("date",$assarray->getDeadline());
-      $notify->addChild("ref_id",$assarray->getId());
+      $notify->addChild("ref_id",$array[ref_id]);
+      $notify->addChild("description",$array["description"]);#assarray->getId());
+      $assarray = 0;
     }
     
     global $tree;

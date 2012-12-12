@@ -15,7 +15,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
-import com.android.iliConnect.R;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.ClassAlias;
 import com.android.iliConnect.models.Desktop;

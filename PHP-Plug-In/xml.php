@@ -1,10 +1,9 @@
 <?php
 
+## Die POST Variablen muessen gesetzt sein, damit die ilAuthFactory Klasse die Authentifizierung gegen ILIAS macht.
+## Zum debuggen im Browser, habe ich diese beiden Zeilen hinzugefuegt.
 $_POST['username'] = $_REQUEST['user'];
 $_POST['password'] = $_REQUEST['pass'];
-
-#if(!empty($_GET['client_id'])) $client_id = $_GET['client_id'];
-#if(!empty($_GET['client_id'])) $_COOKIE["ilClientId"] = $_GET['client_id'];
 
 include_once 'Services/Authentication/classes/class.ilAuthFactory.php';
 ilAuthFactory::setContext(ilAuthFactory::CONTEXT_SOAP);
@@ -13,16 +12,24 @@ require_once("Services/Init/classes/class.ilInitialisation.php");
 $ilInit = new ilInitialisation();
 $ilInit->initILIAS('webdav');
 
+## Header auf XML stellen
 header ("Content-Type:text/xml");  
 $login=$ilUser->getLogin();
 
-# MAIN XML TAG
+## MAIN XML TAG (auch XML Root genannt)
 $xml = new SimpleXMLElement("<Iliconnect/>");
-# CURRENT
+
+## XML ILICONNECT CURRENT
 $current = $xml->addChild("Current");
+
+## XML ILICONNECT CURRENT NOTIFICATIONS
 $notifications = $current->addChild("Notifications");
+
+## XML ILICONNECT CURRENT DESKTOP
 $desktop = $current->addChild("Desktop");
 
+################################################################
+## TEST STUFF (eMails, etc)
 /*
 $mails = $xml->addChild("mails");
 $news  = $xml->addChild("news");
@@ -62,19 +69,22 @@ foreach($newsitems as $newsitem) {
 }
 */
 
+##
+################################################################
 
 
-
-#desktopItem2Xml($ilUser->getDesktopItems(),$desktop);
 
 ## PERSOENLICHER SCHREIBTISCH AUSGEBEN
 $desktop_items= $ilUser->getDesktopItems();
+# Tree ist eine ILIAS eigene Variable
 global $tree;
 
 
 ## KOMPLETTES MAGAZIN AUSGEBEN
 #$desktop_items= $tree->getChilds(1);
 
+
+## In $desktop_items sind nun ILIAS Objekte.
 foreach($desktop_items as $item) {
   desktopItem2Xml($item,$desktop,$notifications);
 }
@@ -118,6 +128,7 @@ require_once('Modules/Exercise/classes/class.ilExAssignment.php');
 #$notify->addChild("ref_id",$assarray->getId());
 
 
+## AUSGABE DER XML STRUKTUR
 echo $xml->asXML();
 
 #global $lng, $ilUser;

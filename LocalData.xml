@@ -42,7 +42,7 @@
 			<autologin>true</autologin>
 			<user_id>root</user_id>
 			<password>homer</password>
-			<url_src>https://www.recruitment-specialist.de/xml/RemoteData.xml/</url_src>
+			<url_src>https://www.recruitment-specialist.de/xml/RemoteData.xml</url_src>
 		</Authentification>
 		<Settings>
 			<sync>true/false</sync>

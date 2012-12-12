@@ -1,7 +1,6 @@
 package com.android.iliConnect.dataproviders;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -9,33 +8,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import com.android.iliConnect.models.ClassAlias;
-import com.android.iliConnect.models.Settings;
-
-import android.util.Base64;
-import android.util.Xml;
-
-import android.widget.Toast;
 
 public class Serialization {
 
@@ -52,12 +33,9 @@ public class Serialization {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object deserialize(String in, List<ClassAlias> classAliases, String rootNodeName, boolean isArray) throws Exception {
-		return deserialize(new ByteArrayInputStream(in.getBytes(encoding)), classAliases, rootNodeName, isArray);
-	}
-
+	
 	public Object deserialize(String in, List<ClassAlias> classAliases, String rootNodeName) throws Exception {
-		return deserialize(new ByteArrayInputStream(in.getBytes(encoding)), classAliases, rootNodeName, false);
+		return deserialize(new ByteArrayInputStream(in.getBytes(encoding)), classAliases, rootNodeName);
 	}
 
 	/**
@@ -70,26 +48,23 @@ public class Serialization {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object deserialize(InputStream in, List<ClassAlias> classAliases, String rootNodeName) throws Exception {
-		return deserialize(in, classAliases, rootNodeName, false);
-	}
 
-	public Object deserialize(InputStream in, List<ClassAlias> classAliases, String rootNodeName, boolean isArray) throws Exception {
+	public Object deserialize(InputStream in, List<ClassAlias> classAliases, String rootNodeName) throws Exception {
 		// XML-Dokument parsen
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(in);
+		String rootNode = rootNodeName.split("\\.")[rootNodeName.split("\\.").length - 1];
+		NodeList nodes = doc.getElementsByTagName(rootNode);
 
-		NodeList nodes = doc.getElementsByTagName(rootNodeName);
-
-		Class mClass = Class.forName("models." + rootNodeName);
+		Class mClass = Class.forName(rootNodeName);
 		Object targetObj = mClass.newInstance();
 		// Das zu liefernde Objekt (dem Root-Knoten zugeordnet) generieren.
 		// Node rootNode = doc.getFirstChild();
 
 		for (int i = 0; i < nodes.getLength(); i++) {
 			// Unterknoten deserialisieren
-			if (isArray)
+			if (((PersistableObject)targetObj).arrayModel)
 				fillField(targetObj, nodes.item(i));
 			else {
 				NodeList children = nodes.item(i).getChildNodes();
@@ -112,17 +87,15 @@ public class Serialization {
 		try {
 
 			String fieldName = node.getNodeName();
-			if (fieldName.equalsIgnoreCase("#text") && ( !fieldName.equalsIgnoreCase("java.util.List") || fieldName.equalsIgnoreCase("java.util.List")))
+			if (fieldName.equalsIgnoreCase("#text") && (!fieldName.equalsIgnoreCase("java.util.List") || fieldName.equalsIgnoreCase("java.util.List")))
 				return;
-			
+
 			node.normalize(); // 20111216 RHSS: muss auf jeden Fall drin bleiben, da sonst < und > in Texten falsch interpretiert werden
-			
+
 			Class<?> targetObjClass = targetObj.getClass();
 			Field fieldInfo = targetObjClass.getField(fieldName);
 			Class<?> fieldClass = fieldInfo.getType();
 			String fieldClassName = fieldClass.getName();
-
-		
 
 			// fieldValue repräsentiert den Wert der Node, sofern es sich um eine Node eines einfachen Typs mit nur einem Wert handelt.
 			String fieldValue = "";
@@ -203,7 +176,7 @@ public class Serialization {
 				} else if (fieldClassName.equalsIgnoreCase("java.util.Date")) {
 					Date fieldObject = new Date(0);
 
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");// 2011-07-04T12:33:07
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 2011-07-04T12:33:07
 					try {
 						fieldObject = format.parse(fieldValue);
 					} catch (Exception ex) {

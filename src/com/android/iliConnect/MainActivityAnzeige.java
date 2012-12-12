@@ -3,8 +3,6 @@ package com.android.iliConnect;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.ilias.R;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,7 +25,7 @@ import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 
-public class MainActivityAnzeige extends FragmentActivity  {
+public class MainActivityAnzeige extends FragmentActivity implements Updatetable {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,5 +107,9 @@ public class MainActivityAnzeige extends FragmentActivity  {
         }
         return super.onOptionsItemSelected(item);
     }
+	public void updateViews() {
+		
+		
+	}
 
 }

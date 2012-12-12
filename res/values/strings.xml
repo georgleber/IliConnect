@@ -69,5 +69,7 @@
         <string name="testpraktikum3">Bildverarbeitung Praktikum</string>
         <string name="kurs_abmeldung">Abmelden</string>
         <string name="test_file">Aufgabe 1.pdf</string>
+        <string name="server_default_url">http://www.swek3mp.de/ilias/xml.php?user=root&amp;pass=homer</string>
+        
   
 </resources>

@@ -1,6 +1,7 @@
 package com.android.iliConnect.models;
 
 import java.util.Date;
+import java.util.List;
 
 public class Item {
 	public String title;
@@ -8,5 +9,6 @@ public class Item {
 	public String type;
 	public String ref_id;
 	public Date timestamp;
+	public List<Item> Item;
 	
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Iliconnect>
+	<Static>
+	    <Authentification>
+			<autologin>false</autologin>
+			<user_id>root</user_id>
+			<password>homer</password>
+			<url_src>www.recruitment-specialist.de/xml/RemoteData.xml</url_src>
+		</Authentification>
+		<Settings>
+			<sync>true</sync>
+			<interval>30</interval>
+			<sync_wlanonly>false</sync_wlanonly>
+			<num_notifications>3</num_notifications>
+			<level_warning>96</level_warning>
+			<level_critical>24</level_critical>
+		</Settings>
+	</Static>
+</Iliconnect>

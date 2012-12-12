@@ -19,8 +19,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.ilias.R;
-
 
 public class Schreibtisch extends ListFragment  {
 	

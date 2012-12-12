@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,22 +16,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
 import com.android.iliConnect.PagerAdapter;
-import com.example.ilias.R;
-import com.example.ilias.R.color;
 
 /*
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager. 
  */
 public class MainTabView extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 
+	public static MainTabView instance;
 	private TabHost mTabHost;
 	private ViewPager mViewPager;
 	private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, MainTabView.TabInfo>();
 	private PagerAdapter mPagerAdapter;
+	
 	/*
 	 *	 
 	 * Maintains extrinsic info of a tab's construct
@@ -72,6 +74,9 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	    }
 
 	}
+	public static MainTabView getInstance(){
+		return instance;
+	}
 	/*
 	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
 	 */
@@ -79,6 +84,8 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		super.onCreate(savedInstanceState);
 		// Inflate the layout
 		setContentView(R.layout.tabviewcontainer);
+		MainActivity.currentActivity = this;
+		instance = this;
 		// Initialise the TabHost
 		this.initialiseTabHost(savedInstanceState);
 		if (savedInstanceState != null) {
@@ -110,13 +117,16 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		
 		
 		this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
+		
 		//
 		this.mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
 		this.mViewPager.setAdapter(this.mPagerAdapter);
+		
 		this.mViewPager.setCurrentItem(1); //set default site "Übersicht"
+		
 		this.mViewPager.setOnPageChangeListener(this);
     }
-
+    
 	/*
 	 * Initialise the Tab Host
 	 */
@@ -160,9 +170,16 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	public void onTabChanged(String tag) {
 		//TabInfo newTab = this.mapTabInfo.get(tag);		
 		int pos = this.mTabHost.getCurrentTab();
+		update(pos);
 		this.mViewPager.setCurrentItem(pos);
+		
+		instance = this;
+		
     }
-
+	public void update(int position){
+		this.mPagerAdapter.updateFragment(position);
+		this.mViewPager.setAdapter(this.mPagerAdapter);
+	}
 	/* 
 	 * @see android.support.v4.view.ViewPager.OnPageChangeListener#onPageScrolled(int, float, int)
 	 */
@@ -207,6 +224,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	    return super.onOptionsItemSelected(item);
 	}
 	}
+	
 }
 
 

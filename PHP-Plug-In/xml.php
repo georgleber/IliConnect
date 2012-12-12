@@ -156,9 +156,9 @@ echo $xml->asXML();
 function notification2Xml($a,$nxml)
 {
   $factory=new ilObjectFactory();
-  $exc=$factory->getInstanceByRefId($array[ref_id]);
+  $exc=$factory->getInstanceByRefId($a[ref_id]);
   require_once('Modules/Exercise/classes/class.ilExAssignment.php');
-  $assarray = new ilExAssignment($exc);
+  $n = new ilExAssignment($exc);
 #print_r($n);
   $notify = $nxml->addChild("Notification");
   $notify->addChild("title",$n->getTitle());

@@ -2,8 +2,8 @@
 
 ## Die POST Variablen muessen gesetzt sein, damit die ilAuthFactory Klasse die Authentifizierung gegen ILIAS macht.
 ## Zum debuggen im Browser, habe ich diese beiden Zeilen hinzugefuegt.
-$_POST['username'] = $_REQUEST['user'];
-$_POST['password'] = $_REQUEST['pass'];
+$_POST['username'] = 'root'; #$_REQUEST['user'];
+$_POST['password'] = 'homer'; #$_REQUEST['pass'];
 
 include_once 'Services/Authentication/classes/class.ilAuthFactory.php';
 ilAuthFactory::setContext(ilAuthFactory::CONTEXT_SOAP);
@@ -27,6 +27,7 @@ $notifications = $current->addChild("Notifications");
 
 ## XML ILICONNECT CURRENT DESKTOP
 $desktop = $current->addChild("Desktop");
+
 
 ################################################################
 ## TEST STUFF (eMails, etc)
@@ -150,6 +151,25 @@ echo $xml->asXML();
 #print_r($ex_gui->read());
 
 
+## Der (un)uebersichtlichkeit halber in eine eigene funktion gepackt.
+## erzeugt einen eintrag innerhalb des NOTIFICATIONS tag
+function notification2Xml($a,$nxml)
+{
+  $factory=new ilObjectFactory();
+  $exc=$factory->getInstanceByRefId($array[ref_id]);
+  require_once('Modules/Exercise/classes/class.ilExAssignment.php');
+  $assarray = new ilExAssignment($exc);
+#print_r($n);
+  $notify = $nxml->addChild("Notification");
+  $notify->addChild("title",$n->getTitle());
+  #$notify->addChild("title",$assarray->getTitle());
+  #$notify->addChild("date",$assarray->getDeadline());
+  #$notify->addChild("ref_id",$array[ref_id]);
+  #$notify->addChild("description",$array["description"]);#assarray->getId());
+  #$assarray = 0;
+}
+
+
 ## FUNCTION FUER DIE REKURSIVE ABARBEITUNG DER CHILD ITEMS
 function desktopItem2Xml($array,$sxml,$notifications){
   if(strstr("file|fold|crs|tst|exc",$array["type"]))
@@ -162,20 +182,7 @@ function desktopItem2Xml($array,$sxml,$notifications){
 
     if($array[type] == "exc")
     {
-      $factory=new ilObjectFactory();
-      $exc=$factory->getInstanceByRefId($array[ref_id]);
-      require_once('Modules/Exercise/classes/class.ilExAssignment.php');
-      $assarray = new ilExAssignment($exc);
-      
-      #print_r($exc);
-      #print_r($assarray);      
-
-      $notify = $notifications->addChild("Notification");
-      $notify->addChild("title",$assarray->getTitle());
-      $notify->addChild("date",$assarray->getDeadline());
-      $notify->addChild("ref_id",$array[ref_id]);
-      $notify->addChild("description",$array["description"]);#assarray->getId());
-      $assarray = 0;
+      notification2Xml($array,$notifications);
     }
     
     global $tree;
@@ -190,7 +197,7 @@ function desktopItem2Xml($array,$sxml,$notifications){
   }
 }
 
-// function defination to convert array to xml
+## OLD STUFF
 function array_to_xml($student_info, &$xml_student_info) {
     foreach($student_info as $key => $value) {
         if(is_array($value)) {

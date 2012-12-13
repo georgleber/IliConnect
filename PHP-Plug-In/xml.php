@@ -12,9 +12,25 @@ require_once("Services/Init/classes/class.ilInitialisation.php");
 $ilInit = new ilInitialisation();
 $ilInit->initILIAS('webdav');
 
+
+# Stuff
+require_once('classes/class.ilObjectFactory.php');
+require_once('Modules/Exercise/classes/class.ilObjExerciseAccess.php');
+require_once('Modules/Exercise/classes/class.ilObjExerciseGUI.php');
+require_once('Modules/Exercise/classes/class.ilExAssignment.php');
+
+
 ## Header auf XML stellen
 header ("Content-Type:text/xml");  
 $login=$ilUser->getLogin();
+
+
+if(strstr($_SERVER['REQUEST_URI'],"register") > 0) {
+
+## register xy..
+
+};
+
 
 ## MAIN XML TAG (auch XML Root genannt)
 $xml = new SimpleXMLElement("<Iliconnect/>");
@@ -28,73 +44,18 @@ $notifications = $current->addChild("Notifications");
 ## XML ILICONNECT CURRENT DESKTOP
 $desktop = $current->addChild("Desktop");
 
-
-################################################################
-## TEST STUFF (eMails, etc)
-/*
-$mails = $xml->addChild("mails");
-$news  = $xml->addChild("news");
-
-include_once ("Services/Mail/classes/class.ilMailbox.php");
-include_once ("Services/Mail/classes/class.ilMail.php");
-$mailbox = new ilMailbox($ilUser->getId());
-$mailObj = new ilMail($ilUser->getId());
-
-$inboxId = $mailbox->getInboxFolder();
-$inbox = $mailObj->getMailsOfFolder($inboxId);
-foreach($inbox as $mailitem){
-  $mail = $mailObj->getMail($mailitem['mail_id']);
-  $sender = new ilObjUser($mailitem['sender_id']);
-  $sender = $sender->getFullname();
-  //Name added
-  $mail['sender_name'] = $sender;
-  
-  $mailelem = $mails->addChild('mail');
-  array_to_xml($mail,$mailelem);
-}
-// Mails are ok		
-
-
-echo $xml->asXML();
-
-#echo $xml;
-
-//die();
-include_once("Services/News/classes/class.ilNewsItem.php");
-$newsarr      = ilNewsItem::_lookupUserPDPeriod($ilUser->getId());
-$newsitems = ilNewsItem::_getNewsItemsOfUser($ilUser->getId(), false, false, $newsarr);
-
-foreach($newsitems as $newsitem) {
-  $newselem = $news->addChild('newsitem');
-  array_to_xml($newsitem,$newselem);
-}
-*/
-
-##
-################################################################
-
-
-
 ## PERSOENLICHER SCHREIBTISCH AUSGEBEN
 $desktop_items= $ilUser->getDesktopItems();
 # Tree ist eine ILIAS eigene Variable
 global $tree;
 
-
 ## KOMPLETTES MAGAZIN AUSGEBEN
 #$desktop_items= $tree->getChilds(1);
-
 
 ## In $desktop_items sind nun ILIAS Objekte.
 foreach($desktop_items as $item) {
   desktopItem2Xml($item,$desktop,$notifications);
 }
-
-## GIBT DIE XML AUS
-#echo $xml->asXML();
-
-
-#print_r($children);
 
 
 #global $ilDB;
@@ -104,11 +65,6 @@ foreach($desktop_items as $item) {
 
 #print_r($r);
 #print_r($elem);
-
-require_once('classes/class.ilObjectFactory.php');
-require_once('Modules/Exercise/classes/class.ilObjExerciseAccess.php');
-require_once('Modules/Exercise/classes/class.ilObjExerciseGUI.php');
-require_once('Modules/Exercise/classes/class.ilExAssignment.php');
 
 #$factory=new ilObjectFactory();
 #$object=$factory->getInstanceByRefId(63);
@@ -155,18 +111,29 @@ echo $xml->asXML();
 ## erzeugt einen eintrag innerhalb des NOTIFICATIONS tag
 function notification2Xml($a,$nxml)
 {
+  #print_r($a);
+  
   $factory=new ilObjectFactory();
-  $exc=$factory->getInstanceByRefId($a[ref_id]);
-  require_once('Modules/Exercise/classes/class.ilExAssignment.php');
-  $n = new ilExAssignment($exc);
-#print_r($n);
+  $obj=$factory->getInstanceByRefId(61);#$a['ref_id']);
+  
+  print_r($obj);
+  die();
+   
+  $ass = new ilExAssignment($a["ref_id"]);
+#  $ass->setExerciseId($a["ref_id"]);
+#  $ass->read();
+  
+  #print_r($ass->getDeadline());
+die();
+  $assarray = $n->getDeadline();
+  #print_r($n);
+  
+  #print_r($n);
   $notify = $nxml->addChild("Notification");
-  $notify->addChild("title",$n->getTitle());
-  #$notify->addChild("title",$assarray->getTitle());
+  $notify->addChild("title",$a["title"]);
   #$notify->addChild("date",$assarray->getDeadline());
-  #$notify->addChild("ref_id",$array[ref_id]);
-  #$notify->addChild("description",$array["description"]);#assarray->getId());
-  #$assarray = 0;
+  $notify->addChild("ref_id",$a["ref_id"]);
+  $notify->addChild("description",$a["description"]);
 }
 
 

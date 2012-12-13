@@ -109,7 +109,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
     private void intialiseViewPager() {
 
 		List<Fragment> fragments = new Vector<Fragment>();
-		//fragments.add(Fragment.instantiate(this, Suche.class.getName()));		
+		fragments.add(Fragment.instantiate(this, Suche.class.getName()));		
 		fragments.add(Fragment.instantiate(this, QR.class.getName()));
 		fragments.add(Fragment.instantiate(this, Uebersicht.class.getName()));
 		fragments.add(Fragment.instantiate(this, Schreibtisch.class.getName()));
@@ -122,7 +122,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
 		this.mViewPager.setAdapter(this.mPagerAdapter);
 		
-		this.mViewPager.setCurrentItem(1); //set default site "Übersicht"
+		this.mViewPager.setCurrentItem(2); //set default site "Übersicht"
 		
 		this.mViewPager.setOnPageChangeListener(this);
     }
@@ -135,8 +135,8 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
         mTabHost.setup();
         TabInfo tabInfo = null;             
         // to insert Picture: setIndicator(name, getResources().getDrawable(R.drawable.qr_code_defaul)) ....
-        //MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Suche"), ( tabInfo = new TabInfo("Tab1", Suche.class, args)));
-        //this.mapTabInfo.put(tabInfo.tag, tabInfo);  
+        MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Suche"), ( tabInfo = new TabInfo("Tab1", Suche.class, args)));
+        this.mapTabInfo.put(tabInfo.tag, tabInfo);  
         MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("QR"), ( tabInfo = new TabInfo("Tab2", QR.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);  
         MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Übersicht"), ( tabInfo = new TabInfo("Tab3", Uebersicht.class, args)));
@@ -146,7 +146,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
         MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab5").setIndicator("Termine"), ( tabInfo = new TabInfo("Tab5", Termine.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         
-        mTabHost.setCurrentTab(1);//set default tab "Übersicht"
+        mTabHost.setCurrentTab(2);//set default tab "Übersicht"
        for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++){
        //     mTabHost.getTabWidget().getChildAt(i).setPadding(10,10,10,10);        
         mTabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 60;

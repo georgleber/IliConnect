@@ -3,6 +3,5 @@ INDEX VERSION 1.126+E:\Google Drive\FH-Aachen\SWE Projekt\IliConnect\.metadata\.
 3679991782.index
 3352491446.index
 3743239982.index
-677446840.index
 52108211.index
 1752912051.index

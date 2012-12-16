@@ -1,6 +1,6 @@
 package com.android.iliConnect.models;
 
-public class CourseDto {
+public class CourseData {
 
 	// Beinhaltet die Action, die im Plugin ausgeführt werden soll. 
 	// join für Kursanmelden und leave für Abmelden
@@ -17,7 +17,7 @@ public class CourseDto {
 	String coursePw;
 	
 	
-	public CourseDto(String action, String userId, String password, String urlSrc, String courseId, String coursePw) {
+	public CourseData(String action, String userId, String password, String urlSrc, String courseId, String coursePw) {
 		super();
 		this.action = action;
 		this.userId = userId;

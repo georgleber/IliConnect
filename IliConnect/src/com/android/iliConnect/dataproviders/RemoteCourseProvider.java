@@ -15,22 +15,21 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import com.android.iliConnect.models.CourseDto;
+import com.android.iliConnect.models.CourseData;
 
 
 import android.os.AsyncTask;
 
-public class RemoteCourseProvider extends AsyncTask<CourseDto, Integer, String> {
+public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String> {
 	
 	// Pfad zum An/Abmelde Plugin
 	private final String pluginPath = "IliConnect.Courses.php";
-	private LocalCourseProvider prov = new LocalCourseProvider();
 	
 	@Override
-	protected String doInBackground(CourseDto... crs)  { 		
+	protected String doInBackground(CourseData... crs)  { 		
 
 		// nur ersten Kurs verarbeiten
-		CourseDto course = crs[0];
+		CourseData course = crs[0];
 		
 		// Creating HTTP client
 		HttpClient httpClient = new DefaultHttpClient();
@@ -50,8 +49,7 @@ public class RemoteCourseProvider extends AsyncTask<CourseDto, Integer, String> 
 	    List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 		nameValuePair.add(new BasicNameValuePair("username", course.getUserId()));
 		nameValuePair.add(new BasicNameValuePair("password", course.getPassword()));
-			
-		
+					
 		try {
 			// Url Encoding the POST parameters
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
@@ -63,19 +61,19 @@ public class RemoteCourseProvider extends AsyncTask<CourseDto, Integer, String> 
 
 		String responseMessage = null;
 		try {
-			// Http Request ausführen
+			// Http-Request ausführen
 			HttpResponse response = httpClient.execute(httpPost);
 			
 			// Anwortnachricht aus Response auslesen
 			responseMessage = this.getResponseMessage(response);
-
+			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 			
-		// return String schreibt das Ergebnis in result von postExecute
+		// Mit return wird das Ergebnis im result bereitgestellt 
 		return responseMessage;
 	}
 	

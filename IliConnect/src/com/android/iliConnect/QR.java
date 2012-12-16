@@ -1,13 +1,21 @@
 package com.android.iliConnect;
 
+import com.android.iliConnect.dataproviders.CoursePasswordException;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
+import com.android.iliConnect.dataproviders.JoinCourseException;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
+import com.android.iliConnect.dataproviders.LocalCourseProvider;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -22,6 +30,9 @@ import android.widget.Toast;
 
 public class QR extends Fragment {
 	
+
+	public static LocalCourseProvider local = new LocalCourseProvider();
+
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -55,11 +66,21 @@ public class QR extends Fragment {
 		        	//Launch
 		        	startActivityForResult(intent, REQUEST_SCAN);
 		        	
-		        			           
+		        	try {
+						local.joinCourse("49", "4711");
+						//loacl.leaveCourse("49");
+					} catch (JoinCourseException e) {
+						// Wenn Exception auftritt, Fehlermeldung mit errorMessage anzeigen.
+						System.out.println(e.getMessage());
+
+					} catch (CoursePasswordException e) {
+						// Wenn Exception auftritt, Fehlermeldung mit errorMessage anzeigen.
+						System.out.println(e.getMessage());
+					}	
+		        	
 		        }
 		    });
 
-		  
 		    return mLinearLayout;
 		
 		
@@ -71,11 +92,12 @@ public class QR extends Fragment {
 	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
 	            // Handle successful scan
+	            
+	            // Zunächst Messagebox anzeigen, ob wirkloch beitreten will 
 	        } else if (resultCode == 0) {
 	            // Handle cancel
 	        }
 	    }
 	}
-	
-	
+			
 }

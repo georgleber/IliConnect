@@ -1,9 +1,6 @@
 <?php
 
-## Die POST Variablen muessen gesetzt sein, damit die ilAuthFactory Klasse die Authentifizierung gegen ILIAS macht.
-## Zum debuggen im Browser, habe ich diese beiden Zeilen hinzugefuegt.
-$_POST['username'] = 'lukas'; #$_REQUEST['user'];
-$_POST['password'] = 'foobar'; #$_REQUEST['pass'];
+# $_POST['username'], $_POST['password'] used for authentication
 
 include_once 'Services/Authentication/classes/class.ilAuthFactory.php';
 ilAuthFactory::setContext(ilAuthFactory::CONTEXT_SOAP);

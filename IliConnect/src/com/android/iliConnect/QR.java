@@ -23,8 +23,6 @@ import android.widget.Toast;
 public class QR extends Fragment {
 	
 
-	private int RESULT_OK;
-	private int RESULT_CANCELED;
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (container == null) {
@@ -68,12 +66,12 @@ public class QR extends Fragment {
 	}
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	    if (requestCode == 0) {
-	        if (resultCode == RESULT_OK) {
+	        if (resultCode != 0) {
 	            String contents = intent.getStringExtra("SCAN_RESULT");
 	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
 	            // Handle successful scan
-	        } else if (resultCode == RESULT_CANCELED) {
+	        } else if (resultCode == 0) {
 	            // Handle cancel
 	        }
 	    }

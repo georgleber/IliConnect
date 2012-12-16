@@ -4,12 +4,12 @@ import java.util.concurrent.ExecutionException;
 
 import android.database.CursorJoiner.Result;
 
-import com.android.iliConnect.models.CourseDto;
+import com.android.iliConnect.models.CourseData;
 
 public class LocalCourseProvider {
 	
 	// Speichert Daten, die für An-/Abmeldung von Kursen benötigt werden.
-	private CourseDto course = null;
+	private CourseData course = null;
 
 	private RemoteCourseProvider prov = new RemoteCourseProvider();
 	
@@ -18,25 +18,14 @@ public class LocalCourseProvider {
 	private String url_src = "http://swe.k3mp.de/ilias/";
 	
 	public void joinCourse(String ref_id, String pw) {
-		course = new CourseDto("join", this.user_id, this.password, this.url_src, ref_id, pw);
+		course = new CourseData("join", this.user_id, this.password, this.url_src, ref_id, pw);
 		
 		// Kursbeitritt im Hintergrund durchführen
-		prov.execute(course);
-		
-		try {
-			String result = prov.get();
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		prov.execute(course);	
 	}
 	
 	public void leaveCourse(String ref_id) {
-		course = new CourseDto("leave", this.user_id, this.password, this.url_src, ref_id, null);
+		course = new CourseData("leave", this.user_id, this.password, this.url_src, ref_id, null);
 		// Abmeldung im Hintergrund durchführen
 		prov.execute(course);
 	}
@@ -45,10 +34,5 @@ public class LocalCourseProvider {
 	public void update() {
 
 	}
-	
-	
-	private void deleteCourseInXml() {
 		
-	}
-	
 }

@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 public class QR extends Fragment {
 	
 
+	private int RESULT_OK;
+	private int RESULT_CANCELED;
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (container == null) {
@@ -47,14 +50,14 @@ public class QR extends Fragment {
 		        	Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 		        	intent.setPackage(packageString);
 		        	//Add any optional extras to pass
+		        	//e.g. 
+		        	//intent.putExtra("SCAN_FORMATS", "EAN13");
+		        	//intent.putExtra("SCAN_FORMATS", "EAN8");
 		        	intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
 		        	//Launch
 		        	startActivityForResult(intent, REQUEST_SCAN);
 		        	
-		        	//Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-		            //intent.setPackage("com.google.zxing.client.android");
-		            //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-		            //startActivityForResult(intent, 0);			           
+		        			           
 		        }
 		    });
 
@@ -64,16 +67,16 @@ public class QR extends Fragment {
 		
 	}
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//	    if (requestCode == 0) {
-//	        if (resultCode == RESULT_OK) {
-//	            String contents = intent.getStringExtra("SCAN_RESULT");
-//	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-//	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
-//	            // Handle successful scan
-//	        } else if (resultCode == RESULT_CANCELED) {
-//	            // Handle cancel
-//	        }
-//	    }
+	    if (requestCode == 0) {
+	        if (resultCode == RESULT_OK) {
+	            String contents = intent.getStringExtra("SCAN_RESULT");
+	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
+	            // Handle successful scan
+	        } else if (resultCode == RESULT_CANCELED) {
+	            // Handle cancel
+	        }
+	    }
 	}
 	
 	

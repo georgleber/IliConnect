@@ -98,15 +98,15 @@ public class MainActivityAnzeige extends FragmentActivity implements Updatetable
    // }
 
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                NavUtils.navigateUpFromSameTask(this);
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 	public void updateViews() {
 		
 		

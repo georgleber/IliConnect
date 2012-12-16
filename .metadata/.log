@@ -369,3 +369,13 @@ Contains: Could not delete: E:\Google Drive\FH-Aachen\SWE Projekt\IliConnect\Ili
 !MESSAGE Could not delete: E:\Google Drive\FH-Aachen\SWE Projekt\IliConnect\IliConnect\bin\classes\com\android.
 !SUBENTRY 5 org.eclipse.core.filesystem 4 273 2012-12-13 19:56:33.896
 !MESSAGE Could not delete: E:\Google Drive\FH-Aachen\SWE Projekt\IliConnect\IliConnect\bin\classes\com.
+!SESSION 2012-12-16 11:50:44.888 -----------------------------------------------
+eclipse.buildId=M20120914-1800
+java.version=1.7.0_10
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=de_DE
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2012-12-16 11:50:47.790
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.

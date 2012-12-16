@@ -53,15 +53,15 @@ public class Dozent_kurse extends FragmentActivity  {
 }
     
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                NavUtils.navigateUpFromSameTask(this);
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
     private void showAlertMessage(){
     	AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
     	alertDialog.setIcon(android.R.drawable.ic_dialog_alert);

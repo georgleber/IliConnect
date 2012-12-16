@@ -94,12 +94,12 @@ public class MainActivity extends Activity {
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
 		// Build notification
-		Notification noti = new Notification.Builder(this).setContentTitle("Kritisch").setContentText("Termin SWE Praktikum läuft am 23.11.2012 ab").setSmallIcon(android.R.drawable.ic_dialog_alert).setContentIntent(pIntent).build();
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		//Notification noti = new Notification.Builder(this).setContentTitle("Kritisch").setContentText("Termin SWE Praktikum läuft am 23.11.2012 ab").setSmallIcon(android.R.drawable.ic_dialog_alert).setContentIntent(pIntent).build();
+		//NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		// Hide the notification after its selected
-		noti.flags |= Notification.FLAG_AUTO_CANCEL;
+		//noti.flags |= Notification.FLAG_AUTO_CANCEL;
 
-		notificationManager.notify(0, noti);
+		//notificationManager.notify(0, noti);
 
 	}
 
@@ -132,15 +132,15 @@ public class MainActivity extends Activity {
 	// return true;
 	// }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case android.R.id.home:
+//			NavUtils.navigateUpFromSameTask(this);
+//			return true;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 
 	public static MainActivity getInstance() {
 		return instance;

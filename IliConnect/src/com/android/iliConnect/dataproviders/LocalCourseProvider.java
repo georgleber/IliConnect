@@ -19,29 +19,33 @@ public class LocalCourseProvider {
 	private String password = "foobar";
 	private String url_src = "http://swe.k3mp.de/ilias/";
 	
-	public void joinCourse(String ref_id, String pw) throws JoinCourseException, CoursePasswordException {
+	public String joinCourse(String ref_id, String pw) throws JoinCourseException, CoursePasswordException {
 		course = new CourseData("join", this.user_id, this.password, this.url_src, ref_id, pw);
 		
-		// Kursbeitritt im Hintergrund durchf��hren
+		// Kursbeitritt im Hintergrund durchfuehren
 		prov.execute(course);
 		try {
-			// Result enth��lt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
+			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
 			// asnyc. Aufrufs gewartet. 
 			String result = prov.get();
 			
-			if(result.equals("JOINED")) {
-				// TODO: wenn Benutzer dem Kurs hinzugef��gt wurde, neuen Sync. durchf��hren
+			if(result.contains("JOINED")) {
+				// TODO: wenn Benutzer dem Kurs hinzugefuegt wurde, neuen Sync. durchfuehren
 				// und Kurs in localData eintragen und zu Schreibtisch wechseln.
+				return result;
 			}
+			else if(result.contains("PASSWORD_NEEDED")) {
+				return result;
+			}
+			
+			// Falls andere Response-Message von Server empfangen wurde, entsprchende Eception werfen
 			else if(result.contains("ALREADY_SUBSCRIBED")) {
 				throw new JoinCourseException("Sie sind bereits im Kurs angemeldet.");
 			}
 			else if(result.contains("not a course object")) {
 				throw new JoinCourseException("Der Kurs ist nicht vorhanden");
 			} 
-			else if(result.contains("PASSWORD_NEEDED")) {
-				throw new CoursePasswordException("Bitte geben Sie das Passwort des Kurses an.");
-			}
+			
 			else if(result.contains("WRONG_PASSWORD")) {
 				throw new CoursePasswordException("Das Passwort des Kurses ist nicht korrekt.");
 			}
@@ -53,6 +57,7 @@ public class LocalCourseProvider {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	

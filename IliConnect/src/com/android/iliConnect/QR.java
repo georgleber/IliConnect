@@ -66,21 +66,8 @@ public class QR extends Fragment {
 		        	//Launch
 		        	startActivityForResult(intent, REQUEST_SCAN);
 		        	
-		        	try {
-						local.joinCourse("49", "4711");
-						showAlert("Sie wurde erfolgreich angemeldet");
-						
-						//loacl.leaveCourse("49");
-					} catch (JoinCourseException e) {
-						// Wenn Exception auftritt, Fehlermeldung mit errorMessage anzeigen.
-						showAlert(e.getMessage());
-						System.out.println(e.getMessage());
+		        	joinCourse("49", "4711");
 
-					} catch (CoursePasswordException e) {
-						// Wenn Exception auftritt, Fehlermeldung mit errorMessage anzeigen.
-						System.out.println(e.getMessage());
-						showAlert(e.getMessage());
-					}	
 		        	
 		        }
 		    });
@@ -98,10 +85,35 @@ public class QR extends Fragment {
 	            // Handle successful scan
 	            
 	            // Zunaechst Messagebox anzeigen, ob wirklich beitreten will 
+	            
+	            // Bei Bestätigung joinCourse() aufrufen
 	        } else if (resultCode == 0) {
 	            // Handle cancel
 	        }
 	    }
+	}
+	
+	private void joinCourse(String ref_id, String crs_pw) {
+    	try {
+			String result = QR.local.joinCourse("49", "4711");
+			
+			if(result != null && result.contains("JOINED")) {
+				this.showAlert("Sie wurde erfolgreich angemeldet");
+			}
+			// Falls Passwort für Anmeldung benoetigt wird, Abfrage einblenden
+			if(result != null && result.contains("PASSWORD_NEEDED")) {
+				// Passwortabfrage einblenden
+				this.showAlert("Bitte geben Sie das Passwort des Kurses ein");
+			}
+			//local.leaveCourse("49");
+		} catch (JoinCourseException e) {
+			this.showAlert(e.getMessage());
+			System.out.println(e.getMessage());
+
+		} catch (CoursePasswordException e) {
+			System.out.println(e.getMessage());
+			this.showAlert(e.getMessage());
+		}		
 	}
 	
 	// Fuer Ausgabetest etwas zum Anzeigen!!
@@ -112,7 +124,6 @@ public class QR extends Fragment {
 		 ad.setTitle("Test");
 		 ad.setMessage(text);
 		 ad.setButton(getActivity().toString(), new DialogInterface.OnClickListener() {
-
 			 public void onClick(DialogInterface dialog, int which) {
 				 dialog.dismiss();
 			 }

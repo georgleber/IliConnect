@@ -2,8 +2,8 @@ package com.android.iliConnect.models;
 
 public class CourseData {
 
-	// Beinhaltet die Action, die im Plugin ausgeführt werden soll. 
-	// join für Kursanmelden und leave für Abmelden
+	// Beinhaltet die Action, die im Plugin ausgefuehrt werden soll. 
+	// join fuer Kursanmelden und leave fuer Abmelden
 	String action;
 	
 	String userId;

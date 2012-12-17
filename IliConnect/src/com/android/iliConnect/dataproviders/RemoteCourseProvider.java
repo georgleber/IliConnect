@@ -34,7 +34,7 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 		// Creating HTTP client
 		HttpClient httpClient = new DefaultHttpClient();
 		
-		// Url für Request erstellen
+		// Url f��r Request erstellen
 		String url = course.getUrlSrc() + this.pluginPath + "/";
 		url += "?action=" + course.getAction() + "&";
 		if(course.getAction().equals("join") && course.getPassword() != null) {
@@ -61,7 +61,7 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 
 		String responseMessage = null;
 		try {
-			// Http-Request ausführen
+			// Http-Request ausfuehren
 			HttpResponse response = httpClient.execute(httpPost);
 			
 			// Anwortnachricht aus Response auslesen

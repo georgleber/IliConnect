@@ -9,7 +9,7 @@ import com.android.iliConnect.models.CourseData;
 
 public class LocalCourseProvider {
 	
-	// Speichert Daten, die für An-/Abmeldung von Kursen benötigt werden.
+	// Speichert Daten, die f��r An-/Abmeldung von Kursen ben��tigt werden.
 	private CourseData course = null;
 
 	private RemoteCourseProvider prov = new RemoteCourseProvider();
@@ -22,15 +22,15 @@ public class LocalCourseProvider {
 	public void joinCourse(String ref_id, String pw) throws JoinCourseException, CoursePasswordException {
 		course = new CourseData("join", this.user_id, this.password, this.url_src, ref_id, pw);
 		
-		// Kursbeitritt im Hintergrund durchführen
+		// Kursbeitritt im Hintergrund durchf��hren
 		prov.execute(course);
 		try {
-			// Result enthält die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
+			// Result enth��lt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
 			// asnyc. Aufrufs gewartet. 
 			String result = prov.get();
 			
 			if(result.equals("JOINED")) {
-				// TODO: wenn Benutzer dem Kurs hinzugefügt wurde, neuen Sync. durchführen
+				// TODO: wenn Benutzer dem Kurs hinzugef��gt wurde, neuen Sync. durchf��hren
 				// und Kurs in localData eintragen und zu Schreibtisch wechseln.
 			}
 			else if(result.contains("ALREADY_SUBSCRIBED")) {
@@ -45,6 +45,9 @@ public class LocalCourseProvider {
 			else if(result.contains("WRONG_PASSWORD")) {
 				throw new CoursePasswordException("Das Passwort des Kurses ist nicht korrekt.");
 			}
+			else if(result.contains("PERMISSION_DENIED")) {
+				throw new JoinCourseException("Zugriff verweigert");
+			} 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -56,15 +59,18 @@ public class LocalCourseProvider {
 	public void leaveCourse(String ref_id) throws JoinCourseException {
 		course = new CourseData("leave", this.user_id, this.password, this.url_src, ref_id, null);
 		
-		// Abmeldung im Hintergrund durchführen
+		// Abmeldung im Hintergrund durchfuehren
 		prov.execute(course);
 		
 		try {
-			// Result enthält die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
+			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
 			// asnyc. Aufrufs gewartet. 
 			String result = prov.get();
 			if(result.contains("not a course object")) {
 				throw new JoinCourseException("Der Kurs ist nicht vorhanden");
+			}
+			else if(result.contains("PERMISSION_DENIED")) {
+				throw new JoinCourseException("Zugriff verweigert");
 			} 
 			else {
 				// TODO: Kurs aus lokalen Daten entfernen, Schreibtisch updaten.

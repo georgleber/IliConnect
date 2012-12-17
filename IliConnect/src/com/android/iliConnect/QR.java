@@ -68,14 +68,18 @@ public class QR extends Fragment {
 		        	
 		        	try {
 						local.joinCourse("49", "4711");
+						showAlert("Sie wurde erfolgreich angemeldet");
+						
 						//loacl.leaveCourse("49");
 					} catch (JoinCourseException e) {
 						// Wenn Exception auftritt, Fehlermeldung mit errorMessage anzeigen.
+						showAlert(e.getMessage());
 						System.out.println(e.getMessage());
 
 					} catch (CoursePasswordException e) {
 						// Wenn Exception auftritt, Fehlermeldung mit errorMessage anzeigen.
 						System.out.println(e.getMessage());
+						showAlert(e.getMessage());
 					}	
 		        	
 		        }
@@ -93,11 +97,27 @@ public class QR extends Fragment {
 	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
 	            // Handle successful scan
 	            
-	            // Zunächst Messagebox anzeigen, ob wirkloch beitreten will 
+	            // Zunaechst Messagebox anzeigen, ob wirklich beitreten will 
 	        } else if (resultCode == 0) {
 	            // Handle cancel
 	        }
 	    }
+	}
+	
+	// Fuer Ausgabetest etwas zum Anzeigen!!
+	private void showAlert(String text) {
+		 AlertDialog ad = new AlertDialog.Builder(getActivity())
+         .create();
+		 ad.setCancelable(false);
+		 ad.setTitle("Test");
+		 ad.setMessage(text);
+		 ad.setButton(getActivity().toString(), new DialogInterface.OnClickListener() {
+
+			 public void onClick(DialogInterface dialog, int which) {
+				 dialog.dismiss();
+			 }
+		 });
+		 ad.show();
 	}
 			
 }

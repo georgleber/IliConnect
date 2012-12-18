@@ -1,9 +1,6 @@
 <?php
 
-## Die POST Variablen muessen gesetzt sein, damit die ilAuthFactory Klasse die Authentifizierung gegen ILIAS macht.
-## Zum debuggen im Browser, habe ich diese beiden Zeilen hinzugefuegt.
-$_POST['username'] = 'lukas'; #$_REQUEST['user'];
-$_POST['password'] = 'foobar'; #$_REQUEST['pass'];
+# $_POST['username'], $_POST['password'] used for authentication
 
 include_once 'Services/Authentication/classes/class.ilAuthFactory.php';
 ilAuthFactory::setContext(ilAuthFactory::CONTEXT_SOAP);
@@ -46,9 +43,11 @@ function joinCourse($course, $password=NULL) {
 
 	if($ilUser->getId() == ANONYMOUS_USER_ID || // anonymous user not allowed to subscribe
 		$course->getSubScriptionLimitationType() == 0 || // subscription deactivated
-		!$course->inSubScriptionTime() || // subscription time limit exceeded
-		$course->getMembersObject()->isMember($ilUser->getId())) // user already subscribed
-		return "PERMISSION_DENIED";
+		!$course->inSubScriptionTime()) // subscription time limit exceeded
+        return "PERMISSION_DENIED";
+
+    if($course->getMembersObject()->isMember($ilUser->getId()))
+        return "ALREADY_SUBSCRIBED";
 
 	switch($course->getSubScriptionType()) { // check for deactivated registration && valid password
 		case $course->SUBSCRIPTION_DEACTIVATED:
@@ -60,13 +59,17 @@ function joinCourse($course, $password=NULL) {
 				return "WRONG_PASSWORD";
 	}
 
-        include_once('./Modules/Course/classes/class.ilCourseWaitingList.php');
+	include_once('./Modules/Course/classes/class.ilCourseWaitingList.php');
 	include_once('./Modules/Course/classes/class.ilCourseParticipants.php');
 
 	$obj_id = $ilObjDataCache->lookupObjId($course->ref_id);
 	$participants = ilCourseParticipants::_getInstanceByObjId($obj_id);
         $free = max(0, $course->getSubscriptionMaxMembers() - $participants->getCountMembers());
-        $waiting_list = new ilCourseWaitingList($course->getId());
+	$waiting_list = new ilCourseWaitingList($course->getId());
+
+	if($waiting_list->isOnList($ilUser->getId())) {
+		return "ON_WAITINGLIST";
+	}
 
 	// TODO: Check if course is full && no waitinglist enabled
 	if($course->isSubscriptionMembershipLimited() and $course->enabledWaitingList() and (!$free or $waiting_list->getCountUsers())) {
@@ -77,18 +80,20 @@ function joinCourse($course, $password=NULL) {
 
 	switch($course->getSubScriptionType()) {
 		case $course->SUBSCRIPTION_CONFIRMATION:
+			if(in_array($ilUser->getId(), $participants->getSubscribers())) // user already sent subscription request
+				return "WAITING_FOR_CONFIRMATION";
 			$participants->addSubscriber($ilUser->getId());
 			$participants->updateSubscriptionTime($ilUser->getId(), time());
 			$participants->updateSubject($ilUser->getId(), ilUtil::stripSlashes($_POST['subject']));
 			$participants->sendNotification($participants->NOTIFY_SUBSCRIPTION_REQUEST, $ilUser->getId());
-			break;
+			return "JOIN_REQUEST_SENT";
 		default:
 			$participants->add($ilUser->getId(), IL_CRS_MEMBER);
 			$participants->sendNotification($participants->NOTIFY_ADMINS, $ilUser->getId());
 			$participants->sendNotification($participants->NOTIFY_REGISTERED, $ilUser->getId());
 			include_once './Modules/Forum/classes/class.ilForumNotification.php';
 			ilForumNotification::checkForumsExistsInsert($course->getRefId(), $ilUser->getId());
-			break;
+			return "JOINED";
 	}
 
 }

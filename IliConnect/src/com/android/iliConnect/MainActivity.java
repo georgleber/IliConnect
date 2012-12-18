@@ -58,8 +58,22 @@ public class MainActivity extends Activity {
 
 		etUrl = (EditText) findViewById(R.id.urlText);
 		etUrl.setText(localDataProvider.auth.url_src);
+		Button Test = (Button) findViewById(R.id.testmessagebutton);
+		Test.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				int Return = MessageBuilder.AlertIli(MainActivity.this, "Fehler", "dasda", "jop");
+				if (Return==1){
+					Toast t = Toast.makeText(context, "message OK", Toast.LENGTH_LONG);
+					t.show();
+					
+				}
+			}
+		});
 
 		Button login = (Button) findViewById(R.id.button1);
+		
 
 		login.setOnClickListener(new View.OnClickListener() {
 
@@ -69,7 +83,7 @@ public class MainActivity extends Activity {
 				EditText etPassword = (EditText) findViewById(R.id.editText2);
 
 				DataDownloadThread watchThread = new DataDownloadThread();
-
+				
 				try {
 
 					if(!localDataProvider.auth.autologin)	
@@ -82,6 +96,7 @@ public class MainActivity extends Activity {
 			catch (Exception ex) {
 					Toast t = Toast.makeText(context, "Login fehlgeschlagen", Toast.LENGTH_LONG);
 					t.show();
+					
 					return;
 				}
 				Intent i = new Intent(MainActivity.this, MainTabView.class);

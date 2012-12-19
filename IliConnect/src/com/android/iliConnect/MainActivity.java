@@ -63,14 +63,11 @@ public class MainActivity extends Activity {
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				int Return = MessageBuilder.AlertIli(MainActivity.this, "Fehler", "dasda", "jop");
-				if (Return==1){
-					Toast t = Toast.makeText(context, "message OK", Toast.LENGTH_LONG);
-					t.show();
+				showAlertMessage();
 					
 				}
 			}
-		});
+		);
 
 		Button login = (Button) findViewById(R.id.button1);
 		
@@ -120,23 +117,23 @@ public class MainActivity extends Activity {
 
 	private void showAlertMessage() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
-		alertDialog.setTitle("QR Code nicht erkannt!");
-		alertDialog.setMessage("Der eingescannte QR-Code ist ungültig.");
-		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+		alertDialog.setTitle("Kursanmeldung");
+		alertDialog.setMessage("Wollen Sie sich zu dem Kurs: SWE anmelden?");
+		alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "Anmeldung", Toast.LENGTH_LONG).show();
 			}
 		});
-		// alertDialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-		//
-		// public void onClick(DialogInterface dialog, int which) {
-		// // TODO Auto-generated method stub
-		// Toast.makeText(getApplicationContext(), "abbruch", Toast.LENGTH_LONG).show();
-		// }
-		// });
+		 alertDialog.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+		
+		 public void onClick(DialogInterface dialog, int which) {
+		 // TODO Auto-generated method stub
+		 Toast.makeText(getApplicationContext(), "abbruch", Toast.LENGTH_LONG).show();
+		 }
+		 });
 		AlertDialog alertDialog1 = alertDialog.create();
 		alertDialog1.show();
 	}

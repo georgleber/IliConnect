@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +34,12 @@ public class Dozent_kurse extends FragmentActivity  {
         setContentView(R.layout.dozent_layout);        
       Intent intent = getIntent();
         ((TextView)(findViewById(R.id.dozent_name))).setText(intent.getStringExtra("selected"));
-           List<String> valueList = new ArrayList<String>();		
+           List<String> valueList = new ArrayList<String>();
+           //Dozent Name Font
+           TextView dozent_label=(TextView) findViewById(R.id.dozent_name);
+   		Typeface typeFace=Typeface.createFromAsset(getAssets(),"fonts/Roboto-BoldCondensed.ttf");
+   		dozent_label.setTypeface(typeFace);
+   		
 		valueList.add("TIWS");
 		valueList.add("Compiler Bau");		
 			

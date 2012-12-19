@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.widget.Toast;
 
 public class MessageBuilder {	
-	 private static int result = 0;
-	 public static int AlertIli(final Activity activity, String title, String message, String buttonpositive ) {		
+	
+	 public static void AlertIli(final Activity activity, String title, String message, String buttonpositive ) {		
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 		alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
 		alertDialog.setTitle(title);
@@ -15,17 +15,17 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton(buttonpositive, new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-				result=1;
+				
 				
 			}
 		});
 		
 		AlertDialog alertDialog1 = alertDialog.create();
 		alertDialog1.show();
-		return result;
+		
 	}
 	 
-	 public static int InfoIli(final Activity activity, String title, String message, String buttonpositive, String buttonnegative) {
+	 public static void InfoIli(final Activity activity, String title, String message, String buttonpositive, String buttonnegative) {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 		alertDialog.setIcon(android.R.drawable.ic_dialog_info);
 		alertDialog.setTitle(title);
@@ -33,13 +33,13 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton(buttonpositive, new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-				result=1;
+				
 			}
 		});
 		 alertDialog.setNegativeButton(buttonnegative, null);
 		AlertDialog alertDialog1 = alertDialog.create();
 		alertDialog1.show();
-		return result;
+	
 	}
 	
 	

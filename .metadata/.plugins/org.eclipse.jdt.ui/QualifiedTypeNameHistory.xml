@@ -3,4 +3,8 @@
 <fullyQualifiedTypeName name="android.content.Intent"/>
 <fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
 <fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
+<fullyQualifiedTypeName name="android.widget.TextView"/>
+<fullyQualifiedTypeName name="android.graphics.Typeface"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.R.id"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.R.layout"/>
 </qualifiedTypeNameHistroy>

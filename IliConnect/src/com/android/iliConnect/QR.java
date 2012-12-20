@@ -81,6 +81,9 @@ public class QR extends Fragment {
 	        if (resultCode != 0) {
 	            String contents = intent.getStringExtra("SCAN_RESULT");
 	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+	            
+	            
+	            
 	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
 	            // Handle successful scan
 	            

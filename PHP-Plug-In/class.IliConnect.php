@@ -10,18 +10,12 @@ class IliConnect{
 
 		switch($_GET["action"]) {
 			case "join":
-				if(checkCourse($ref_id) {
-					$factory = new IlObjectFactory();
-					$course = $factory->getInstanceByRefId($ref_id);
-					echo joinCourse($course, isset($_GET["course_pw"]) ? $_GET["course_pw"] : null);
-				}
+				$course = checkCourse($ref_id);
+				echo joinCourse($course, isset($_GET["course_pw"]) ? $_GET["course_pw"] : null);
 				break;
 			case "leave":
-				if(checkCourse($ref_id) {
-					$factory = new IlObjectFactory();
-					$course = $factory->getInstanceByRefId($ref_id);
-					echo leaveCourse($course);
-				}
+				$course = checkCourse($ref_id);
+				echo leaveCourse($course);
 				break;
 			case "sync":
 				break;

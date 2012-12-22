@@ -21,6 +21,7 @@ class IliConnect{
       case "search":
         break;
       case "magazin":
+				$this->printMagazin();
         break;
       default:
         echo "ACTION_UNKNOWN";
@@ -118,6 +119,7 @@ class IliConnect{
   }
 
   function printCurrentDesk() {
+
     global $ilUser;
     ## Header auf XML stellen
     header ("Content-Type:text/xml");
@@ -137,9 +139,6 @@ class IliConnect{
     ## PERSOENLICHER SCHREIBTISCH AUSGEBEN
     $desktop_items = $ilUser->getDesktopItems();
 
-    ## Tree ist eine ILIAS eigene Variable
-    #global $tree;
-
     ## In $desktop_items sind nun ILIAS Objekte.
     foreach($desktop_items as $item) {
       $this->desktopItem2Xml($item,$desktop,$notifications);
@@ -147,9 +146,13 @@ class IliConnect{
 
     ## AUSGABE DER XML STRUKTUR
     echo $xml->asXML();
+
   }
 
-  function printMagazin($ilUser) {
+  function printMagazin() {
+
+		global $ilUser
+
     ## Header auf XML stellen
     header ("Content-Type:text/xml");
 
@@ -165,9 +168,6 @@ class IliConnect{
     ## XML ILICONNECT CURRENT DESKTOP
     $desktop = $current->addChild("Desktop");
 
-    ## PERSOENLICHER SCHREIBTISCH AUSGEBEN
-    $desktop_items = $ilUser->getDesktopItems();
-
     ## Tree ist eine ILIAS eigene Variable
     global $tree;
     $desktop_items= $tree->getChilds(1);
@@ -179,22 +179,26 @@ class IliConnect{
 
     ## AUSGABE DER XML STRUKTUR
     echo $xml->asXML();
+
   }
 
   ## Der (un)uebersichtlichkeit halber in eine eigene funktion gepackt.
   ## erzeugt einen eintrag innerhalb des NOTIFICATIONS tag
   function notification2Xml($a,$nxml)
   {
+
     $notify = $nxml->addChild("Notification");
     $notify->addChild("title",$a["title"]);
     #$notify->addChild("date",$assarray->getDeadline());
     $notify->addChild("ref_id",$a["ref_id"]);
     $notify->addChild("description",$a["description"]);
+
   }
 
 
   ## FUNCTION FUER DIE REKURSIVE ABARBEITUNG DER CHILD ITEMS
   function desktopItem2Xml($array,$sxml,$notifications){
+
     if(strstr("file|fold|crs|tst|exc",$array["type"]))
     {
       $item = $sxml->addChild("Item");
@@ -218,6 +222,7 @@ class IliConnect{
       # Debugging
       #print_r($array);
     }
+
   }
 
 }

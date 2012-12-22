@@ -117,6 +117,7 @@ class IliConnect{
 	}
 
 	function printCurrentDesk($ilUser) {
+		global $ilUser;
 		## Header auf XML stellen
 		header ("Content-Type:text/xml");
 

@@ -24,6 +24,19 @@ class IliConnect{
 
 	}
 
+	function checkCourse($ref_id) {
+		require_once('classes/class.ilObjectFactory.php');
+		require_once('Services/Utilities/classes/class.ilUtil.php');
+
+		$ref_id = intval($ref_id);
+		$factory = new IlObjectFactory();
+		$course = $factory->getInstanceByRefId($ref_id);
+
+		if(strcmp($course->getType(), "crs") !== 0) {
+			die("not a course object");
+		}
+	}
+
 	function leaveCourse($course) {
 		global $ilUser;
 

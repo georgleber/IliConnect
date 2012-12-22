@@ -34,6 +34,8 @@ class IliConnect{
 
 		if(strcmp($course->getType(), "crs") !== 0) {
 			die("not a course object");
+		} else {
+		return true;
 		}
 	}
 

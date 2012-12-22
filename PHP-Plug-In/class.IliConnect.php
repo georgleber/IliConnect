@@ -13,6 +13,8 @@ class IliConnect{
 				break;
 			case "sync":
 				break;
+			case "srch":
+				break;
 			case "mgzn":
 				break;
 			default:

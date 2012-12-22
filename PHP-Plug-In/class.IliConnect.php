@@ -3,13 +3,18 @@
 class IliConnect{
 	
 	function __construct(){
+		$ref_id = intval($_GET['ref_id']);
 
 		switch($_GET["action"]) {
 			case "join":
-				echo joinCourse($course, isset($_GET["course_pw"]) ? $_GET["course_pw"] : null);
+				if(checkCourse($ref_id) {
+					echo joinCourse($course, isset($_GET["course_pw"]) ? $_GET["course_pw"] : null);
+				}
 				break;
 			case "leave":
-				echo leaveCourse($course);
+				if(checkCourse($ref_id) {
+					echo leaveCourse($course);
+				}
 				break;
 			case "sync":
 				break;
@@ -28,7 +33,6 @@ class IliConnect{
 		require_once('classes/class.ilObjectFactory.php');
 		require_once('Services/Utilities/classes/class.ilUtil.php');
 
-		$ref_id = intval($ref_id);
 		$factory = new IlObjectFactory();
 		$course = $factory->getInstanceByRefId($ref_id);
 

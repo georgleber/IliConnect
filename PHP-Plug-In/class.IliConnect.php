@@ -16,6 +16,7 @@ class IliConnect{
 				echo leaveCourse($course);
 				break;
 			case "sync":
+				printCurrentDesk();
 				break;
 			case "search":
 				break;

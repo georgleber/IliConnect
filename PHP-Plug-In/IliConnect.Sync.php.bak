@@ -1,7 +1,5 @@
 <?php
 
-if(!defined('IliConnect')) die(); // Zugriff nur ueber IliConnect.php
-
 ## Die POST Variablen muessen gesetzt sein, damit die ilAuthFactory Klasse die Authentifizierung gegen ILIAS macht.
 ## Zum debuggen im Browser, habe ich diese beiden Zeilen hinzugefuegt.
 $_POST['username'] = $_REQUEST['user'];
@@ -14,15 +12,21 @@ require_once("Services/Init/classes/class.ilInitialisation.php");
 $ilInit = new ilInitialisation();
 $ilInit->initILIAS('webdav');
 
+#$login=$ilUser->getLogin();
+
+# Stuff
 require_once('classes/class.ilObjectFactory.php');
 require_once('Modules/Exercise/classes/class.ilObjExerciseAccess.php');
 require_once('Modules/Exercise/classes/class.ilObjExerciseGUI.php');
 require_once('Modules/Exercise/classes/class.ilExAssignment.php');
 
 
-function printCurrentDesk($ilUser) {
+#function printCurrentDesk($ilUser) {
+#}
   ## Header auf XML stellen
   header ("Content-Type:text/xml");  
+  
+  #$login=$ilUser->getLogin();
   
   ## MAIN XML TAG (auch XML Root genannt)
   $xml = new SimpleXMLElement("<Iliconnect/>");
@@ -48,45 +52,41 @@ function printCurrentDesk($ilUser) {
   }
   
   ## AUSGABE DER XML STRUKTUR
-  echo $xml->asXML();
-}
+  $xml->asXML();
+#}
 
-function printMagazin($ilUser) {
-  ## Header auf XML stellen
-  header ("Content-Type:text/xml");
-
-  ## MAIN XML TAG (auch XML Root genannt)
-  $xml = new SimpleXMLElement("<Iliconnect/>");
-
-  ## XML ILICONNECT CURRENT
-  $current = $xml->addChild("Current");
-
-  ## XML ILICONNECT CURRENT NOTIFICATIONS
-  $notifications = $current->addChild("Notifications");
-
-  ## XML ILICONNECT CURRENT DESKTOP
-  $desktop = $current->addChild("Desktop");
-
-  ## PERSOENLICHER SCHREIBTISCH AUSGEBEN
-  $desktop_items = $ilUser->getDesktopItems();
-  
-  ## Tree ist eine ILIAS eigene Variable
-  global $tree;
-  $desktop_items= $tree->getChilds(1);
-
-  ## In $desktop_items sind nun ILIAS Objekte.
-  foreach($desktop_items as $item) {
-    desktopItem2Xml($item,$desktop, new SimpleXMLElement("<dontshow/>"));
-  }
-
-  ## AUSGABE DER XML STRUKTUR
-  echo $xml->asXML();
-}
 
 ## Der (un)uebersichtlichkeit halber in eine eigene funktion gepackt.
 ## erzeugt einen eintrag innerhalb des NOTIFICATIONS tag
 function notification2Xml($a,$nxml)
 {
+#$ass_data = ilExAssignment::getAssignmentDataOfExercise(60);
+
+#print_r($ass_data);
+#    foreach ($ass_data as $ass)
+#    {
+#    print_r($ass);
+#    }
+
+  #print_r($a);
+  
+#  $factory=new ilObjectFactory();
+#  $esc=$factory->getInstanceByRefId($a['ref_id']);
+  #print_r($esc->getTimestamp());
+  
+#  print_r($esc);
+#  die();
+#   
+#  $ass = new ilExAssignment($a["ref_id"]);
+#  $ass->setExerciseId($a["ref_id"]);
+#  $ass->read();
+  
+  #print_r($ass->getDeadline());
+#die();
+#  $assarray = $n->getDeadline();
+  #print_r($n);
+  
+  #print_r($n);
   $notify = $nxml->addChild("Notification");
   $notify->addChild("title",$a["title"]);
   #$notify->addChild("date",$assarray->getDeadline());
@@ -125,10 +125,10 @@ function desktopItem2Xml($array,$sxml,$notifications){
 
 switch($_GET["action"]) {
   case "sync":
-    printCurrentDesk($ilUser);
+    #printCurrentDesk($ilUser);
     break;
   case "magazin":
-    printMagazin($ilUser);
+    #printMagazin();
     break;
   case "search":
     #suche

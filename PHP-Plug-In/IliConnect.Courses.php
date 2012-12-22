@@ -1,5 +1,7 @@
 <?php
 
+if(!defined('IliConnect')) die(); // Zugriff nur ueber IliConnect.php
+
 # $_POST['username'], $_POST['password'] used for authentication
 
 include_once 'Services/Authentication/classes/class.ilAuthFactory.php';

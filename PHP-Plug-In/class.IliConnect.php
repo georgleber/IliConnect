@@ -13,9 +13,9 @@ class IliConnect{
 				break;
 			case "sync":
 				break;
-			case "srch":
+			case "search":
 				break;
-			case "mgzn":
+			case "magazin":
 				break;
 			default:
 				echo "ACTION_UNKNOWN";

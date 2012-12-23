@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import com.android.iliConnect.models.CourseData;
+import com.android.iliConnect.ssl.HttpsClient;
 
 
 import android.os.AsyncTask;
@@ -23,7 +24,8 @@ import android.os.AsyncTask;
 public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String> {
 	
 	// Pfad zum An/Abmelde Plugin
-	private final String pluginPath = "IliConnect.Courses.php";
+	// private final String pluginPath = "IliConnect.Courses.php";
+	private final String pluginPath = "IliConnect.php";
 	
 	@Override
 	protected String doInBackground(CourseData... crs)  { 		
@@ -34,7 +36,10 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 		// Creating HTTP client
 		HttpClient httpClient = new DefaultHttpClient();
 		
-		// Url f��r Request erstellen
+		// mache aus http einen httpsClient
+		HttpClient httpsClient = HttpsClient.createHttpsClient(httpClient);
+		
+		// Url für Request erstellen
 		String url = course.getUrlSrc() + this.pluginPath + "/";
 		url += "?action=" + course.getAction() + "&";
 		if(course.getAction().equals("join") && course.getPassword() != null) {
@@ -62,7 +67,7 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 		String responseMessage = null;
 		try {
 			// Http-Request ausfuehren
-			HttpResponse response = httpClient.execute(httpPost);
+			HttpResponse response = httpsClient.execute(httpPost);
 			
 			// Anwortnachricht aus Response auslesen
 			responseMessage = this.getResponseMessage(response);

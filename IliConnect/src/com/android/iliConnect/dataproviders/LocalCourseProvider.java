@@ -9,7 +9,7 @@ import com.android.iliConnect.models.CourseData;
 
 public class LocalCourseProvider {
 	
-	// Speichert Daten, die f��r An-/Abmeldung von Kursen ben��tigt werden.
+	// Speichert Daten, die für An-/Abmeldung von Kursen benötigt werden.
 	private CourseData course = null;
 
 	private RemoteCourseProvider prov = new RemoteCourseProvider();
@@ -17,7 +17,7 @@ public class LocalCourseProvider {
 	// Testdaten
 	private String user_id = "lukas";
 	private String password = "foobar";
-	private String url_src = "http://swe.k3mp.de/ilias/";
+	private String url_src = "https://swe.k3mp.de/ilias/";
 	
 	public String joinCourse(String ref_id, String pw) throws JoinCourseException, CoursePasswordException {
 		course = new CourseData("join", this.user_id, this.password, this.url_src, ref_id, pw);

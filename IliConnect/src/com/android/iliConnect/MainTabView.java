@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
@@ -169,16 +167,18 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	 */
 	public void onTabChanged(String tag) {
 		//TabInfo newTab = this.mapTabInfo.get(tag);		
-		int pos = this.mTabHost.getCurrentTab();
-		update(pos);
-		this.mViewPager.setCurrentItem(pos);
 		
+		int pos = this.mTabHost.getCurrentTab();
+		
+		this.mViewPager.setCurrentItem(pos);
+		this.position = pos;
 		instance = this;
 		
     }
 	public void update(int position){
+		//this.mViewPager.setAdapter(this.mPagerAdapter);
 		this.mPagerAdapter.updateFragment(position);
-		this.mViewPager.setAdapter(this.mPagerAdapter);
+		
 	}
 	/* 
 	 * @see android.support.v4.view.ViewPager.OnPageChangeListener#onPageScrolled(int, float, int)
@@ -194,6 +194,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	 */
 	public void onPageSelected(int position) {
 		// TODO Auto-generated method stub
+		this.position = position;
 		this.mTabHost.setCurrentTab(position);
 	}
 
@@ -224,7 +225,13 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	    return super.onOptionsItemSelected(item);
 	}
 	}
-	
+	private int position = 2;
+	@Override
+	public void onBackPressed() {
+		//super.onBackPressed();
+		update(position);
+		
+	}
 }
 
 

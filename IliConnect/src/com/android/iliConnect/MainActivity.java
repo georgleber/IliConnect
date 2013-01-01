@@ -1,13 +1,11 @@
 package com.android.iliConnect;
 
-import com.android.iliConnect.dataproviders.DataDownloadThread;
-import com.android.iliConnect.dataproviders.LocalDataProvider;
-import com.android.iliConnect.dataproviders.RemoteDataProvider;
-import com.android.iliConnect.models.Authentification;
-import com.android.iliConnect.models.Settings;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -17,25 +15,33 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.support.v4.app.NavUtils;
+
+import com.android.iliConnect.dataproviders.DataDownloadThread;
+import com.android.iliConnect.dataproviders.LocalDataProvider;
+import com.android.iliConnect.dataproviders.RemoteDataProvider;
 
 public class MainActivity extends Activity {
 
-	public static Context context;
-	private static MainActivity instance;
+	public Context context;
+	public static MainActivity instance;
 	public static Activity currentActivity;
-	public static ProgressDialog progressDialog;
-	public static RemoteDataProvider remoteDataProvider;
-	public static LocalDataProvider localDataProvider;
+	public RemoteDataProvider remoteDataProvider;
+	public ProgressDialog progressDialog;
+	public LocalDataProvider localDataProvider;
 	
 	
+	private final DataDownloadThread watchThread = new DataDownloadThread();
 	private EditText etUrl;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,12 +56,15 @@ public class MainActivity extends Activity {
 
 		// TODO: Login überspringen, falls Autologin, Auth vorhanden
 		localDataProvider = LocalDataProvider.getInstance();
-
 		localDataProvider.init(R.xml.config);
-		localDataProvider.auth.load();
-		localDataProvider.settings.load();
-		
+		localDataProvider.localdata.load();
+		//localDataProvider.auth.load();
+		//localDataProvider.settings.load();
 
+		localDataProvider.updateLocalData();
+		
+		
+		remoteDataProvider = new RemoteDataProvider();
 		etUrl = (EditText) findViewById(R.id.urlText);
 		etUrl.setText(localDataProvider.auth.url_src);
 
@@ -68,41 +77,49 @@ public class MainActivity extends Activity {
 				EditText etUserID = (EditText) findViewById(R.id.editText1);
 				EditText etPassword = (EditText) findViewById(R.id.editText2);
 
-				DataDownloadThread watchThread = new DataDownloadThread();
-
 				try {
 
-					if(!localDataProvider.auth.autologin)	
+					if (!localDataProvider.auth.autologin)
 						localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
 
-					watchThread.start();
+					if (!watchThread.isAlive())
+						watchThread.start();
+
+					synchronized (remoteDataProvider.synchronizeObject) {
+						if (!localDataProvider.isAvaiable)
+							remoteDataProvider.synchronizeObject.wait();
+						Intent i = new Intent(MainActivity.this, MainTabView.class);
+						startActivity(i);
+					}
 
 				}
-				
-			catch (Exception ex) {
+
+				catch (Exception ex) {
 					Toast t = Toast.makeText(context, "Login fehlgeschlagen", Toast.LENGTH_LONG);
 					t.show();
 					return;
 				}
-				Intent i = new Intent(MainActivity.this, MainTabView.class);
-				startActivity(i);
 
 			}
 		});
 
-		Intent intent = new Intent(this, MainTabView.class);
-		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+	}
+	
+	public static void showNotification(String title, String text){
+		Intent intent = new Intent(MainActivity.instance, MainTabView.class);
+		PendingIntent pIntent = PendingIntent.getActivity(MainActivity.instance, 0, intent, 0);
 
 		// Build notification
-		Notification noti = new Notification.Builder(this).setContentTitle("Kritisch").setContentText("Termin SWE Praktikum läuft am 23.11.2012 ab").setSmallIcon(android.R.drawable.ic_dialog_alert).setContentIntent(pIntent).build();
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		Notification noti = new Notification.Builder(MainActivity.instance).setContentTitle(title).setContentText(text).setSmallIcon(android.R.drawable.ic_dialog_alert).setContentIntent(pIntent).build();
+		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
 		// Hide the notification after its selected
 		noti.flags |= Notification.FLAG_AUTO_CANCEL;
 
 		notificationManager.notify(0, noti);
-
 	}
-
+	
+	
 	private void showAlertMessage() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
@@ -142,9 +159,13 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public static MainActivity getInstance() {
+	public MainActivity getInstance() {
 		return instance;
 	}
-
-
+	public void showBrowserContent(String url){
+		
+		Intent openUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		startActivity(openUrlIntent);
+		
+	}
 }

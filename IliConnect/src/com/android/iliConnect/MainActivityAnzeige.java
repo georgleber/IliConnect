@@ -4,22 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.support.v4.app.ListFragment;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
@@ -43,7 +38,7 @@ public class MainActivityAnzeige extends FragmentActivity implements Updatetable
 		valueList.add("Aufgabe 3.pdf");
 			
 	  ListAdapter fileList = new ArrayAdapter<String>( getApplicationContext(), R.layout.black_list_item, valueList);	 
-	  final ListView lv = (ListView)findViewById(R.id.list_files);
+	  final ListView lv = (ListView)findViewById(R.id.lfiles);
 	  lv.setAdapter(fileList);
 		lv.setOnItemClickListener(new OnItemClickListener(){
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)

@@ -9,4 +9,5 @@ public class ClassAlias {
 		this.classInfo = c;
 		this.className = name;
 	}
+	
 }

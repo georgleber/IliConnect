@@ -8,7 +8,6 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.View;
 
 
 public class PagerAdapter extends FragmentPagerAdapter {
@@ -37,7 +36,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 	}
 	
 	public void updateFragment(int position){
-		fragments.set(position,Fragment.instantiate(MainActivity.context, fragments.get(position).getClass().getName())); 
+		fragments.set(position,Fragment.instantiate(MainActivity.instance, fragments.get(position).getClass().getName())); 
 		
 	}
 }

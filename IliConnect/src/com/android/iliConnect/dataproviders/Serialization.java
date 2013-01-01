@@ -1,22 +1,32 @@
 package com.android.iliConnect.dataproviders;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import com.android.iliConnect.models.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.ls.LSInput;
+
+import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.models.ClassAlias;
+import com.android.iliConnect.models.Item;
 
 public class Serialization {
 
@@ -33,9 +43,9 @@ public class Serialization {
 	 * @return
 	 * @throws Exception
 	 */
-	
-	public Object deserialize(String in, List<ClassAlias> classAliases, String rootNodeName) throws Exception {
-		return deserialize(new ByteArrayInputStream(in.getBytes(encoding)), classAliases, rootNodeName);
+
+	public Object deserialize(String in, String rootNodeName) throws Exception {
+		return deserialize(new ByteArrayInputStream(in.getBytes(encoding)), rootNodeName);
 	}
 
 	/**
@@ -49,182 +59,111 @@ public class Serialization {
 	 * @throws Exception
 	 */
 
-	public Object deserialize(InputStream in, List<ClassAlias> classAliases, String rootNodeName) throws Exception {
+	
+	public Object deserialize(Class<?> targetClass , String filename) throws Exception {
+		// XML-Dokument parsen
+		Serializer serializer = new Persister();
+		File source = new File (MainActivity.instance.getFilesDir()+"/"+filename);
+		//Object targetObject = targetClass.newInstance();
+		Object example = serializer.read(targetClass, source,false);
+		return example;
+	}
+
+	
+	
+	
+	public Object deserialize(InputStream in, String rootNodeName) throws Exception {
 		// XML-Dokument parsen
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(in);
 		String rootNode = rootNodeName.split("\\.")[rootNodeName.split("\\.").length - 1];
 		NodeList nodes = doc.getElementsByTagName(rootNode);
+		return deserialize(nodes, rootNodeName);
+	}
 
-		Class mClass = Class.forName(rootNodeName);
+	public Object deserialize(NodeList nodes, String rootNodeName) throws Exception {
+
+		Class<?> mClass = Class.forName(rootNodeName);
 		Object targetObj = mClass.newInstance();
 		// Das zu liefernde Objekt (dem Root-Knoten zugeordnet) generieren.
 		// Node rootNode = doc.getFirstChild();
-
 		for (int i = 0; i < nodes.getLength(); i++) {
-			// Unterknoten deserialisieren
-			if (((PersistableObject)targetObj).arrayModel)
-				fillField(targetObj, nodes.item(i));
-			else {
-				NodeList children = nodes.item(i).getChildNodes();
-				for (int c = 0; c < children.getLength(); c++)
-					fillField(targetObj, children.item(c));
-			}
+			fillObject(targetObj, nodes.item(i));
 		}
 
 		return targetObj;
 	}
 
-	/**
-	 * Ein Feld innerhalb von <targetObj> mit dem Knoten <node> füllen. Das Füllen findet rekursiv statt.
-	 * 
-	 * @param targetObj
-	 * @param node
-	 */
-	private void fillField(Object targetObj, Node node) {
+	public void fillObject(Object targetObject, Node actNode) {
 
+		Class<?> actClass = targetObject.getClass();
 		try {
+			Field actField = actClass.getField(actNode.getNodeName());
+			String fieldClassName = actField.getType().getName();
 
-			String fieldName = node.getNodeName();
-			if (fieldName.equalsIgnoreCase("#text") && (!fieldName.equalsIgnoreCase("java.util.List") || fieldName.equalsIgnoreCase("java.util.List")))
-				return;
+			if (fieldClassName.contains("String")) {
 
-			node.normalize(); // 20111216 RHSS: muss auf jeden Fall drin bleiben, da sonst < und > in Texten falsch interpretiert werden
+				actField.set(targetObject, actNode.getTextContent());
 
-			Class<?> targetObjClass = targetObj.getClass();
-			Field fieldInfo = targetObjClass.getField(fieldName);
-			Class<?> fieldClass = fieldInfo.getType();
-			String fieldClassName = fieldClass.getName();
+			} else if (fieldClassName.contains("List")) {
 
-			// fieldValue repräsentiert den Wert der Node, sofern es sich um eine Node eines einfachen Typs mit nur einem Wert handelt.
-			String fieldValue = "";
-			if (node.getChildNodes().getLength() == 1)
-				fieldValue = node.getChildNodes().item(0).getNodeValue();
+				Object listContainer = ArrayList.class.newInstance();
 
-			// Die Klasse des zu füllenden Objekts --> Daraus können die einzelnen Felder ausgelesen werden.
+				NodeList childNodes = actNode.getChildNodes();
+				Method add = List.class.getDeclaredMethod("add", Object.class);
 
-			// Per reflection das zu füllende Feld ermitteln
+				for (int i = 0; i < childNodes.getLength(); i++) {
+					Node childNode = childNodes.item(i);
+					Node nextNode = childNode;
+					do {
 
-			// Um was für ein Feld handelt es sich? Primitiver Typ, Klasse, Array, Liste?
+						if (nextNode.getNodeType() == Node.ELEMENT_NODE) {
 
-			// Primitive Typen
-			if (fieldClass.isPrimitive()) {
-				if (fieldClassName.equalsIgnoreCase("boolean"))
-					fieldInfo.setBoolean(targetObj, primitiveParser.parseBoolean(fieldValue));
-				else if (fieldClassName.equalsIgnoreCase("byte"))
-					fieldInfo.setByte(targetObj, primitiveParser.parseByte(fieldValue));
-				else if (fieldClassName.equalsIgnoreCase("char"))
-					fieldInfo.setChar(targetObj, primitiveParser.parseChar(fieldValue));
-				else if (fieldClassName.equalsIgnoreCase("double"))
-					fieldInfo.setDouble(targetObj, primitiveParser.parseDouble(fieldValue));
-				else if (fieldClassName.equalsIgnoreCase("float"))
-					fieldInfo.setFloat(targetObj, primitiveParser.parseFloat(fieldValue));
-				else if (fieldClassName.equalsIgnoreCase("int"))
-					fieldInfo.setInt(targetObj, primitiveParser.parseInt(fieldValue));
-				else if (fieldClassName.equalsIgnoreCase("long"))
-					fieldInfo.setLong(targetObj, primitiveParser.parseLong(fieldValue));
-				else if (fieldClassName.equalsIgnoreCase("short"))
-					fieldInfo.setShort(targetObj, primitiveParser.parseShort(fieldValue));
-			} else {
-				// Kein primitiver Typ
-				// String
-				if (fieldClassName.equalsIgnoreCase("java.lang.String"))
-					fieldInfo.set(targetObj, fieldValue);
-				else if (fieldClassName.equalsIgnoreCase("java.util.ArrayList") || fieldClassName.equalsIgnoreCase("java.util.List") || fieldClass.isArray()) {
-					Object fieldObject = ArrayList.class.newInstance();
-
-					// Liste: die einzelnen Unterknoten deserialisieren und zur Liste hinzufügen.
-
-					// Klasse der Element bestimmen
-					Class<?> componentClass = null;
-					if (fieldClass.isArray())
-						componentClass = fieldClass.getComponentType();
-					else
-						componentClass = (Class<?>) ((ParameterizedType) fieldInfo.getGenericType()).getActualTypeArguments()[0];
-
-					NodeList children = node.getChildNodes();
-					for (int c = 0; c < children.getLength(); c++) {
-						Node listSubNode = children.item(c);
-						if (listSubNode.getNodeType() == Node.ELEMENT_NODE) {
-							// Objekt-Instanz erstellen
+							Class<?> componentClass = (Class<?>) ((ParameterizedType) actField.getGenericType()).getActualTypeArguments()[0];
 							Object toAdd = componentClass.newInstance();
 
-							// Die einzelnen Felder des Objekts füllen
-							NodeList subChildren = listSubNode.getChildNodes();
-							for (int c2 = 0; c2 < subChildren.getLength(); c2++) {
-								Node n = subChildren.item(c2);
-								if (componentClass.getClass().getName().equalsIgnoreCase("java.util.String"))
-									toAdd = n.getTextContent();
-								else
-									fillField(toAdd, n);
-							}
+							fillObject(toAdd, nextNode);
 
-							// Das Objekt zur Liste hinzufügen
-							Method add = List.class.getDeclaredMethod("add", Object.class);
-							add.invoke(fieldObject, toAdd);
+							add.invoke(listContainer, toAdd);
+							nextNode = nextNode.getNextSibling();
 						}
+						}while ( nextNode != null); 
 					}
+			
+			
+				actField.set(targetObject, listContainer);
 
-					// Die gefüllte Liste dem übergeordneten Objekt zuweisen
-					if (fieldClass.isArray()) {
-						ArrayList<?> fieldObjArrayList = (ArrayList<?>) fieldObject;
-						Object arrayObj = fieldObjArrayList.toArray((Object[]) Array.newInstance(componentClass, fieldObjArrayList.size()));
-						fieldInfo.set(targetObj, arrayObj);
-					} else
-						fieldInfo.set(targetObj, fieldObject);
-				} else if (fieldClassName.equalsIgnoreCase("java.util.Date")) {
-					Date fieldObject = new Date(0);
+			} else {
 
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 2011-07-04T12:33:07
-					try {
-						fieldObject = format.parse(fieldValue);
-					} catch (Exception ex) {
-						try {
-							format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-							fieldObject = format.parse(fieldValue);
-						} catch (Exception ex2) {
-						}
-					}
-					fieldInfo.set(targetObj, fieldObject);
-				} else {
-					// Selbstdefinierte Klassen
+				// Eine Instanz der Klasse erzeugen
 
-					// Eine Instanz der Klasse erzeugen
-					Object fieldObject = fieldClass.newInstance();
+				Class actFieldClass = actField.getClass();
+				Object fieldObject = actFieldClass.newInstance();
 
-					// Die einzelnen Felder der Klasse füllen
-					NodeList children = node.getChildNodes();
-					for (int c = 0; c < children.getLength(); c++)
-						fillField(fieldObject, children.item(c));
+				// Die einzelnen Felder der Klasse füllen
 
-					// Das Objekt dem übergeordneten Objekt zuweisen
-					fieldInfo.set(targetObj, fieldObject);
-				}
+				for (int j = 0; j < actNode.getChildNodes().getLength(); j++)
+					fillObject(targetObject, actNode.getChildNodes().item(j));
+
+				// Das Objekt dem übergeordneten Objekt zuweisen
+				actField.set(targetObject, fieldObject);
+
 			}
-		} catch (NoSuchFieldException ex) {
-			// Feld ist in Klasse nicht vorhanden, macht nix!
-		} catch (Exception ex) {
-			String exep = ex.getMessage();
+
+		} catch (NoSuchFieldException e) {
+		} catch (IllegalArgumentException e) {
+		} catch (DOMException e) {
+		} catch (IllegalAccessException e) {
+		} catch (InstantiationException e) {
+
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Gibt, falls in der Liste der Class-Aliases gefunden, ein leeres Objekt (passend zum Name des übergebenen Knotens) zurück.
-	 * 
-	 * @param rootNode
-	 * @return
-	 * @throws Exception
-	 */
-	private static Object getObjectInstanceFromNode(Node rootNode, boolean ignoreErrors, List<ClassAlias> classAliases) throws Exception {
-		String expectedClassName = rootNode.getNodeName();
-		for (ClassAlias alias : classAliases)
-			if (alias.className.equalsIgnoreCase(expectedClassName))
-				return alias.classInfo.newInstance();
-
-		if (ignoreErrors)
-			return null;
-		else
-			throw new Exception("Knoten konnte keiner Klasse zugeordnet werden: " + expectedClassName);
-	}
 }

@@ -1,15 +1,23 @@
 package com.android.iliConnect.models;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.dataproviders.PersistableObject;
 
+@Root
 public class Authentification extends PersistableObject {
-	public boolean autologin;
-	public String user_id;
-	public String password;
-	public String url_src = "http://www.recruitment-specialist.de/xml/RemoteData.xml";
+	@Element
+	public boolean autologin = true;
+	@Element
+	public String user_id = "";
+	@Element
+	public String password = "";
+	@Element
+	public String url_src = "http://www.recruitment-specialist.de/xml/";
 
 	public Authentification() {
 
@@ -18,10 +26,10 @@ public class Authentification extends PersistableObject {
 	@Override
 	public void load() {
 		try {
-			super.deserialize(MainActivity.localDataProvider.localDataFilename);
+			super.deserialize(MainActivity.instance.localDataProvider.localDataFilename);
 
 		} catch (Exception e) {
-			Toast t = Toast.makeText(MainActivity.context, "Fehler beim laden der Authentifizierungsparameter.", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(MainActivity.instance, "Fehler beim laden der Authentifizierungsparameter.", Toast.LENGTH_LONG);
 			t.show();
 		}
 

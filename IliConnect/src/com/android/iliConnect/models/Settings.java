@@ -1,17 +1,27 @@
 package com.android.iliConnect.models;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.dataproviders.PersistableObject;
 
+@Root 
 public class Settings extends PersistableObject {
-	public boolean sync;
+	@Element
+	public boolean sync = true;
+	@Element
 	public int interval = 30;
-	public boolean sync_wlanonly;
-	public int num_notifications;
-	public int level_warning;
-	public int level_critical;
+	@Element
+	public boolean sync_wlanonly = false;
+	@Element
+	public int num_notifications = 0;
+	@Element
+	public int level_warning = 0;
+	@Element
+	public int level_critical = 0;
 
 	public Settings() {
 
@@ -20,10 +30,10 @@ public class Settings extends PersistableObject {
 	public void load() {
 
 		try {
-			 super.deserialize(MainActivity.localDataProvider.localDataFilename);
+			 super.deserialize(MainActivity.instance.localDataProvider.localDataFilename);
 			
 		} catch (Exception e) {
-			Toast t = Toast.makeText(MainActivity.context, "Fehler beim laden der Einstellungen, nutze Standardkonfiguration.", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(MainActivity.instance, "Fehler beim laden der Einstellungen, nutze Standardkonfiguration.", Toast.LENGTH_LONG);
 			t.show();
 		}
 

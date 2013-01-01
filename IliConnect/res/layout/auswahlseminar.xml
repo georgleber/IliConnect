@@ -27,7 +27,7 @@
         android:text="@string/desc_long" />
 
     <ListView
-        android:id="@+id/list_files"                
+        android:id="@+id/lfiles"                
         style="@style/ListView"         
         android:layout_weight="1" >
     </ListView>

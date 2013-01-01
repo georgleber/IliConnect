@@ -214,7 +214,8 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	    //respond to menu item selection
 		switch (item.getItemId()) {
 	    case R.id.settings:
-	    startActivity(new Intent(MainTabView.this, Menu_setting.class));
+	    	Intent settingsActivity = new Intent(getBaseContext(),Einstellungen.class);
+	    	startActivity(settingsActivity);
 	    return true;
 	    case R.id.Logout:
 	    finish();

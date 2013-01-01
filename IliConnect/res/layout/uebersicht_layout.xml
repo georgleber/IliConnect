@@ -13,7 +13,7 @@
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:text="Termine"
+        android:text="TERMINE"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
@@ -22,5 +22,23 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         />
+
+    
+    
+    <TextView
+        android:id="@+id/textNewFiles"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="GEÄNDERTE DATEIEN"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ListView
+        android:id="@+id/listViewNewFiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
+
+    
 
 </LinearLayout>

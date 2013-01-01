@@ -1,0 +1,82 @@
+<resources>
+
+    <string name="app_name">IliConnect</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">IliConnect</string>
+    <string name="passwort_label">"Passwort: "</string>
+    <string name="Email_label">"ID: "</string>
+    <string name="login_button">Anmelden</string>
+    <string name="passwort_hint">******</string>
+    <string name="email_pre">userid</string>
+    <string name="desc_logoright">FH-Aachen Logo</string>
+	<string name="desc_head">Ilias Logo</string>
+	<string name="logout">Logout</string>
+	<string name="magazin">Magazin</string>
+	<string name="uebersicht">Übersicht</string>
+	<string name="account_logout">Logout</string>
+	<string name="QR_Code">Scan QR Code</string>
+	<string name="todo_liste">Todo Liste</string>
+	<string name="Date">Montag 17.12.2012 Praktikum Fassbender</string>
+	<string name="desc_seminar">Beschreibung:</string>
+	<string name="desc_long">Dies ist ein Testseminar. Hier würde ihr Text stehen der das Seminar beschreibt.</string>
+	<string name="search_string">Kursname oder Dozent</string>
+	<string name="termine_string">Termine:</string>
+	<string name="geaendertedateien_string">Geänderte Dateien:</string>
+	<string name="qr_string">QR Scanner:</string>
+	<string name="datum_praktikum">24.12.2012 Praktikum SWE</string>
+	<string name="Testmessage">Testmeldung</string>
+	<string name="stringurl">Url: </string>
+	<string name="urlHint">www.ilias.de</string>
+	<string name="logout_menu">Ausloggen</string>
+	<string name="settings_menu">Einstellungen</string>
+	<string name="sync_label">Synchronisation:</string>
+	<string name="Sync_intervall">Intervall: </string>
+	<string name="Wlan_snyc">"nur über Wlan: "</string>
+	<string name="dates_sync">"Anzahl der Termine: "</string>
+	<string name="Notifi_sync">"Benachrichtigungen: "</string>
+	<string name="Warning_sync">"Warnung: "</string>
+	<string name="Critical_sync">"Kritisch: "</string>	
+	<string name="sync_button">Synchronisieren</string>
+	<string name="abmelde_menu">Abmelden</string>
+	
+	 <string-array name="array_intervall">
+        <item>15 Min</item>
+        <item>30 Min</item>
+        <item>1 H</item>
+        <item>2 H</item>
+        <item>1 D</item>        
+    </string-array>
+    <string-array name="array_termine">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>        
+    </string-array>
+    <string-array name="array_warnung">
+        <item>3 D</item>
+        <item>4 D</item>
+        <item>5 D</item>
+        <item>6 D</item>               
+    </string-array>
+    <string-array name="array_Kritisch">
+        <item>1 D</item>
+        <item>2 D</item>                    
+    </string-array>
+        <string name="testdates">24.12.2012    16 Uhr</string>
+        <string name="testpraktikum">Software Engineering Praktikum</string>
+        <string name="testpraktikum2">25.12.2012    14 Uhr</string>
+        <string name="testpraktikum3">Bildverarbeitung Praktikum</string>
+        <string name="kurs_abmeldung">Abmelden</string>
+        <string name="test_file">Aufgabe 1.pdf</string>
+        <string name="kurs_suche">KURS:</string>
+        <string name="Dozent_suche">DOZENT:</string>
+        <string name="test_seminar">Physik</string>
+        <string name="Join_kurs">Beitreten</string>
+        <string name="dozent_fassbender">"Prof. Dr. rer. nat. Faßbender "</string>
+        <string name="button_kurse">Kurse</string>
+        <string name="searching_button">Suche</string>
+        <string name="Kurs_default">Physik</string>
+  
+</resources>

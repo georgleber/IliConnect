@@ -1,0 +1,46 @@
+package com.android.iliConnect;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.widget.Toast;
+
+public class MessageBuilder {	
+	
+	 public static void AlertIli(final Activity activity, String title, String message, String buttonpositive ) {		
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+		alertDialog.setTitle(title);
+		alertDialog.setMessage(message);
+		alertDialog.setPositiveButton(buttonpositive, new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				
+				
+			}
+		});
+		
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+		
+	}
+	 
+	 public static void InfoIli(final Activity activity, String title, String message, String buttonpositive, String buttonnegative) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+		alertDialog.setTitle(title);
+		alertDialog.setMessage(message);
+		alertDialog.setPositiveButton(buttonpositive, new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		});
+		 alertDialog.setNegativeButton(buttonnegative, null);
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+	
+	}
+	
+	
+}

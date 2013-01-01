@@ -25,7 +25,7 @@ public class Desktop extends PersistableObject {
 			super.deserialize(MainActivity.instance.localDataProvider.remoteDataFileName);
 
 		} catch (Exception e) {
-			Toast t = Toast.makeText(MainActivity.instance.context, "Fehler bein laden der Authentifizierungsparameter.", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(MainActivity.instance, "Fehler bein laden der Authentifizierungsparameter.", Toast.LENGTH_LONG);
 			t.show();
 		}
 

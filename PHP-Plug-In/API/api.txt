@@ -1,0 +1,27 @@
+Synchronization XML:
+	IliConnect.php?action=sync
+	POST:
+		username=&password=
+	Response Body:
+		xml output
+Join course:
+	IliConnect.php?action=join&ref_id=<ref_id>[&course_pw=<course_pw>]
+	POST:
+		username=&password=
+	Response Body:
+		{PERMISSION_DENIED,
+		ALREADY_SUBSCRIBED,
+		SUBSCRIPTION_DEACTIVATED,
+		PASSWORD_NEEDED,
+		WRONG_PASSWORD,
+		ON_WAITINGLIST,
+		WAITING_FOR_CONFIRMATION,
+		JOIN_REQUEST_SENT,
+		JOINED}
+Leave course:
+	IliConnect.php?action=leave&ref_id=<ref_id>
+	POST:
+		username=&password=
+	Response Body:
+		{PERMISSION_DENIED,
+		LEFT}

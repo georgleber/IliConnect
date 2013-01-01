@@ -6,7 +6,7 @@
     <string name="title_activity_main">IliConnect</string>
     <string name="passwort_label">"Passwort: "</string>
     <string name="Email_label">"ID: "</string>
-    <string name="login_button">Login</string>
+    <string name="login_button">Anmelden</string>
     <string name="passwort_hint">******</string>
     <string name="email_pre">userid</string>
     <string name="desc_logoright">FH-Aachen Logo</string>
@@ -30,21 +30,22 @@
 	<string name="urlHint">www.ilias.de</string>
 	<string name="logout_menu">Ausloggen</string>
 	<string name="settings_menu">Einstellungen</string>
-	<string name="sync_label">Synchronisation:</string>
-	<string name="Sync_intervall">Intervall: </string>
-	<string name="Wlan_snyc">"nur über Wlan: "</string>
-	<string name="dates_sync">"Anzahl der Termine: "</string>
-	<string name="Notifi_sync">"Benachrichtigungen: "</string>
-	<string name="Warning_sync">"Warnung: "</string>
-	<string name="Critical_sync">"Kritisch: "</string>	
+	<string name="sync_label">Synchronisation</string>
+	<string name="Sync_intervall">Intervall</string>
+	<string name="Wlan_snyc">"Wlan"</string>
+	<string name="dates_sync">"Anzahl der Termine"</string>
+	<string name="Notifi_sync">"Benachrichtigungen"</string>
+	<string name="Warning_sync">"Warnung"</string>
+	<string name="Critical_sync">"Kritisch"</string>	
 	<string name="sync_button">Synchronisieren</string>
+	<string name="abmelde_menu">Abmelden</string>
 	
 	 <string-array name="array_intervall">
-        <item>15 Min</item>
-        <item>30 Min</item>
-        <item>1 H</item>
-        <item>2 H</item>
-        <item>1 D</item>        
+        <item>15 Minuten</item>
+        <item>30 Minuten</item>
+        <item>1 Stunde</item>
+        <item>2 Stunden</item>
+        <item>1 Tag</item>        
     </string-array>
     <string-array name="array_termine">
         <item>1</item>
@@ -54,14 +55,14 @@
         <item>5</item>        
     </string-array>
     <string-array name="array_warnung">
-        <item>3 D</item>
-        <item>4 D</item>
-        <item>5 D</item>
-        <item>6 D</item>               
+        <item>3 Tage</item>
+        <item>4 Tage</item>
+        <item>5 Tage</item>
+        <item>6 Tage</item>               
     </string-array>
     <string-array name="array_Kritisch">
-        <item>1 D</item>
-        <item>2 D</item>                    
+        <item>1 Tag</item>
+        <item>2 Tage</item>                    
     </string-array>
         <string name="testdates">24.12.2012    16 Uhr</string>
         <string name="testpraktikum">Software Engineering Praktikum</string>
@@ -69,8 +70,8 @@
         <string name="testpraktikum3">Bildverarbeitung Praktikum</string>
         <string name="kurs_abmeldung">Abmelden</string>
         <string name="test_file">Aufgabe 1.pdf</string>
-        <string name="kurs_suche">Kurs:</string>
-        <string name="Dozent_suche">Dozent:</string>
+        <string name="kurs_suche">KURS:</string>
+        <string name="Dozent_suche">DOZENT:</string>
         <string name="test_seminar">Physik</string>
         <string name="Join_kurs">Beitreten</string>
         <string name="dozent_fassbender">"Prof. Dr. rer. nat. Faßbender "</string>

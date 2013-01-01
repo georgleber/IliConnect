@@ -1,0 +1,35 @@
+package com.android.iliConnect;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.widget.Toast;
+
+public class MessageBuilder {
+
+	 public static void QrInvalid(final Activity activity) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+		alertDialog.setTitle("QR Code nicht erkannt!");
+		alertDialog.setMessage("Der eingescannte QR-Code ist ungültig.");
+		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				//Toast.makeText(activity, "Anmeldung", Toast.LENGTH_LONG).show();
+			}
+		});
+		// alertDialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+		//
+		// public void onClick(DialogInterface dialog, int which) {
+		// // TODO Auto-generated method stub
+		// Toast.makeText(getApplicationContext(), "abbruch", Toast.LENGTH_LONG).show();
+		// }
+		// });
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+	}
+
+	
+	
+}

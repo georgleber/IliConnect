@@ -19,9 +19,10 @@ class IliConnect{
         $this->printCurrentDesk();
         break;
       case "search":
+        $this->searchMagazin();
         break;
       case "magazin":
-				$this->printMagazin();
+        $this->printMagazin();
         break;
       default:
         echo "ACTION_UNKNOWN";
@@ -135,13 +136,14 @@ class IliConnect{
 
     ## XML ILICONNECT CURRENT DESKTOP
     $desktop = $current->addChild("Desktop");
+    $items   = $desktop->addChild("Items");
 
     ## PERSOENLICHER SCHREIBTISCH AUSGEBEN
     $desktop_items = $ilUser->getDesktopItems();
 
     ## In $desktop_items sind nun ILIAS Objekte.
     foreach($desktop_items as $item) {
-      $this->desktopItem2Xml($item,$desktop,$notifications);
+      $this->desktopItem2Xml($item,$items,$notifications);
     }
 
     ## AUSGABE DER XML STRUKTUR
@@ -151,7 +153,7 @@ class IliConnect{
 
   function printMagazin() {
 
-		global $ilUser;
+    global $ilUser;
 
     ## Header auf XML stellen
     header ("Content-Type:text/xml");
@@ -166,7 +168,7 @@ class IliConnect{
     $notifications = $current->addChild("Notifications");
 
     ## XML ILICONNECT CURRENT DESKTOP
-    $desktop = $current->addChild("Desktop");
+    $desktop = $current->addChild("Magazin");
 
     ## Tree ist eine ILIAS eigene Variable
     global $tree;
@@ -175,6 +177,38 @@ class IliConnect{
     ## In $desktop_items sind nun ILIAS Objekte.
     foreach($desktop_items as $item) {
       $this->desktopItem2Xml($item,$desktop, new SimpleXMLElement("<dontshow/>"));
+    }
+
+    ## AUSGABE DER XML STRUKTUR
+    echo $xml->asXML();
+
+  }
+
+  function searchMagazin() {
+
+    global $ilUser;
+
+    ## Header auf XML stellen
+    header ("Content-Type:text/xml");
+
+    ## MAIN XML TAG (auch XML Root genannt)
+    $xml = new SimpleXMLElement("<Iliconnect/>");
+
+    ## XML ILICONNECT CURRENT
+    $current = $xml->addChild("Current");
+
+    $needle = $_POST['searchfor'];
+    
+    ## XML ILICONNECT CURRENT DESKTOP
+    $results = $current->addChild("Results");
+
+    ## Tree ist eine ILIAS eigene Variable
+    global $tree;
+    $desktop_items= $tree->getChilds(1);
+
+    ## In $desktop_items sind nun ILIAS Objekte.
+    foreach($desktop_items as $item) {
+      $this->searchInTree($item,$needle,$results);
     }
 
     ## AUSGABE DER XML STRUKTUR
@@ -192,6 +226,7 @@ class IliConnect{
     #$notify->addChild("date",$assarray->getDeadline());
     $notify->addChild("ref_id",$a["ref_id"]);
     $notify->addChild("description",$a["description"]);
+    $notify->addChild("date","");
 
   }
 
@@ -214,15 +249,40 @@ class IliConnect{
 
       global $tree;
       $children=$tree->getChilds($array[ref_id]);
-      foreach($children as $child)
-      {
-        $this->desktopItem2Xml($child,$item,$notifications);
+      if(count($children) > 0) {
+        $subitems = $item->addChild("Items");
+        foreach($children as $child)
+        {
+         $this->desktopItem2Xml($child,$subitems,$notifications);
+        }
       }
     } else {
       # Debugging
       #print_r($array);
     }
 
+  }
+  ## FUNCTION FUER DIE REKURSIVE ABARBEITUNG DER CHILD ITEMS
+  function searchInTree($start,$needle,$return){
+
+    if(strstr("fold|crs|",$start["type"]))
+    {
+      global $tree;
+      if(stristr($start['title'],$needle) || stristr($start['description'],$needle)) {
+        $item = $return->addChild("Item");
+        $item->addChild("title",$start[title]);
+        $item->addChild("description",$start[description]);
+        $item->addChild("type",$start[type]);
+        $item->addChild("ref_id",$start[ref_id]);
+      }
+      $children=$tree->getChilds($start[ref_id]);
+      if(count($children) > 0) {
+        foreach($children as $child)
+        {
+          $this->searchInTree($child,$needle,$return);
+        }
+      }
+    }
   }
 
 }

@@ -34,7 +34,7 @@ public class LocalDataProvider {
 	public Desktop desktopItems = new Desktop();
 	public Authentification auth = new Authentification();;
 	public ArrayList<ClassAlias> classAliases = new ArrayList<ClassAlias>();
-	public String remoteDataFileName = "RemoteData.xml";
+	public String remoteDataFileName = "IliConnect.php?action=sync";
 	public String localDataFilename = "LocalData.xml";
 	public boolean isAvaiable = false;
 	public boolean isUpdating = false;

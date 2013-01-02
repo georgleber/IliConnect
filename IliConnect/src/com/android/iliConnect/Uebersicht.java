@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Uebersicht extends ListFragment {
+public class Uebersicht extends ListFragment implements Redrawable{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,5 +34,10 @@ public class Uebersicht extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+	}
+
+	public void refreshViews() {
+
+		
 	}
 }

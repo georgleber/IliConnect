@@ -2,11 +2,17 @@ package com.android.iliConnect.dataproviders;
 
 import java.io.IOException;
 
+import com.android.iliConnect.MainActivity;
+
+import android.widget.Toast;
+
 public class AuthException extends IOException {
 	
+	String error;
 	
-	public AuthException() {
+	public AuthException(String s) {
 		super();
+		this.error = s;
 	}
 
 	/**
@@ -16,8 +22,7 @@ public class AuthException extends IOException {
 
 	@Override
 	public String getMessage() {
-
-		return "Login fehlgeschlagen.";
+		return "Login fehlgeschlagen: "+this.error;
 	}
 
 }

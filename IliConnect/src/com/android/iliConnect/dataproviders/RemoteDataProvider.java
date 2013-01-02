@@ -29,17 +29,17 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 
-public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
+public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
-	public ReentrantLock syncObject = new ReentrantLock();
 	private List<NameValuePair> nameValuePairs;
 	private ProgressDialog pDialog;
 
 	public RemoteDataProvider() {
-		this.syncObject = new ReentrantLock();
+		
 	}
 
 	public RemoteDataProvider(ProgressDialog pDialog) {
@@ -58,7 +58,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
 	}
 
 	@Override
-	protected String doInBackground(String... sUrl) {
+	protected Exception doInBackground(String... sUrl) {
 
 		try {
 
@@ -68,11 +68,11 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 			nameValuePairs.add(new BasicNameValuePair("username", MainActivity.instance.localDataProvider.auth.user_id));
 			nameValuePairs.add(new BasicNameValuePair("password", MainActivity.instance.localDataProvider.auth.password));
-			
-			if (this.nameValuePairs != null){
+
+			if (this.nameValuePairs != null) {
 				nameValuePairs.addAll(this.nameValuePairs);
 			}
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 			// Execute HTTP Post Request
 			HttpResponse response = httpclient.execute(httppost);
@@ -93,18 +93,22 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
 				InputStream input = instream;
 
 				String s = convertStreamToString(instream);
-				BufferedWriter out = new BufferedWriter(new FileWriter(MainActivity.instance.getFilesDir() + "/" + targetName));
-				out.write(s);
 
 				if (s.contains("ACCESS_DENIED"))
-					throw new AuthException();
+					throw new AuthException(s);
+
+				BufferedWriter out = new BufferedWriter(new FileWriter(MainActivity.instance.getFilesDir() + "/" + targetName));
+				out.write(s);
 
 				out.flush();
 				out.close();
 				input.close();
+
 			}
+
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			return e;
+
 		}
 		return null;
 
@@ -125,12 +129,15 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
 	}
 
 	@Override
-	protected void onPostExecute(String result) {
-		super.onPostExecute(result);
+	protected void onPostExecute(Exception e) {
+		// super.onPostExecute(result);
+		if (e != null)
+			MainActivity.instance.showToast(e.getMessage());
 
 		MainActivity.instance.localDataProvider.updateLocalData();
-		synchronized (this.syncObject) {
-			this.syncObject.notifyAll();
+	
+		synchronized (MainActivity.syncObject) {
+			MainActivity.syncObject.notifyAll();
 		}
 
 		if (pDialog != null && pDialog.isShowing())

@@ -1,5 +1,6 @@
 package com.android.iliConnect;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class MainActivity extends Activity {
 	public static Activity currentActivity;
 	public RemoteDataProvider remoteDataProvider;
 	public ProgressDialog progressDialog;
-
+	public static Object syncObject = new Object();
 	public LocalDataProvider localDataProvider;
 
 	public DataDownloadThread watchThread = new DataDownloadThread();
@@ -74,9 +75,31 @@ public class MainActivity extends Activity {
 					if (!localDataProvider.auth.autologin)
 						localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
 
-				
 					try {
-						sync(instance);
+
+						File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
+
+						if (!remoteDataFile.exists())
+							MainActivity.instance.sync(MainActivity.instance);
+
+						Date start = new Date();
+						long timeout = 4000;
+
+						synchronized (syncObject) {
+							while (!remoteDataFile.exists()) {
+								syncObject.wait(100);
+								if (new Date().getTime() - start.getTime() > timeout)
+									throw new InterruptedException();
+
+							}
+						}
+
+						// while (!remoteDataFile.exists()) {
+						// if (new Date().getTime() - start.getTime() > timeout)
+						// throw new InterruptedException();
+						// Thread.sleep(100);
+						// }
+
 						if (watchThread.doAsynchronousTask == null)
 							watchThread.startTimer();
 
@@ -132,8 +155,15 @@ public class MainActivity extends Activity {
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setTitle("Sync");
 		progressDialog.setMessage("Bitte warten...");
-		
-		RemoteDataProvider rP = new RemoteDataProvider( progressDialog);
-		rP.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=sync");
+
+		RemoteDataProvider rP = new RemoteDataProvider(progressDialog);
+		rP.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 	}
+
+	public void showToast(final String msg) {
+		Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
+		t.show();
+
+	}
+
 }

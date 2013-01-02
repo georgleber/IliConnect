@@ -42,7 +42,7 @@ public class LocalDataProvider {
 	public String remoteDataFileName = "RemoteData.xml";
 	public String localDataFilename = "LocalData.xml";
 	
-	public boolean isAvaiable = false;
+	public static boolean isAvaiable = false;
 	public boolean isUpdating = false;
 	public ReentrantLock syncObject;
 	
@@ -91,7 +91,7 @@ public class LocalDataProvider {
 
 	public boolean updateLocalData() {
 		try {
-			if (new File(MainActivity.instance.getFilesDir() + "/" + remoteDataFileName).exists()) {
+			
 				// desktopItems.load();
 				remoteData.load();
 
@@ -100,7 +100,7 @@ public class LocalDataProvider {
 				notifications.Notifications = remoteData.Current.Notifications;
 				isAvaiable = true;
 				isUpdating = false;
-			}
+			
 			if(new File(MainActivity.instance.getFilesDir() + "/" + searchDataFileName).exists())
 				results.load();
 			

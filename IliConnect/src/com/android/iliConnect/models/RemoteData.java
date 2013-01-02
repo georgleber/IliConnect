@@ -33,7 +33,7 @@ public class RemoteData extends PersistableObject {
 	public String getSyncUrl(){
 		//return MainActivity.instance.localDataProvider.auth.url_src+MainActivity.instance.localDataProvider.auth.api_src+"?user="+MainActivity.instance.localDataProvider.auth.user_id+"&pass="+MainActivity.instance.localDataProvider.auth.password+"&action=sync";
 //		return MainActivity.instance.localDataProvider.auth.url_src+MainActivity.instance.localDataProvider.auth.api_src+"?user=gbonney&pass=gbonney&action=sync";
-		return MainActivity.instance.localDataProvider.auth.url_src+"RemoteData.xml";
+		return MainActivity.instance.localDataProvider.auth.url_src+"IliConnect.php?action=sync";
 	}
 	
 }

@@ -2,8 +2,14 @@
 
 ## Die POST Variablen muessen gesetzt sein, damit die ilAuthFactory Klasse die Authentifizierung gegen ILIAS macht.
 ## Zum debuggen im Browser, habe ich diese beiden Zeilen hinzugefuegt.
-$_POST['username'] = $_REQUEST['user'];
-$_POST['password'] = $_REQUEST['pass'];
+if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])) {
+  $_POST['username'] = $_REQUEST['user'];
+  $_POST['password'] = $_REQUEST['pass'];
+}
+
+if(isset($_POST['action'])) {
+  $_REQUEST['action'] = $_POST['action'];
+}
 
   include_once 'Services/Authentication/classes/class.ilAuthFactory.php';
   ilAuthFactory::setContext(ilAuthFactory::CONTEXT_SOAP);
@@ -13,12 +19,16 @@ $_POST['password'] = $_REQUEST['pass'];
   $ilInit->initILIAS('webdav');
 
   $login=$ilUser->getLogin();
-  include_once "Services/IliConnect/classes/class.IliConnect.php";
-  require_once('classes/class.ilObjectFactory.php');
-  require_once('Services/Utilities/classes/class.ilUtil.php');
-  require_once('Modules/Exercise/classes/class.ilObjExerciseAccess.php');
-  require_once('Modules/Exercise/classes/class.ilObjExerciseGUI.php');
-  require_once('Modules/Exercise/classes/class.ilExAssignment.php');
-  $ilIConnect =  new IliConnect();
-
+  if($login) {
+    include_once "Services/IliConnect/classes/class.IliConnect.php";
+    require_once('classes/class.ilObjectFactory.php');
+    require_once('Services/Utilities/classes/class.ilUtil.php');
+    require_once('Modules/Exercise/classes/class.ilObjExerciseAccess.php');
+    require_once('Modules/Exercise/classes/class.ilObjExerciseGUI.php');
+    require_once('Modules/Exercise/classes/class.ilExAssignment.php');
+    $ilIConnect =  new IliConnect();
+  } else {
+    sleep(1);
+    die("ACCESS_DENIED");
+  }
 ?>

@@ -46,7 +46,8 @@ public class Suche extends ListFragment implements Redrawable {
 
 		mLinearLayout = (LinearLayout) inflater.inflate(R.layout.suche_layout, container, false);
 
-		curses = MainActivity.instance.localDataProvider.results.Item;
+		if(MainActivity.instance.localDataProvider.results.Item!=null)
+			curses = MainActivity.instance.localDataProvider.results.Item;
 		
 		fileList = new DesktopArrayAdapter(getActivity(), R.layout.item, curses);
 		setListAdapter(fileList);

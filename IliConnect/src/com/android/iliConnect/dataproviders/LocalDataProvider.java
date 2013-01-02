@@ -12,9 +12,11 @@ import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.ClassAlias;
 import com.android.iliConnect.models.Desktop;
+import com.android.iliConnect.models.Item;
 import com.android.iliConnect.models.LocalData;
 import com.android.iliConnect.models.Notifications;
 import com.android.iliConnect.models.RemoteData;
+import com.android.iliConnect.models.Results;
 import com.android.iliConnect.models.Settings;
 
 import android.content.Intent;
@@ -34,8 +36,12 @@ public class LocalDataProvider {
 	public Desktop desktopItems = new Desktop();
 	public Authentification auth = new Authentification();;
 	public ArrayList<ClassAlias> classAliases = new ArrayList<ClassAlias>();
+	public Results results = new Results();
+	
+	public String searchDataFileName = "SearchData.xml";
 	public String remoteDataFileName = "RemoteData.xml";
 	public String localDataFilename = "LocalData.xml";
+	
 	public boolean isAvaiable = false;
 	public boolean isUpdating = false;
 	public ReentrantLock syncObject;
@@ -88,11 +94,16 @@ public class LocalDataProvider {
 			if (new File(MainActivity.instance.getFilesDir() + "/" + remoteDataFileName).exists()) {
 				// desktopItems.load();
 				remoteData.load();
+
+
 				desktopItems.DesktopItem = remoteData.Current.Desktop.DesktopItem;
 				notifications.Notifications = remoteData.Current.Notifications;
 				isAvaiable = true;
 				isUpdating = false;
 			}
+			if(new File(MainActivity.instance.getFilesDir() + "/" + searchDataFileName).exists())
+				results.load();
+			
 			 MainTabView.getInstance().update();
 			
 		} catch (Exception e) {

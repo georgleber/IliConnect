@@ -1,6 +1,10 @@
 package com.android.iliConnect;
 
+import java.util.ArrayList;
 import java.util.Date;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -70,18 +74,11 @@ public class MainActivity extends Activity {
 					if (!localDataProvider.auth.autologin)
 						localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
 
-					int timeout = 5000;
-					Date start = new Date();
+				
 					try {
 						sync(instance);
-						/*while (!localDataProvider.isAvaiable) {
-							if (new Date().getTime() - start.getTime() > timeout)
-								throw new InterruptedException();
-							Thread.sleep(200);
-						}*/
-
 						if (watchThread.doAsynchronousTask == null)
-							watchThread.start();
+							watchThread.startTimer();
 
 						Intent i = new Intent(MainActivity.this, MainTabView.class);
 						startActivity(i);
@@ -135,7 +132,8 @@ public class MainActivity extends Activity {
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setTitle("Sync");
 		progressDialog.setMessage("Bitte warten...");
-		RemoteDataProvider rP = new RemoteDataProvider(progressDialog);
-		rP.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl());
+		
+		RemoteDataProvider rP = new RemoteDataProvider( progressDialog);
+		rP.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=sync");
 	}
 }

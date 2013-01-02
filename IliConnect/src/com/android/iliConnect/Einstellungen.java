@@ -70,7 +70,7 @@ public class Einstellungen extends PreferenceActivity {
 	@Override
 	public void onBackPressed() {
 		MainActivity.instance.localDataProvider.localdata.save();
-		MainActivity.instance.watchThread.restart();
+		MainActivity.instance.watchThread.startTimer();
 		super.onBackPressed();
 	}
 }

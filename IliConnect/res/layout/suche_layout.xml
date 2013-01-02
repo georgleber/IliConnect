@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E5F7F7"
-    android:orientation="vertical" xmlns:tools="http://schemas.android.com/tools" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,14 +23,6 @@
 
             <requestFocus />
         </EditText>
-
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:text="@string/searching_button" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -53,12 +46,10 @@
                 android:textSize="25sp" />
 
             <ListView
-                android:id="@+id/kurs_list"
-                style="@style/ListView"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent" >
-
-            </ListView>
+                android:id="@id/android:list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,7 +61,7 @@
             <TextView
                 android:id="@+id/dozent_suche_label"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"                
+                android:layout_height="wrap_content"
                 android:text="@string/Dozent_suche"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textSize="25sp" />
@@ -80,9 +71,8 @@
                 style="@style/ListView"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent" >
-
             </ListView>
         </LinearLayout>
-
     </LinearLayout>
+
 </LinearLayout>

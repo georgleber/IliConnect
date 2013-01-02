@@ -9,31 +9,33 @@ import com.android.iliConnect.dataproviders.PersistableObject;
 
 @Element
 public class Notification extends PersistableObject {
-	
+
 	public Notification() {
-	
+
 	}
+
 	@Element
-	public String title = "";
-	@Element
-	(required = false)
-	public String description = "";
-	public Date date = new Date();
-	@Element
-	(required = false)
-	public String ref_id = "";
+	public String title;
+	@Element(required = false)
+	public String description;
+	@Element(required = false)
+	public Date date;
+	@Element(required = false)
+	public String ref_id;
 
 	public String getDate() {
 
-		SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM hh:mm");
-		return sFormat.format(date); 
+		if (date != null) {
+			SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM hh:mm");
+			return sFormat.format(date);
+		} else
+			return "";
 
 	}
 
 	@Override
 	public void load() {
-		
-		
+
 	}
 
 	public String getTitle() {

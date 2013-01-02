@@ -16,7 +16,7 @@ public class Authentification extends PersistableObject {
 	public String password = "schnee";
 	@Element
 	public String url_src;
-	public String api_src = "IliConnect2.php";
+	public String api_src = "IliConnect.php";
 	
 
 	@Override

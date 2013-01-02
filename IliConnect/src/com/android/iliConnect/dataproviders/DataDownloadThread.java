@@ -15,7 +15,7 @@ public class DataDownloadThread {
 	public TimerTask doAsynchronousTask;
 	private Timer timer = new Timer();
 
-	public void start() {
+	public void startTimer() {
 		final Handler handler = new Handler();
 
 		doAsynchronousTask = new TimerTask() {
@@ -31,22 +31,22 @@ public class DataDownloadThread {
 								ConnectivityManager cM = (ConnectivityManager) MainActivity.instance.getSystemService(Context.CONNECTIVITY_SERVICE);
 								NetworkInfo nInfo = cM.getActiveNetworkInfo();
 								// WIFI-only sync ?
-								if (!MainActivity.instance.localDataProvider.settings.sync_wlanonly || nInfo.getType() == ConnectivityManager.TYPE_WIFI)
-									MainActivity.instance.remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl());
+								if (!MainActivity.instance.localDataProvider.settings.sync_wlanonly || nInfo.getType() == ConnectivityManager.TYPE_WIFI){
+									MainActivity.instance.remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=sync");
+								}
 
 							}
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
+
 						}
 					}
 				});
 			}
 		};
-		restart();
+		start();
 	}
 
-	public void restart() {
-		timer = new Timer();
+	public void start() {
 		timer.schedule(doAsynchronousTask, 0, MainActivity.instance.localDataProvider.settings.interval * 60 * 1000);
 	}
 }

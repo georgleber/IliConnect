@@ -53,16 +53,15 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 	private View replaceView(View v1, LinearLayout v, int resID, String descr) {
 		v.removeView(v1);
 		LinearLayout layout = new LinearLayout(MainActivity.instance);
-		
-		//if (descr.equalsIgnoreCase("Ordner"))
-		//	layout.setGravity(Gravity.TOP);
-		//else
+
+		// if (descr.equalsIgnoreCase("Ordner"))
+		// layout.setGravity(Gravity.TOP);
+		// else
 		layout.setGravity(Gravity.TOP);
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		lp.setMargins(20, 30, 0, 0);
-		
-		
+
 		ImageButton vSub = new ImageButton(MainActivity.instance);
 
 		vSub.setBackgroundResource(resID);
@@ -72,7 +71,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		layout.addView(v1);
 		LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		v1.setLayoutParams(lp1);
-		
+
 		return layout;
 
 	}
@@ -93,17 +92,15 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		desktopViews.title.setText(item.getTitle());
 		desktopViews.description.setText(item.getDescription());
 		desktopViews.type.setText(item.getType());
-		
-		if(item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
+
+		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
 			desktopViews.type.setVisibility(View.GONE);
-		
+
 		if (item.getClass().equals(DesktopItem.class) && !((DesktopItem) item).getDate().equals(""))
 			desktopViews.date.setText(((DesktopItem) item).getDate());
 		else
 			desktopViews.date.setVisibility(View.GONE);
 
-		
-		
 		v.setTag(item.getRef_id());
 
 		if (item.getItems() != null) {
@@ -135,19 +132,17 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			public void onClick(View v) {
 				String s = v.getTag().toString();
 
-				if(parentItem.getType().equalsIgnoreCase("fold") || parentItem.getType().equalsIgnoreCase("crs")){
+				if (parentItem.getType().equalsIgnoreCase("fold") || parentItem.getType().equalsIgnoreCase("crs")) {
 					toggleVisibility(parentItem, v);
-				}	else if (parentItem.getType().equalsIgnoreCase("file")) {
+				} else if (parentItem.getType().equalsIgnoreCase("file")) {
 					MainActivity.instance.localDataProvider.openFileOrDownload(s);
 				} else {
 					MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src + "webdav.php?ref_id=" + s);
 				}
 
-
-				
 			}
 		});
-		
+		toggleVisibility(parentItem, v);
 		return v;
 
 	}
@@ -157,16 +152,11 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		ArrayList<Item> childItems = new ArrayList<Item>();
 		if (childItem.Item != null)
 			childItems = childItem.Item;
-		else 
-		if(childItem.getClass().equals(DesktopItem.class) && ((DesktopItem)childItem).Item != null)
-			childItems = ((DesktopItem)childItem).Item;
-			
-		
-			
-			for (Item item : childItems)
-				if ((vSub = v.findViewWithTag(item.getRef_id())).getVisibility() == View.VISIBLE)
-					vSub.setVisibility(View.GONE);
-				else
-					vSub.setVisibility(View.VISIBLE);
+
+		for (Item item : childItems)
+			if ((vSub = v.findViewWithTag(item.getRef_id())).getVisibility() == View.VISIBLE)
+				vSub.setVisibility(View.GONE);
+			else
+				vSub.setVisibility(View.VISIBLE);
 	}
 }

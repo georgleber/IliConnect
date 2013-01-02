@@ -22,6 +22,10 @@ public class Serialization {
 		// XML-Dokument parsen
 		Serializer serializer = new Persister();
 		File source = new File(MainActivity.instance.getFilesDir() + "/" + filename);
+		
+		if(!source.exists())
+			throw new Exception();
+		
 		// Object targetObject = targetClass.newInstance();
 		Object example = null;
 		example = serializer.read(targetClass, source, false);
@@ -34,7 +38,6 @@ public class Serialization {
 		Serializer serializer = new Persister();
 		File target = new File(MainActivity.instance.getFilesDir() + "/" + filename);
 		serializer.write(targetObject, target);
-
 	}
 	
 

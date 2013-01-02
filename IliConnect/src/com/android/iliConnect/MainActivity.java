@@ -5,6 +5,8 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ public class MainActivity extends Activity {
 	public static MainActivity instance;
 	public static Activity currentActivity;
 	public RemoteDataProvider remoteDataProvider;
+	public ProgressDialog progressDialog;
 
 	public LocalDataProvider localDataProvider;
 
@@ -67,28 +70,26 @@ public class MainActivity extends Activity {
 					if (!localDataProvider.auth.autologin)
 						localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
 
-					if (watchThread.doAsynchronousTask == null)
-						watchThread.start();
-
 					int timeout = 5000;
 					Date start = new Date();
-					synchronized (MainActivity.instance.localDataProvider.syncObject) {
-						try {
-							while (!localDataProvider.isAvaiable) {
-								if (new Date().getTime() - start.getTime() > timeout)
-									throw new InterruptedException();
-								MainActivity.instance.localDataProvider.syncObject.wait(1000);
+					try {
+						sync(instance);
+						/*while (!localDataProvider.isAvaiable) {
+							if (new Date().getTime() - start.getTime() > timeout)
+								throw new InterruptedException();
+							Thread.sleep(200);
+						}*/
 
-							}
-							Intent i = new Intent(MainActivity.this, MainTabView.class);
-							startActivity(i);
-						} catch (InterruptedException e) {
-							Toast t = Toast.makeText(instance, "Login fehlgeschlagen", Toast.LENGTH_LONG);
-							t.show();
+						if (watchThread.doAsynchronousTask == null)
+							watchThread.start();
 
-						}
+						Intent i = new Intent(MainActivity.this, MainTabView.class);
+						startActivity(i);
+					} catch (Exception e) {
+						Toast t = Toast.makeText(instance, "Login fehlgeschlagen", Toast.LENGTH_LONG);
+						t.show();
+
 					}
-
 				}
 
 				catch (Exception ex) {
@@ -128,5 +129,13 @@ public class MainActivity extends Activity {
 		Intent openUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		startActivity(openUrlIntent);
 
+	}
+
+	public void sync(Context context) {
+		progressDialog = new ProgressDialog(context);
+		progressDialog.setTitle("Sync");
+		progressDialog.setMessage("Bitte warten...");
+		RemoteDataProvider rP = new RemoteDataProvider(progressDialog);
+		rP.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl());
 	}
 }

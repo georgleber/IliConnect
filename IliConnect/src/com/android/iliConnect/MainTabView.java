@@ -29,7 +29,6 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	private ViewPager mViewPager;
 	private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, MainTabView.TabInfo>();
 	private PagerAdapter mPagerAdapter;
-	public ProgressDialog progressDialog;
 
 	/*
 	 *	 
@@ -175,7 +174,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 		int pos = this.mTabHost.getCurrentTab();
 		this.mViewPager.setCurrentItem(pos);
-		
+
 		instance = this;
 
 	}
@@ -199,7 +198,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	 */
 	public void onPageSelected(int position) {
 		// TODO Auto-generated method stub
-		
+
 		this.mTabHost.setCurrentTab(position);
 	}
 
@@ -227,23 +226,11 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		case R.id.Logout:
 			finish();
 		case R.id.refresh:
-			sync();
+			MainActivity.instance.sync(instance);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
-	
-
-	public void sync() {
-
-		progressDialog = new ProgressDialog(MainTabView.instance);
-		progressDialog.setTitle("Sync");
-		progressDialog.setMessage("Bitte warten...");
-		RemoteDataProvider rP = new RemoteDataProvider(progressDialog);
-		rP.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl());
-	}
-
 
 }

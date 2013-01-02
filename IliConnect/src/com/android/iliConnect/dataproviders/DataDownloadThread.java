@@ -46,6 +46,7 @@ public class DataDownloadThread {
 	}
 
 	public void restart() {
+		timer = new Timer();
 		timer.schedule(doAsynchronousTask, 0, MainActivity.instance.localDataProvider.settings.interval * 60 * 1000);
 	}
 }

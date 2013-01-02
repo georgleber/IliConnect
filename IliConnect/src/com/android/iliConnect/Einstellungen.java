@@ -66,11 +66,6 @@ public class Einstellungen extends PreferenceActivity {
 		});
 		
 		
-		
-		
-		
-		
-		
 	}
 	@Override
 	public void onBackPressed() {

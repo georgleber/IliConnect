@@ -1,27 +1,23 @@
 package com.android.iliConnect.models;
 
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.dataproviders.PersistableObject;
 
-@Root
+@Element
 public class Authentification extends PersistableObject {
 	@Element
 	public boolean autologin = true;
+	@Element (required = false)	
+	public String user_id = "Joerg";
+	@Element (required = false)
+	public String password = "schnee";
 	@Element
-	public String user_id = "";
-	@Element
-	public String password = "";
-	@Element
-	public String url_src = "http://www.recruitment-specialist.de/xml/";
-
-	public Authentification() {
-
-	}
+	public String url_src;
+	public String api_src = "IliConnect2.php";
+	
 
 	@Override
 	public void load() {

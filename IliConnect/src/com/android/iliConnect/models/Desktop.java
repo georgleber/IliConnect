@@ -1,8 +1,6 @@
 package com.android.iliConnect.models;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 
@@ -12,12 +10,8 @@ import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.dataproviders.PersistableObject;
 @Element
 public class Desktop extends PersistableObject {
-	@ElementList
-	public ArrayList<DesktopItem> DesktopItem;
-	
-	public Desktop(){
-		super.arrayModel = true;
-	}
+	@ElementList( name="Items", required = true)
+	public ArrayList<Item> DesktopItem;
 	
 	@Override
 	public void load() {

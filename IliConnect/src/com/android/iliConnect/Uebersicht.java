@@ -1,6 +1,5 @@
 package com.android.iliConnect;
 
-import java.util.ArrayList;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;

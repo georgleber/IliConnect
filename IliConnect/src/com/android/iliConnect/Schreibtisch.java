@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import com.android.iliConnect.models.Item;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +12,29 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class Schreibtisch extends ListFragment {
+public class Schreibtisch extends ListFragment implements Redrawable {
+	
+	private ArrayList<Item> mItems;
+	private DesktopArrayAdapter  desktopAdapter;
 	
 	
-	
+ 
+	public void refreshViews() {
+    	getListView().invalidateViews();
+    	desktopAdapter = new DesktopArrayAdapter(MainActivity.currentActivity, R.layout.item,  MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
+		setListAdapter(desktopAdapter);
+		
+    }
+  
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		View v = inflater.inflate(R.layout.schreibtisch_layout, container, false);
-
-			DesktopArrayAdapter desktopAdapter = new DesktopArrayAdapter(MainActivity.currentActivity, R.layout.item,  MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
-
-			setListAdapter(desktopAdapter);
+		
+	    
+		desktopAdapter = new DesktopArrayAdapter(MainActivity.currentActivity, R.layout.item,  MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
+		setListAdapter(desktopAdapter);
+			
 
 			if (container == null) {
 				// We have different layouts, and in one of them this
@@ -40,7 +49,8 @@ public class Schreibtisch extends ListFragment {
 	
 		return v;
 	}
-
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,12 +60,15 @@ public class Schreibtisch extends ListFragment {
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		ItemArrayAdapter desktopAdapter = new ItemArrayAdapter(MainActivity.currentActivity, R.layout.item,  MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position).Items);
+		ItemArrayAdapter desktopAdapter = new ItemArrayAdapter(MainActivity.currentActivity, R.layout.item,  MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position).Item);
 		
 		((TextView)MainActivity.currentActivity.findViewById(R.id.textView1)).setText( MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position).title);
 		setListAdapter(desktopAdapter);
 		super.onListItemClick(l, v, position, id);
 		
 	}
+
+
+
 	
 }

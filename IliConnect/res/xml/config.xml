@@ -5,7 +5,8 @@
 			<autologin>false</autologin>
 			<user_id>root</user_id>
 			<password>homer</password>
-			<url_src>http://swe.k3mp.de/ilias/xml.php</url_src>
+			<url_src>http://www.recruitment-specialist.de/xml/</url_src>
+						<!---<url_src>http://swe.k3mp.de/ilias/</url_src>!-->
 		</Authentification>
 		<Settings>
 			<sync>true</sync>

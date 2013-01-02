@@ -3,28 +3,21 @@ package com.android.iliConnect;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.android.iliConnect.models.Desktop;
-import com.android.iliConnect.models.DesktopItem;
-import com.android.iliConnect.models.Item;
-
 import android.content.Context;
-import android.content.Intent;
-import android.opengl.Visibility;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-public class DesktopArrayAdapter extends ArrayAdapter<DesktopItem> {
+import com.android.iliConnect.models.DesktopItem;
+import com.android.iliConnect.models.Item;
+
+public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 
 	private class DesktopViews {
 		TextView title;
@@ -39,9 +32,9 @@ public class DesktopArrayAdapter extends ArrayAdapter<DesktopItem> {
 		super(context, textViewResourceId);
 	}
 
-	private List<DesktopItem> items;
+	private List<Item> items;
 
-	public DesktopArrayAdapter(Context context, int textViewResourceId, List<DesktopItem> items) {
+	public DesktopArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
 		super(context, textViewResourceId, items);
 		this.items = items;
 	}
@@ -104,7 +97,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<DesktopItem> {
 		if(item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
 			desktopViews.type.setVisibility(View.GONE);
 		
-		if (item.getClass().equals(DesktopItem.class))
+		if (item.getClass().equals(DesktopItem.class) && !((DesktopItem) item).getDate().equals(""))
 			desktopViews.date.setText(((DesktopItem) item).getDate());
 		else
 			desktopViews.date.setVisibility(View.GONE);
@@ -164,8 +157,9 @@ public class DesktopArrayAdapter extends ArrayAdapter<DesktopItem> {
 		ArrayList<Item> childItems = new ArrayList<Item>();
 		if (childItem.Item != null)
 			childItems = childItem.Item;
-		else if(childItem.getClass().equals(DesktopItem.class) && ((DesktopItem)childItem).Items != null)
-			childItems = ((DesktopItem)childItem).Items;
+		else 
+		if(childItem.getClass().equals(DesktopItem.class) && ((DesktopItem)childItem).Item != null)
+			childItems = ((DesktopItem)childItem).Item;
 			
 		
 			

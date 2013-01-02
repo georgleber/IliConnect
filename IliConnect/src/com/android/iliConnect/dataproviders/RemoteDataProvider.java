@@ -8,18 +8,28 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.android.iliConnect.MainActivity;
-
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
-public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
-	public Object synchronizeObject = new Object();
+import com.android.iliConnect.MainActivity;
 
+public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
+	
+	public ReentrantLock syncObject;
+	private ProgressDialog pDialog;
+
+	public RemoteDataProvider(){
+		this.syncObject = new ReentrantLock();
+	}
+	public RemoteDataProvider(ProgressDialog pDialog){
+		this.syncObject = new ReentrantLock();
+		this.pDialog = pDialog;
+	}
+	
 	@Override
 	protected String doInBackground(String... sUrl) {
 		try {
-		URL url = new URL(sUrl[0]);
+			URL url = new URL(sUrl[0]);
 			String targetName = MainActivity.instance.localDataProvider.remoteDataFileName;
 			if (sUrl.length > 1)
 				targetName = sUrl[1];
@@ -55,22 +65,32 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, String> {
 
 	@Override
 	protected void onPreExecute() {
-		
+		MainActivity.instance.localDataProvider.isUpdating = true;
+		if (pDialog != null)
+			pDialog.show();
 	};
 
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 		// increment progress bar by progress value
-
-		//MainActivity.instance.progressDialog.setProgress(values[0]);
+		if (pDialog != null)
+			pDialog.setProgress(values[0]);
 	}
 
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
+		
+		
 		MainActivity.instance.localDataProvider.updateLocalData();
-		synchronized (this.synchronizeObject) {
-			this.synchronizeObject.notifyAll();
+		synchronized ( this.syncObject) {
+			this.syncObject.notifyAll();
 		}
+
+		if (pDialog != null && pDialog.isShowing())
+			pDialog.dismiss();
+		
+		
 	}
+
 }

@@ -47,6 +47,13 @@
         <item>2 Stunden</item>
         <item>1 Tag</item>        
     </string-array>
+     <string-array name="array_intervall_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>1440</item>        
+    </string-array>
     <string-array name="array_termine">
         <item>1</item>
         <item>2</item>
@@ -60,10 +67,21 @@
         <item>5 Tage</item>
         <item>6 Tage</item>               
     </string-array>
+    <string-array name="array_warnung_values">
+        <item>3 Tage</item>
+        <item>4 Tage</item>
+        <item>5 Tage</item>
+        <item>6 Tage</item>               
+    </string-array>
     <string-array name="array_Kritisch">
         <item>1 Tag</item>
         <item>2 Tage</item>                    
     </string-array>
+    <string-array name="array_Kritisch_values">
+        <item>1 Tag</item>
+        <item>2 Tage</item>                    
+    </string-array>
+    
         <string name="testdates">24.12.2012    16 Uhr</string>
         <string name="testpraktikum">Software Engineering Praktikum</string>
         <string name="testpraktikum2">25.12.2012    14 Uhr</string>

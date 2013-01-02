@@ -2,7 +2,6 @@ package com.android.iliConnect;
 
 import java.util.List;
 
-import com.android.iliConnect.models.Item;
 import com.android.iliConnect.models.Notification;
 
 import android.content.Context;

@@ -2,9 +2,6 @@ package com.android.iliConnect.dataproviders;
 
 import java.util.concurrent.ExecutionException;
 
-import android.database.CursorJoiner.Result;
-
-import com.android.iliConnect.Schreibtisch;
 import com.android.iliConnect.models.CourseData;
 
 public class LocalCourseProvider {

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.xmlpull.v1.XmlPullParser;
 import com.android.iliConnect.MainActivity;
@@ -12,8 +12,6 @@ import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.ClassAlias;
 import com.android.iliConnect.models.Desktop;
-import com.android.iliConnect.models.DesktopItem;
-import com.android.iliConnect.models.Item;
 import com.android.iliConnect.models.LocalData;
 import com.android.iliConnect.models.Notifications;
 import com.android.iliConnect.models.RemoteData;
@@ -39,20 +37,22 @@ public class LocalDataProvider {
 	public String remoteDataFileName = "RemoteData.xml";
 	public String localDataFilename = "LocalData.xml";
 	public boolean isAvaiable = false;
-
+	public boolean isUpdating = false;
+	public ReentrantLock syncObject;
+	
+	
 	public static LocalDataProvider getInstance() {
 		if (instance == null) {
 			instance = new LocalDataProvider();
-			instance.classAliases.add(new ClassAlias("Settings", Settings.class));
-			instance.classAliases.add(new ClassAlias("Authentification", Authentification.class));
-			instance.classAliases.add(new ClassAlias("Desktop", Desktop.class));
-			instance.classAliases.add(new ClassAlias("Notifications", Notifications.class));
-
+	
 		}
 		return instance;
 	}
 
 	public void init(int xmLRes) {
+		
+		syncObject = new ReentrantLock();
+		
 		File config = new File(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
 		if (!config.exists()) {
 			XmlResourceParser xpp = MainActivity.currentActivity.getResources().getXml(xmLRes);
@@ -84,20 +84,17 @@ public class LocalDataProvider {
 	}
 
 	public boolean updateLocalData() {
-
 		try {
-
 			if (new File(MainActivity.instance.getFilesDir() + "/" + remoteDataFileName).exists()) {
 				// desktopItems.load();
 				remoteData.load();
-				desktopItems.DesktopItem = remoteData.Current.Desktop;
+				desktopItems.DesktopItem = remoteData.Current.Desktop.DesktopItem;
 				notifications.Notifications = remoteData.Current.Notifications;
 				isAvaiable = true;
+				isUpdating = false;
 			}
-			MainActivity.instance.remoteDataProvider.synchronizeObject.notifyAll();
-
-			// MainTabView.getInstance().instance.update(1);
-
+			 MainTabView.getInstance().update();
+			
 		} catch (Exception e) {
 			return false;
 		}
@@ -111,9 +108,9 @@ public class LocalDataProvider {
 		if (!file.exists()) {
 			RemoteDataProvider download = new RemoteDataProvider();
 			download.execute(new String[] { auth.url_src + "webdav.php?ref_id=" + refID, refID });
-			synchronized (download.synchronizeObject) {
+			synchronized (MainActivity.instance.localDataProvider.syncObject) {
 				try {
-					download.synchronizeObject.wait(5);
+					MainActivity.instance.localDataProvider.syncObject.wait(100);
 				} catch (InterruptedException e) {
 
 				}
@@ -134,29 +131,6 @@ public class LocalDataProvider {
 			t.show();
 		}
 
-	}
-
-	public Item findItemByRefID(String refID) {
-		for (Item subItem : desktopItems.DesktopItem)
-			return findItem(subItem, refID);
-
-		return null;
-	}
-
-	public Item walk(List<Item> items, String refID) {
-		for (Item subItem : items)
-			return findItem(subItem, refID);
-		return null;
-	}
-
-	public Item findItem(Item item, String refID) {
-		if (item.ref_id.equals(refID))
-			return item;
-		else if (item.getClass().equals(DesktopItem.class) && ((DesktopItem) item).Items != null) {
-			return walk(((DesktopItem) item).Items, refID);
-		} else if (item.Item != null)
-			return walk(item.Item, refID);
-		return item;
 	}
 
 }

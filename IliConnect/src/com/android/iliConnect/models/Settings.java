@@ -1,14 +1,12 @@
 package com.android.iliConnect.models;
 
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.dataproviders.PersistableObject;
 
-@Root 
+@Element
 public class Settings extends PersistableObject {
 	@Element
 	public boolean sync = true;
@@ -39,6 +37,8 @@ public class Settings extends PersistableObject {
 
 	}
 
+
+	
 	public Settings(Authentification auth, boolean sync, int interval, boolean sync_wlanonly, int num_notifications, int level_warning, int level_critical) {
 		super();
 		this.sync = sync;

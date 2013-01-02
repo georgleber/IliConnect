@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
 
 import android.widget.Toast;
 
@@ -16,10 +15,6 @@ public class Notifications extends PersistableObject{
 
 	@ElementList (name="Notifications")
 	public ArrayList<Notification> Notifications;
-	 
-	public Notifications(){
-		super.arrayModel = true;
-	}
 	
 	@Override
 	public void load() {

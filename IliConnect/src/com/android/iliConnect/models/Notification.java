@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 import com.android.iliConnect.dataproviders.PersistableObject;
 
@@ -17,9 +16,11 @@ public class Notification extends PersistableObject {
 	@Element
 	public String title = "";
 	@Element
+	(required = false)
 	public String description = "";
 	public Date date = new Date();
 	@Element
+	(required = false)
 	public String ref_id = "";
 
 	public String getDate() {

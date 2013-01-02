@@ -1,12 +1,8 @@
 package com.android.iliConnect;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.android.iliConnect.models.Desktop;
 import com.android.iliConnect.models.Item;
-import com.android.iliConnect.models.Item;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

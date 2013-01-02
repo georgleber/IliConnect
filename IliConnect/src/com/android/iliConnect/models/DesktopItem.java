@@ -3,34 +3,32 @@ package com.android.iliConnect.models;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
+
 @Element
-public class DesktopItem extends Item{
-	
-	
-	@ElementList (required = false)
-	public ArrayList<Item> Items; 
+public class DesktopItem extends Item {
 
+	//@ElementList(required = false, name="Items")
+	public ArrayList<Item> Item;
 
-	@Element (required = false)
-	public Date timestamp = new Date();
-	
+	@Element(required = false)
+	public Date timestamp;
+
 	@Override
 	public ArrayList<Item> getItems() {
-		return Items;
+		return Item;
 	}
 
 	public String getDate() {
 
-		SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM hh:mm");
-		return sFormat.format(timestamp); 
+		if (timestamp != null) {
+			SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM hh:mm");
+			return sFormat.format(timestamp);
+		} else
+			return "";
 
 	}
-	
+
 	public DesktopItem() {
 
 	}

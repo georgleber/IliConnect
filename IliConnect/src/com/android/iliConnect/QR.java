@@ -21,7 +21,7 @@ import android.widget.Toast;
 public class QR extends Fragment {
 	
 
-	public static LocalCourseProvider local = new LocalCourseProvider();
+	public LocalCourseProvider local = new LocalCourseProvider();
 
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,8 +57,7 @@ public class QR extends Fragment {
 		        	startActivityForResult(intent, REQUEST_SCAN);
 		        	
 		        	joinCourse("49", "4711");
-
-		        	
+		        	//leaveCourse("49");
 		        }
 		    });
 
@@ -79,7 +78,7 @@ public class QR extends Fragment {
 	            
 	            // Zunaechst Messagebox anzeigen, ob wirklich beitreten will 
 	            
-	            // Bei Bestätigung joinCourse() aufrufen
+	            // Bei Best��tigung joinCourse() aufrufen
 	        } else if (resultCode == 0) {
 	            // Handle cancel
 	        }
@@ -88,12 +87,12 @@ public class QR extends Fragment {
 	
 	private void joinCourse(String ref_id, String crs_pw) {
     	try {
-			String result = QR.local.joinCourse("49", "4711");
+			String result = this.local.joinCourse("49", "4711");
 			
 			if(result != null && result.contains("JOINED")) {
 				this.showAlert("Sie wurde erfolgreich angemeldet");
 			}
-			// Falls Passwort für Anmeldung benoetigt wird, Abfrage einblenden
+			// Falls Passwort für Anmeldung benötigt wird, Abfrage einblenden
 			if(result != null && result.contains("PASSWORD_NEEDED")) {
 				// Passwortabfrage einblenden
 				this.showAlert("Bitte geben Sie das Passwort des Kurses ein");
@@ -107,6 +106,19 @@ public class QR extends Fragment {
 			System.out.println(e.getMessage());
 			this.showAlert(e.getMessage());
 		}		
+	}
+	
+	private void leaveCourse(String ref_id) {
+		try {
+			String result = this.local.leaveCourse(ref_id);
+			
+			if(result != null && result.contains("LEFT")) {
+				this.showAlert("Sie wurde erfolgreich abgemeldet");
+			}
+		} catch (JoinCourseException e) {
+			this.showAlert(e.getMessage());
+			e.printStackTrace();
+		}	
 	}
 	
 	// Fuer Ausgabetest etwas zum Anzeigen!!

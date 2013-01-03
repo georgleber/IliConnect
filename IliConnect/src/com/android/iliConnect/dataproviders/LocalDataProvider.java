@@ -34,7 +34,7 @@ public class LocalDataProvider {
 	public LocalData localdata = new LocalData();
 	public RemoteData remoteData = new RemoteData();
 	public Desktop desktopItems = new Desktop();
-	public Authentification auth = new Authentification();;
+	public Authentification auth = new Authentification();
 	public ArrayList<ClassAlias> classAliases = new ArrayList<ClassAlias>();
 	public Results results = new Results();
 	

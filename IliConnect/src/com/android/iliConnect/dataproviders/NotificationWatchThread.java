@@ -39,19 +39,18 @@ public class NotificationWatchThread {
 							int critical = MainActivity.instance.localDataProvider.settings.level_critical;
 
 							for (Notification notification : notifications.Notifications) {
-								// FIXME:
-								// How to check if notification is not marked as done
+								if (!notification.isMarked()) {
+									Date currentDate = new Date(System.currentTimeMillis());
+									Date notiDate = notification.date;
 
-								Date currentDate = new Date(System.currentTimeMillis());
-								Date notiDate = notification.date;
-
-								long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
-								if (daysBetween <= critical) {
-									String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
-									createNotification(false, notificationText);
-								} else if (daysBetween <= warning) {
-									String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
-									createNotification(true, notificationText);
+									long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
+									if (daysBetween <= critical) {
+										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
+										createNotification(false, notificationText);
+									} else if (daysBetween <= warning) {
+										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
+										createNotification(true, notificationText);
+									}
 								}
 							}
 						} catch (Exception e) {

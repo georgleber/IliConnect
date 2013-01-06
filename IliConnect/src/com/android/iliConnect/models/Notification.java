@@ -22,6 +22,8 @@ public class Notification extends PersistableObject {
 	public Date date;
 	@Element(required = false)
 	public String ref_id;
+	@Element(required = false)
+	public boolean marked;
 
 	public String getDate() {
 
@@ -50,4 +52,7 @@ public class Notification extends PersistableObject {
 		return ref_id;
 	}
 
+	public boolean isMarked() {
+		return marked;
+	}
 }

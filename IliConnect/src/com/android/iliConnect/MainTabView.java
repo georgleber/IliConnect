@@ -17,7 +17,10 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import com.android.iliConnect.PagerAdapter;
+import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
+import com.android.iliConnect.dataproviders.Serialization;
+import com.android.iliConnect.models.Authentification;
 
 /*
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager. 
@@ -125,7 +128,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mViewPager = (ViewPager) super.findViewById(R.id.viewpager);
 		this.mViewPager.setAdapter(this.mPagerAdapter);
 
-		this.mViewPager.setCurrentItem(2); // set default site "Übersicht"
+		this.mViewPager.setCurrentItem(2); // set default site "ï¿½bersicht"
 
 		this.mViewPager.setOnPageChangeListener(this);
 	}
@@ -142,14 +145,14 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("QR"), (tabInfo = new TabInfo("Tab2", QR.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
-		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Übersicht"), (tabInfo = new TabInfo("Tab3", Uebersicht.class, args)));
+		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("ï¿½bersicht"), (tabInfo = new TabInfo("Tab3", Uebersicht.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab4").setIndicator("Schreibtisch"), (tabInfo = new TabInfo("Tab4", Schreibtisch.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab5").setIndicator("Termine"), (tabInfo = new TabInfo("Tab5", Termine.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
-		mTabHost.setCurrentTab(2);// set default tab "Übersicht"
+		mTabHost.setCurrentTab(2);// set default tab "ï¿½bersicht"
 		for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++) {
 			// mTabHost.getTabWidget().getChildAt(i).setPadding(10,10,10,10);
 			mTabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 60;
@@ -224,7 +227,17 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			startActivity(settingsActivity);
 			return true;
 		case R.id.Logout:
-			finish();
+			
+			// TODO: Login-Ansicht aufrufen, autLogin auf false setzen und Daten aus XML entfernen
+			LocalDataProvider prov = new LocalDataProvider();
+			
+			prov.deleteAuthentication();
+			
+			// Anmeldebildschirm anzeigen
+			Intent mainActivity = new Intent(instance, MainActivity.class);
+			startActivity(mainActivity);
+
+			//finish();
 		case R.id.refresh:
 			MainActivity.instance.sync(instance);
 			return true;

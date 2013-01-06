@@ -153,7 +153,7 @@ class IliConnect{
 
   function printMagazin() {
 
-    global $ilUser;
+    global $ilUser, $ilAccess;
 
     ## Header auf XML stellen
     header ("Content-Type:text/xml");
@@ -176,7 +176,8 @@ class IliConnect{
 
     ## In $desktop_items sind nun ILIAS Objekte.
     foreach($desktop_items as $item) {
-      $this->desktopItem2Xml($item,$desktop, new SimpleXMLElement("<dontshow/>"));
+      if($ilAccess->checkAccess("read", "show", $item["ref_id"], $item["type"], $item["obj_id"]))
+        $this->desktopItem2Xml($item,$desktop, new SimpleXMLElement("<dontshow/>"));
     }
 
     ## AUSGABE DER XML STRUKTUR
@@ -185,35 +186,34 @@ class IliConnect{
   }
 
   function searchMagazin() {
+    global $ilUser, $tree, $ilAccess;
 
-    global $ilUser;
+    require_once("classes/class.ilObjectFactory.php");
 
-    ## Header auf XML stellen
-    header ("Content-Type:text/xml");
-
-    ## MAIN XML TAG (auch XML Root genannt)
     $xml = new SimpleXMLElement("<Iliconnect/>");
 
-    ## XML ILICONNECT CURRENT
     $current = $xml->addChild("Current");
-
-    $needle = $_POST['searchfor'];
     
-    ## XML ILICONNECT CURRENT DESKTOP
     $results = $current->addChild("Results");
 
-    ## Tree ist eine ILIAS eigene Variable
-    global $tree;
-    $desktop_items= $tree->getChilds(1);
-
-    ## In $desktop_items sind nun ILIAS Objekte.
-    foreach($desktop_items as $item) {
-      $this->searchInTree($item,$needle,$results);
+    #$needle = $_POST['searchfor'];
+    $needle = $_REQUEST['searchfor'];
+    $courses = $tree->getChildsByType($tree->getRootId(), "crs");
+    foreach($courses as &$course) {
+        $owner = ilObjectFactory::getInstanceByObjId($course["owner"]);
+        if((stristr($course["title"], $needle) !== false ||
+            stristr($owner->getFullName(), $needle) !== false) &&
+            $ilAccess->checkAccess("read", "show", $course["ref_id"], "crs", $course["obj_id"])) {
+            $item = $results->addChild("Item");
+            foreach(array("title", "description", "ref_id", "type") as $attribute)
+                $item->addChild($attribute, $course[$attribute]);
+            $item->addChild("owner", $owner->getFullName());
+        }
     }
 
     ## AUSGABE DER XML STRUKTUR
+    header ("Content-Type:text/xml");
     echo $xml->asXML();
-
   }
 
   ## Der (un)uebersichtlichkeit halber in eine eigene funktion gepackt.

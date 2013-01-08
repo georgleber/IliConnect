@@ -145,7 +145,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("QR"), (tabInfo = new TabInfo("Tab2", QR.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
-		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("�bersicht"), (tabInfo = new TabInfo("Tab3", Uebersicht.class, args)));
+		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Übersicht"), (tabInfo = new TabInfo("Tab3", Uebersicht.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab4").setIndicator("Schreibtisch"), (tabInfo = new TabInfo("Tab4", Schreibtisch.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);

@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 
 		instance = this;
 
-		// TODO: Login überspringen, falls Autologin, Auth vorhanden
+		// TODO: Login ueberspringen, falls Autologin, Auth vorhanden
 
 		localDataProvider = LocalDataProvider.getInstance();
 		localDataProvider.init(R.xml.config);

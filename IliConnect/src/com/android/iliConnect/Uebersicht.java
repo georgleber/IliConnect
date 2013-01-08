@@ -2,6 +2,7 @@ package com.android.iliConnect;
 
 import java.util.List;
 
+import com.android.iliConnect.handler.NotificationHandler;
 import com.android.iliConnect.models.Notification;
 
 import android.os.Bundle;
@@ -10,17 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Uebersicht extends ListFragment implements Redrawable{
+public class Uebersicht extends ListFragment implements Redrawable {
+
+	private NotificationHandler handler;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-	
 		View v = inflater.inflate(R.layout.uebersicht_layout, container, false);
-		
+
 		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
-		List<Notification> items = this.getNotificationsToShow();
+		List<Notification> items = handler.loadNotifications(true);
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-	
 		setListAdapter(noteAdapter);
 
 		if (container == null) {
@@ -40,30 +41,15 @@ public class Uebersicht extends ListFragment implements Redrawable{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		handler = new NotificationHandler();
 	}
-	
-	
+
 	public void refreshViews() {
 		getListView().invalidateViews();
-		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
-		List<Notification> items = this.getNotificationsToShow();
-		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-		setListAdapter(noteAdapter);	
-	}
-	
-	
-	
-	private List<Notification> getNotificationsToShow() {
-		// Eingestellte Anzahl der Termine 
-		int numNotifications = MainActivity.instance.localDataProvider.settings.num_notifications;
-		// Insgesamt vorhandene Termine
-		int totalNumOfNotifications = MainActivity.instance.localDataProvider.notifications.Notifications.size();
 		
-		List<Notification> allNotis = MainActivity.instance.localDataProvider.notifications.Notifications;
-
-		if(numNotifications < totalNumOfNotifications) {
-			return allNotis.subList(0, numNotifications);
-		}
-		return allNotis;
+		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
+		List<Notification> items = handler.loadNotifications(true);
+		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
+		setListAdapter(noteAdapter);
 	}
 }

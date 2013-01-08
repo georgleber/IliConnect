@@ -57,7 +57,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		} else if (type.equalsIgnoreCase("FOLD")) {
 			resID =R.drawable.fold;  descr = "Ordner";
 		} else if (type.equalsIgnoreCase("EXC")) {
-			resID = R.drawable.exc; descr = "Übung";
+			resID = R.drawable.exc; descr = "Ãœbung";
 		} else if (type.equalsIgnoreCase("TST")) {
 			resID = R.drawable.tst; descr =  "Test";
 		}

@@ -2,10 +2,6 @@ package com.android.iliConnect.dataproviders;
 
 import java.io.IOException;
 
-import com.android.iliConnect.MainActivity;
-
-import android.widget.Toast;
-
 public class AuthException extends IOException {
 	
 	String error;

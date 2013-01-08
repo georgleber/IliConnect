@@ -14,15 +14,22 @@
 
         <EditText
             android:id="@+id/editText1"
-            android:layout_width="0dp"
+            android:layout_width="262dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.95"
+            android:layout_weight="0.39"
             android:ems="10"
             android:hint="@string/search_string"
             android:singleLine="true" >
 
             <requestFocus />
         </EditText>
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
@@ -37,14 +44,6 @@
             android:layout_weight="0.5"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/kurs_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/kurs_suche"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="25sp" />
-
             <ListView
                 android:id="@id/android:list"
                 android:layout_width="match_parent"
@@ -57,21 +56,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/dozent_suche_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Dozent_suche"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="25sp" />
-
-            <ListView
-                android:id="@+id/dozent_list"
-                style="@style/ListView"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent" >
-            </ListView>
         </LinearLayout>
     </LinearLayout>
 

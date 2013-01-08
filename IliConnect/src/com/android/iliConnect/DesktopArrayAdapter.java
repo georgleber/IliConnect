@@ -46,11 +46,22 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		v = fillListRecursive(null, items.get(position), vi);
-
+		//replaceView(v, (LinearLayout)convertView,items.get(position).getType());
 		return v;
 	}
 
-	private View replaceView(View v1, LinearLayout v, int resID, String descr) {
+	private View replaceView(View v1, LinearLayout v, String type) {
+		int resID = 0; String descr = null;
+		if (type.equalsIgnoreCase("FILE")) {
+			resID = R.drawable.dl;  descr = "Download";
+		} else if (type.equalsIgnoreCase("FOLD")) {
+			resID =R.drawable.fold;  descr = "Ordner";
+		} else if (type.equalsIgnoreCase("EXC")) {
+			resID = R.drawable.exc; descr = "Übung";
+		} else if (type.equalsIgnoreCase("TST")) {
+			resID = R.drawable.tst; descr =  "Test";
+		}
+		
 		v.removeView(v1);
 		LinearLayout layout = new LinearLayout(MainActivity.instance);
 
@@ -85,7 +96,9 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			desktopViews.description = (TextView) v.findViewById(R.id.itemDescription);
 			desktopViews.date = (TextView) v.findViewById(R.id.itemDate);
 			desktopViews.type = (TextView) v.findViewById(R.id.itemType);
+			
 			v.setTag(desktopViews);
+			
 		} else
 			desktopViews = (DesktopViews) v.getTag();
 
@@ -110,15 +123,8 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 				LinearLayout layout = (LinearLayout) v1;
 
 				final String type = childItem.getType();
-				if (type.equalsIgnoreCase("FILE")) {
-					layout = (LinearLayout) replaceView(v1, v, R.drawable.dl, "Download");
-				} else if (type.equalsIgnoreCase("FOLD")) {
-					layout = (LinearLayout) replaceView(v1, v, R.drawable.fold, "Ordner");
-				} else if (type.equalsIgnoreCase("EXC")) {
-					layout = (LinearLayout) replaceView(v1, v, R.drawable.exc, "Übung");
-				} else if (type.equalsIgnoreCase("TST")) {
-					layout = (LinearLayout) replaceView(v1, v, R.drawable.tst, "Test");
-				}
+				layout = (LinearLayout) replaceView(v1, v,type);
+				
 				v1 = layout;
 				v1.setTag(childItem.getRef_id());
 				v.addView(v1);
@@ -142,7 +148,10 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 
 			}
 		});
+		
 		toggleVisibility(parentItem, v);
+		
+		
 		return v;
 
 	}

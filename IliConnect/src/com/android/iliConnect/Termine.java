@@ -22,6 +22,8 @@ public class Termine extends Fragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
+		
+		
 		return (LinearLayout)inflater.inflate(R.layout.termine_layout, container, false);
 	}
 }

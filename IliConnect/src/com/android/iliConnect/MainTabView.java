@@ -3,7 +3,6 @@ package com.android.iliConnect;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import com.android.iliConnect.PagerAdapter;
-import com.android.iliConnect.dataproviders.RemoteDataProvider;
 
 /*
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager. 
@@ -224,7 +222,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			startActivity(settingsActivity);
 			return true;
 		case R.id.Logout:
-			finish();
+			MainActivity.instance.logout();
 		case R.id.refresh:
 			MainActivity.instance.sync(instance);
 			return true;

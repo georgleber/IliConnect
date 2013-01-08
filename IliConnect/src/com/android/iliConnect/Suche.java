@@ -1,51 +1,34 @@
 package com.android.iliConnect;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
 import com.android.iliConnect.models.Item;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 public class Suche extends ListFragment implements Redrawable {
 
 	private ArrayList<Item> curses = new ArrayList<Item>();
-	private LinearLayout mLinearLayout;
 	private EditText etSearch;
 	private ListAdapter fileList;
-	private ListView lv; 
-	
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		mLinearLayout = (LinearLayout) inflater.inflate(R.layout.suche_layout, container, false);
-
+		LinearLayout mLinearLayout = (LinearLayout) inflater.inflate(R.layout.suche_layout, container, false);
+		
 		if(MainActivity.instance.localDataProvider.results.Item!=null)
 			curses = MainActivity.instance.localDataProvider.results.Item;
 		
@@ -54,34 +37,9 @@ public class Suche extends ListFragment implements Redrawable {
 		
 		
 		if (container == null) {
-			// We have different layouts, and in one of them this
-			// fragment's containing frame doesn't exist. The fragment
-			// may still be created from its saved state, but there is
-			// no reason to try to create its view hierarchy because it
-			// won't be displayed. Note this is not needed -- we could
-			// just run the code below, where we would create and return
-			// the view hierarchy; it would just never be used.
 			return null;
 		}
 
-		LinearLayout mLinearLayout = (LinearLayout) inflater.inflate(R.layout.suche_layout, container, false);
-
-		// Anpassung der Fonts für überschriften
-		TextView kurs_label = (TextView) mLinearLayout.findViewById(R.id.kurs_label);
-		TextView dozent_label = (TextView) mLinearLayout.findViewById(R.id.dozent_suche_label);
-		Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-BoldCondensed.ttf");
-		kurs_label.setTypeface(typeFace);
-		dozent_label.setTypeface(typeFace);
-
-		// Button kurse = (Button) mLinearLayout.findViewById(R.id.show_dozent_course);
-		// kurse.setOnClickListener(new View.OnClickListener() {
-		// public void onClick(View v) {
-		// Intent i = new Intent();
-		// i.setClass(getActivity(), Dozent_kurse.class);
-		// i.putExtra("selected","Prof. Dr. rer. nat. Faßbender");
-		// startActivity(i);
-		// }
-		// });
 		etSearch = (EditText) mLinearLayout.findViewById(R.id.editText1);
 		etSearch.addTextChangedListener(new TextWatcher() {
 
@@ -95,41 +53,24 @@ public class Suche extends ListFragment implements Redrawable {
 
 			public void afterTextChanged(Editable s) {
 				updateResults(s.toString());
+				
 			}
 		});
 
-		// liste für dozenten
-		List<String> valueList2 = new ArrayList<String>();
-
-		ListAdapter fileList2 = new ArrayAdapter<String>(getActivity(), R.layout.black_list_item, valueList2);
-		final ListView lv2 = (ListView) mLinearLayout.findViewById(R.id.dozent_list);
-		lv2.setAdapter(fileList2);
-		lv2.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Intent i = new Intent();
-				i.setClass(getActivity(), Dozent_kurse.class);
-				i.putExtra("selected", "Prof. Dr. rer. nat. Faßbender");
-				startActivity(i);
-			}
-		});
-
-		// Button join = (Button) mLinearLayout.findViewById(R.id.kurs_beitreten);
-		// join.setOnClickListener(new View.OnClickListener() {
-		//
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// showAlertMessage();
-		// }
-		// });
-
+		
 		return mLinearLayout;
 
 	}
 
 	private void updateResults(String s) {
+		 
 		
-		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		
+		 ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 		 nameValuePairs.add(new BasicNameValuePair("searchfor", s));
+		  
+		 ((ProgressBar)MainTabView.instance.findViewById(R.id.progressBar1)).setVisibility(View.VISIBLE);;
+		 
 		 RemoteDataProvider rP = new RemoteDataProvider(nameValuePairs);
 		 rP.execute(new String[]{MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=search",MainActivity.instance.localDataProvider.searchDataFileName});
 		
@@ -141,29 +82,6 @@ public class Suche extends ListFragment implements Redrawable {
 
 	}
 
-	private void showAlertMessage() {
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-		alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-		alertDialog.setTitle("Kursanmeldung!");
-		alertDialog.setMessage("Wollen Sie sich zu dem Kurs: Physik anmelden?");
-		alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		alertDialog.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
-
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				// Toast.makeText(getApplicationContext(), "abbruch", Toast.LENGTH_LONG).show();
-			}
-		});
-		AlertDialog alertDialog1 = alertDialog.create();
-		alertDialog1.show();
-	}
-
 	public void refreshViews() {
 
 		curses = MainActivity.instance.localDataProvider.results.Item;
@@ -172,11 +90,8 @@ public class Suche extends ListFragment implements Redrawable {
 		getListView().invalidateViews();
 		setListAdapter(fileList);
 		
-		getListView().setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				showAlertMessage();
-			}
-		});
+		((ProgressBar)MainTabView.instance.findViewById(R.id.progressBar1)).setVisibility(View.INVISIBLE);
+		
 
 	}
 }

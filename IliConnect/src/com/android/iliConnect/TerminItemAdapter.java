@@ -39,7 +39,7 @@ public class TerminItemAdapter extends ArrayAdapter<Notification> {
 			if (date != null) {
 				date.setText(notification.getDate());
 			}
-			
+
 			if (name != null) {
 				name.setText(notification.getTitle());
 			}
@@ -50,6 +50,7 @@ public class TerminItemAdapter extends ArrayAdapter<Notification> {
 				marker.setTag(notification.getRef_id());
 			}
 		}
+
 		return v;
 	}
 }

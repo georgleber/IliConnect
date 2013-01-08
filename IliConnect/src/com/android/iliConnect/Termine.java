@@ -1,5 +1,11 @@
 package com.android.iliConnect;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import com.android.iliConnect.models.Notification;
 
 import android.os.Bundle;
@@ -17,7 +23,9 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.termine_layout, container, false);
-		terminAdapter = new TerminItemAdapter(MainActivity.currentActivity, R.layout.termin_list_item, MainActivity.instance.localDataProvider.notifications.Notifications, this);
+
+		List<Notification> notifications = getNotificationList();
+		terminAdapter = new TerminItemAdapter(MainActivity.currentActivity, R.layout.termin_list_item, notifications, this);
 		setListAdapter(terminAdapter);
 
 		if (container == null) {
@@ -41,7 +49,9 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 
 	public void refreshViews() {
 		getListView().invalidateViews();
-		terminAdapter = new TerminItemAdapter(MainActivity.currentActivity, R.layout.termin_list_item, MainActivity.instance.localDataProvider.notifications.Notifications, this);
+
+		List<Notification> notifications = getNotificationList();
+		terminAdapter = new TerminItemAdapter(MainActivity.currentActivity, R.layout.termin_list_item, notifications, this);
 		setListAdapter(terminAdapter);
 	}
 
@@ -62,5 +72,25 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 			selectedNoti.marked = true;
 			// FIXME: save notification!
 		}
+	}
+
+	private List<Notification> getNotificationList() {
+		List<Notification> notifications = new ArrayList<Notification>();
+		for (Notification notification : MainActivity.instance.localDataProvider.notifications.Notifications) {
+			if (notification.date != null) {
+				Calendar notiDate = new GregorianCalendar();
+				notiDate.set(notification.date.getYear(), notification.date.getMonth(), notification.date.getDay());
+
+				Date todayDate = new Date();
+				Calendar today = new GregorianCalendar();
+				today.set(todayDate.getYear(), todayDate.getMonth(), todayDate.getDay());
+
+				if (notiDate.after(today)) {
+					notifications.add(notification);
+				}
+			}
+		}
+
+		return notifications;
 	}
 }

@@ -1,5 +1,9 @@
 package com.android.iliConnect;
 
+import java.util.List;
+
+import com.android.iliConnect.models.Notification;
+
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -10,11 +14,13 @@ public class Uebersicht extends ListFragment implements Redrawable{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-		View v = inflater.inflate(R.layout.uebersicht_layout, container, false);
 	
-		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, MainActivity.instance.localDataProvider.notifications.Notifications);
-
+		View v = inflater.inflate(R.layout.uebersicht_layout, container, false);
+		
+		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
+		List<Notification> items = this.getNotificationsToShow();
+		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
+	
 		setListAdapter(noteAdapter);
 
 		if (container == null) {
@@ -35,9 +41,29 @@ public class Uebersicht extends ListFragment implements Redrawable{
 		super.onCreate(savedInstanceState);
 
 	}
-
+	
+	
 	public void refreshViews() {
-
+		getListView().invalidateViews();
+		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
+		List<Notification> items = this.getNotificationsToShow();
+		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
+		setListAdapter(noteAdapter);	
+	}
+	
+	
+	
+	private List<Notification> getNotificationsToShow() {
+		// Eingestellte Anzahl der Termine 
+		int numNotifications = MainActivity.instance.localDataProvider.settings.num_notifications;
+		// Insgesamt vorhandene Termine
+		int totalNumOfNotifications = MainActivity.instance.localDataProvider.notifications.Notifications.size();
 		
+		List<Notification> allNotis = MainActivity.instance.localDataProvider.notifications.Notifications;
+
+		if(numNotifications < totalNumOfNotifications) {
+			return allNotis.subList(0, numNotifications);
+		}
+		return allNotis;
 	}
 }

@@ -69,7 +69,7 @@ public class Einstellungen extends PreferenceActivity {
 			}
 		});
 		
-		ListPreference lPWarn = (ListPreference) findPreference("listPrefNumNoti");
+		ListPreference lPWarn = (ListPreference) findPreference("listPrefWarning");
 		lPWarn.setDefaultValue(MainActivity.instance.localDataProvider.settings.level_warning);
 		lPWarn.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
@@ -79,6 +79,15 @@ public class Einstellungen extends PreferenceActivity {
 			}
 		});
 		
+		ListPreference lPCrit = (ListPreference) findPreference("listPrefCritical");
+		lPCrit.setDefaultValue(MainActivity.instance.localDataProvider.settings.level_critical);
+		lPCrit.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				MainActivity.instance.localDataProvider.settings.level_critical = Integer.parseInt((String) newValue);
+				return true;
+			}
+		});
 		
 	}
 	@Override

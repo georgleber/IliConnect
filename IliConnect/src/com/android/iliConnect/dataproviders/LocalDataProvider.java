@@ -5,7 +5,27 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
+import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.models.Authentification;
+import com.android.iliConnect.models.Desktop;
+import com.android.iliConnect.models.LocalData;
+import com.android.iliConnect.models.Notifications;
+import com.android.iliConnect.models.RemoteData;
+import com.android.iliConnect.models.Results;
+import com.android.iliConnect.models.Settings;
 
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
@@ -142,6 +162,40 @@ public class LocalDataProvider {
 			t.show();
 		}
 
+	}
+	public void deleteAuthentication() {
+		File file = new File(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
+		
+		try {
+		    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		    Document doc = docBuilder.parse(file);
+
+		    // Change the content of node
+		    Node node = doc.getElementsByTagName("Authentification").item(0);
+		    NodeList childs = node.getChildNodes();
+		    
+		    // Anmeldedaten überschreiben
+		    //autoLoign
+		    childs.item(0).setTextContent("false");
+		    //user_id
+		    childs.item(1).setTextContent("DELETED");
+		    //password
+		    childs.item(2).setTextContent("DELETED");
+		    //url_src
+		    //childs.item(3).setTextContent("DELETED");
+
+		    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+		    // initialize StreamResult with File object to save to file
+		    StreamResult result = new StreamResult(file);
+		    DOMSource source = new DOMSource(doc);
+		    transformer.transform(source, result);
+
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
 	}
 
 }

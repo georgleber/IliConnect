@@ -2,6 +2,8 @@ package com.android.iliConnect.dataproviders;
 
 import java.util.concurrent.ExecutionException;
 
+import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.CourseData;
 
 public class LocalCourseProvider {
@@ -10,13 +12,26 @@ public class LocalCourseProvider {
 	private CourseData course = null;
 
 	private RemoteCourseProvider prov = new RemoteCourseProvider();
+	MainActivity main = new MainActivity();
+
+	// Fürs Syncen
+	private RemoteDataProvider rP = new RemoteDataProvider();
+	private LocalDataProvider lp = new LocalDataProvider();
+	
+	private Authentification auth = new Authentification();
+	
 	
 	// Testdaten
-	private String user_id = "lukas";
-	private String password = "foobar";
+	private String user_id = "florian";
+	private String password = "florian";
 	private String url_src = "https://swe.k3mp.de/ilias/";
 	
 	public String joinCourse(String ref_id, String pw) throws JoinCourseException, CoursePasswordException {
+		// Authnetifizierung aus XML auslesen
+		auth.load();
+		//course = new CourseData("join", auth.user_id, auth.password, auth.url_src, ref_id, pw);
+		
+		// TODO richtige User-Daten verwenden
 		course = new CourseData("join", this.user_id, this.password, this.url_src, ref_id, pw);
 		
 		// Kursbeitritt im Hintergrund durchfuehren
@@ -27,8 +42,9 @@ public class LocalCourseProvider {
 			String result = prov.get();
 			
 			if(result.contains("JOINED")) {
-				// TODO: wenn Benutzer dem Kurs hinzugefuegt wurde, neuen Sync. durchfuehren
-				// und Kurs in localData eintragen und zu Schreibtisch wechseln.
+				// Sync in Background
+				
+				this.rP.execute(this.lp.remoteData.getSyncUrl() + "?action=sync");
 				return result;
 			}
 			else if(result.contains("PASSWORD_NEEDED")) {
@@ -58,9 +74,11 @@ public class LocalCourseProvider {
 	}
 	
 	
-	public void leaveCourse(String ref_id) throws JoinCourseException {
+	public String leaveCourse(String ref_id) throws JoinCourseException {
+
+		auth.load();
 		course = new CourseData("leave", this.user_id, this.password, this.url_src, ref_id, null);
-		
+
 		// Abmeldung im Hintergrund durchfuehren
 		prov.execute(course);
 		
@@ -68,6 +86,7 @@ public class LocalCourseProvider {
 			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
 			// asnyc. Aufrufs gewartet. 
 			String result = prov.get();
+
 			if(result.contains("not a course object")) {
 				throw new JoinCourseException("Der Kurs ist nicht vorhanden");
 			}
@@ -75,12 +94,15 @@ public class LocalCourseProvider {
 				throw new JoinCourseException("Zugriff verweigert");
 			} 
 			else {
-				// TODO: Kurs aus lokalen Daten entfernen, Schreibtisch updaten.
+
+				this.rP.execute(this.lp.remoteData.getSyncUrl() + "?action=sync");
+				return "LEFT";		
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}		
 }

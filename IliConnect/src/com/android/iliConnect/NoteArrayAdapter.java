@@ -1,5 +1,7 @@
 package com.android.iliConnect;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.android.iliConnect.models.Notification;
@@ -27,7 +29,7 @@ public class NoteArrayAdapter extends ArrayAdapter<Notification> {
 
 	public NoteArrayAdapter(Context context, int textViewResourceId, List<Notification> items) {
 		super(context, textViewResourceId, items);
-		this.items = items;
+		this.items = items;	
 	}
 
 	@Override

@@ -33,6 +33,7 @@
 	<string name="sync_label">Synchronisation</string>
 	<string name="Sync_intervall">Intervall</string>
 	<string name="Wlan_snyc">"Wlan"</string>
+	<string name="Auto_Login">"Auto-Login"</string>
 	<string name="dates_sync">"Anzahl der Termine"</string>
 	<string name="Notifi_sync">"Benachrichtigungen"</string>
 	<string name="Warning_sync">"Warnung"</string>

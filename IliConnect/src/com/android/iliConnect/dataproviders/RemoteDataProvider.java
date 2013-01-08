@@ -1,26 +1,16 @@
 package com.android.iliConnect.dataproviders;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -29,8 +19,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.widget.Toast;
-
 import com.android.iliConnect.MainActivity;
 
 public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
@@ -87,8 +75,6 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 				if (sUrl.length > 1)
 					targetName = sUrl[1];
 
-				// URLConnection connection = url.openConnection();
-
 				// download the file
 				InputStream input = instream;
 
@@ -96,7 +82,8 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
 				if (s.contains("ACCESS_DENIED"))
 					throw new AuthException(s);
-
+				
+				
 				BufferedWriter out = new BufferedWriter(new FileWriter(MainActivity.instance.getFilesDir() + "/" + targetName));
 				out.write(s);
 
@@ -131,16 +118,14 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 	@Override
 	protected void onPostExecute(Exception e) {
 		// super.onPostExecute(result);
-		if (e != null)
+		if (e != null){
+			MainActivity.instance.logout();
 			MainActivity.instance.showToast(e.getMessage());
+		}
 
 		MainActivity.instance.localDataProvider.updateLocalData();
 	
-		synchronized (MainActivity.syncObject) {
-			MainActivity.syncObject.notifyAll();
-		}
-
-		if (pDialog != null && pDialog.isShowing())
+			if (pDialog != null && pDialog.isShowing())
 			pDialog.dismiss();
 
 	}

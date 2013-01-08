@@ -1,11 +1,7 @@
 package com.android.iliConnect;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -60,7 +56,21 @@ public class MainActivity extends Activity {
 		etUrl.setText(localDataProvider.auth.url_src);
 
 		View login = findViewById(R.id.button1);
+		
+		EditText etUserID = (EditText) findViewById(R.id.editText1);
+		EditText etPassword = (EditText) findViewById(R.id.editText2);
+		
+		if(!localDataProvider.auth.user_id.equals("")) 
+			etUserID.setText(localDataProvider.auth.user_id);
+		if(!localDataProvider.auth.user_id.equals("")) 
+			etPassword.setText(localDataProvider.auth.password);
+		
 
+		
+		
+		if(localDataProvider.auth.autologin)
+			login();
+		
 		login.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -70,54 +80,9 @@ public class MainActivity extends Activity {
 				EditText etPassword = (EditText) findViewById(R.id.editText2);
 				localDataProvider.auth.password = etPassword.getText().toString();
 
-				try {
+				localDataProvider.auth.setLogin(etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
 
-					if (!localDataProvider.auth.autologin)
-						localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
-
-					try {
-
-						File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
-
-						if (!remoteDataFile.exists())
-							MainActivity.instance.sync(MainActivity.instance);
-
-						Date start = new Date();
-						long timeout = 4000;
-
-						synchronized (syncObject) {
-							while (!remoteDataFile.exists()) {
-								syncObject.wait(100);
-								if (new Date().getTime() - start.getTime() > timeout)
-									throw new InterruptedException();
-
-							}
-						}
-
-						// while (!remoteDataFile.exists()) {
-						// if (new Date().getTime() - start.getTime() > timeout)
-						// throw new InterruptedException();
-						// Thread.sleep(100);
-						// }
-
-						if (watchThread.doAsynchronousTask == null)
-							watchThread.startTimer();
-
-						Intent i = new Intent(MainActivity.this, MainTabView.class);
-						startActivity(i);
-					} catch (Exception e) {
-						Toast t = Toast.makeText(instance, "Login fehlgeschlagen", Toast.LENGTH_LONG);
-						t.show();
-
-					}
-				}
-
-				catch (Exception ex) {
-					Toast t = Toast.makeText(instance, "Login fehlgeschlagen", Toast.LENGTH_LONG);
-					t.show();
-
-					return;
-				}
+				login();
 
 			}
 		});
@@ -133,8 +98,6 @@ public class MainActivity extends Activity {
 		noti.setContentTitle(title).setContentText(text).setSmallIcon(android.R.drawable.ic_dialog_alert).setContentIntent(pIntent);
 
 		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
-		// Hide the notification after its selected
-		// noti.flags |= android.app.Notification.FLAG_AUTO_CANCEL;
 
 		notificationManager.notify(0, noti.build());
 
@@ -156,8 +119,8 @@ public class MainActivity extends Activity {
 		progressDialog.setTitle("Sync");
 		progressDialog.setMessage("Bitte warten...");
 
-		RemoteDataProvider rP = new RemoteDataProvider(progressDialog);
-		rP.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
+		remoteDataProvider = new RemoteDataProvider(progressDialog);
+		remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 	}
 
 	public void showToast(final String msg) {
@@ -166,4 +129,60 @@ public class MainActivity extends Activity {
 
 	}
 
+	public void logout() {
+		if (MainTabView.instance != null)
+			MainTabView.instance.finish();
+
+		localDataProvider.remoteData.delete();
+
+		remoteDataProvider.cancel(true);
+		LocalDataProvider.isAvaiable = false;
+
+		if (watchThread.doAsynchronousTask != null) {
+			watchThread.doAsynchronousTask.cancel();
+			watchThread.doAsynchronousTask = null;
+		}
+
+	}
+
+	public void login() {
+		final File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
+
+		if (remoteDataFile.exists())
+			remoteDataFile.delete();
+
+		MainActivity.instance.sync(MainActivity.instance);
+
+		new Thread(new Runnable() {
+
+			public void run() {
+				synchronized (syncObject) {
+					Date start = new Date();
+					long timeout = 1000;
+
+					while (!remoteDataFile.exists() || !LocalDataProvider.isAvaiable) {
+						try {
+							syncObject.wait(100);
+						} catch (InterruptedException e) {
+						}
+						if (new Date().getTime() - start.getTime() > timeout)
+							break;
+					}
+					if (remoteDataFile.exists()) {
+						Intent i = new Intent(MainActivity.this, MainTabView.class);
+						startActivity(i);
+
+						MainActivity.instance.runOnUiThread(new Runnable() {
+
+							public void run() {
+								if (watchThread.doAsynchronousTask == null)
+									watchThread.startTimer();
+							}
+						});
+
+					}
+				}
+			}
+		}).start();
+	}
 }

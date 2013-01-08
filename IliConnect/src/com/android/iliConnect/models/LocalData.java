@@ -37,4 +37,10 @@ public class LocalData extends PersistableObject {
 		}
 
 	}
+	
+	public void delete(){
+		super.delete(MainActivity.instance.localDataProvider.localDataFilename);
+		
+	}
+	
 }

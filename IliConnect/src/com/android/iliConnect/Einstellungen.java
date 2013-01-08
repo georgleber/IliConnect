@@ -7,7 +7,10 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 
+
 public class Einstellungen extends PreferenceActivity {
+	
+	private static boolean syncIntervChanged = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,6 +37,16 @@ public class Einstellungen extends PreferenceActivity {
 			}
 		}); 
 		
+		CheckBoxPreference cPsLogin = (CheckBoxPreference) findPreference("checkboxPrefAutologin");
+		cPsLogin.setChecked(MainActivity.instance.localDataProvider.auth.autologin);
+		cPsLogin.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				MainActivity.instance.localDataProvider.auth.autologin = (Boolean)newValue;
+				return true;
+			}
+		}); 
+		
 		
 		ListPreference lP = (ListPreference) findPreference("listPrefInterv");
 		lP.setDefaultValue(MainActivity.instance.localDataProvider.settings.interval);
@@ -41,6 +54,7 @@ public class Einstellungen extends PreferenceActivity {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				MainActivity.instance.localDataProvider.settings.interval = Integer.parseInt((String) newValue);
+				syncIntervChanged = true;
 				return true;
 			}
 		});
@@ -79,7 +93,8 @@ public class Einstellungen extends PreferenceActivity {
 	@Override
 	public void onBackPressed() {
 		MainActivity.instance.localDataProvider.localdata.save();
-		MainActivity.instance.watchThread.startTimer();
+		if(syncIntervChanged)
+			MainActivity.instance.watchThread.startTimer();
 		super.onBackPressed();
 	}
 }

@@ -3,7 +3,6 @@ package com.android.iliConnect.dataproviders;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,7 +20,6 @@ import org.xmlpull.v1.XmlPullParser;
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.models.Authentification;
-import com.android.iliConnect.models.ClassAlias;
 import com.android.iliConnect.models.Desktop;
 import com.android.iliConnect.models.LocalData;
 import com.android.iliConnect.models.Notifications;
@@ -34,6 +32,16 @@ import android.content.res.XmlResourceParser;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.models.Authentification;
+import com.android.iliConnect.models.Desktop;
+import com.android.iliConnect.models.LocalData;
+import com.android.iliConnect.models.Notifications;
+import com.android.iliConnect.models.RemoteData;
+import com.android.iliConnect.models.Results;
+import com.android.iliConnect.models.Settings;
+
 public class LocalDataProvider {
 
 	private static LocalDataProvider instance;
@@ -44,8 +52,7 @@ public class LocalDataProvider {
 	public LocalData localdata = new LocalData();
 	public RemoteData remoteData = new RemoteData();
 	public Desktop desktopItems = new Desktop();
-	public Authentification auth = new Authentification();
-	public ArrayList<ClassAlias> classAliases = new ArrayList<ClassAlias>();
+	public Authentification auth = new Authentification();;
 	public Results results = new Results();
 	
 	public String searchDataFileName = "SearchData.xml";
@@ -104,21 +111,24 @@ public class LocalDataProvider {
 			
 				// desktopItems.load();
 				remoteData.load();
-
-
 				desktopItems.DesktopItem = remoteData.Current.Desktop.DesktopItem;
 				notifications.Notifications = remoteData.Current.Notifications;
-				isAvaiable = true;
+
 				isUpdating = false;
 			
 			if(new File(MainActivity.instance.getFilesDir() + "/" + searchDataFileName).exists())
 				results.load();
+			
+			synchronized (MainActivity.syncObject) {
+				MainActivity.syncObject.notifyAll();
+			}
 			
 			 MainTabView.getInstance().update();
 			
 		} catch (Exception e) {
 			return false;
 		}
+		isAvaiable = true;
 		return true;
 
 	}

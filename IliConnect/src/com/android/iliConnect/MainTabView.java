@@ -3,7 +3,6 @@ package com.android.iliConnect;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -227,7 +226,10 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			startActivity(settingsActivity);
 			return true;
 		case R.id.Logout:
-			
+//<<<<<<< HEAD
+			MainActivity.instance.logout();
+//=======
+			/*
 			// TODO: Login-Ansicht aufrufen, autLogin auf false setzen und Daten aus XML entfernen
 			LocalDataProvider prov = new LocalDataProvider();
 			
@@ -238,6 +240,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			startActivity(mainActivity);
 
 			//finish();
+>>>>>>> branch 'master' of https://github.com/Develman/IliConnect.git*/
 		case R.id.refresh:
 			MainActivity.instance.sync(instance);
 			return true;

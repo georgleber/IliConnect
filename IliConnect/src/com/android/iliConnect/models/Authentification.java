@@ -31,8 +31,7 @@ public class Authentification extends PersistableObject {
 
 	}
 
-	public void setLogin(boolean autologin, String user_id, String password, String url_src) {
-		this.autologin = autologin;
+	public void setLogin(String user_id, String password, String url_src) {
 		this.user_id = user_id;
 		this.password = password;
 		this.url_src = url_src;

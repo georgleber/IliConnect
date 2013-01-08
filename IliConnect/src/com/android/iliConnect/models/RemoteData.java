@@ -29,6 +29,11 @@ public class RemoteData extends PersistableObject {
 		}
 
 	}
+	
+	
+	public String getSyncUrl(){
+		return MainActivity.instance.localDataProvider.auth.url_src+MainActivity.instance.localDataProvider.auth.api_src;
+	}
 
 	public void save() {
 
@@ -39,17 +44,11 @@ public class RemoteData extends PersistableObject {
 			Toast t = Toast.makeText(MainActivity.instance, "Fehler beim speichern der Einstellungen, nutze Standardkonfiguration.", Toast.LENGTH_LONG);
 			t.show();
 		}
-
 	}
 
-	public String getSyncUrl() {
-		// return
-		// MainActivity.instance.localDataProvider.auth.url_src+MainActivity.instance.localDataProvider.auth.api_src+"?user="+MainActivity.instance.localDataProvider.auth.user_id+"&pass="+MainActivity.instance.localDataProvider.auth.password+"&action=sync";
-		return MainActivity.instance.localDataProvider.auth.url_src + MainActivity.instance.localDataProvider.auth.api_src;
-		// return MainActivity.instance.localDataProvider.auth.url_src+"RemoteData.xml";
-		// return
-		// MainActivity.instance.localDataProvider.auth.url_src+MainActivity.instance.localDataProvider.auth.api_src+"?user=gbonney&pass=gbonney&action=sync";
-
+	public void delete(){
+		super.delete(MainActivity.instance.localDataProvider.remoteDataFileName);
+		
 	}
-
+	
 }

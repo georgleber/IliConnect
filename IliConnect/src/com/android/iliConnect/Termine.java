@@ -91,5 +91,6 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 		}
 
 		return notifications;
+
 	}
 }

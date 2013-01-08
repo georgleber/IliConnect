@@ -57,7 +57,6 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		CheckBox checkbox = (CheckBox) buttonView;
-
 		String ref_id = (String) checkbox.getTag();
 
 		Notification selectedNoti = null;
@@ -70,7 +69,7 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 
 		if (selectedNoti != null) {
 			selectedNoti.marked = true;
-			// FIXME: save notification!
+			MainActivity.instance.localDataProvider.remoteData.save();
 		}
 	}
 

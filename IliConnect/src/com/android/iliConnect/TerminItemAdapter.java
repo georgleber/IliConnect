@@ -14,10 +14,12 @@ import com.android.iliConnect.models.Notification;
 
 public class TerminItemAdapter extends ArrayAdapter<Notification> {
 	private List<Notification> notifications;
+	private Termine termineFragment;
 
-	public TerminItemAdapter(Context context, int textViewResourceId, List<Notification> notifications) {
+	public TerminItemAdapter(Context context, int textViewResourceId, List<Notification> notifications, Termine termineFragment) {
 		super(context, textViewResourceId, notifications);
 		this.notifications = notifications;
+		this.termineFragment = termineFragment;
 	}
 
 	@Override
@@ -43,7 +45,9 @@ public class TerminItemAdapter extends ArrayAdapter<Notification> {
 			}
 
 			if (marker != null) {
+				marker.setOnCheckedChangeListener(termineFragment);
 				marker.setChecked(notification.isMarked());
+				marker.setTag(notification.getRef_id());
 			}
 		}
 		return v;

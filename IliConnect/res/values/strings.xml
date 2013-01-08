@@ -32,7 +32,7 @@
 	<string name="settings_menu">Einstellungen</string>
 	<string name="sync_label">Synchronisation</string>
 	<string name="Sync_intervall">Intervall</string>
-	<string name="Wlan_snyc">"Wlan"</string>
+	<string name="Wlan_snyc">"WLAN"</string>
 	<string name="Auto_Login">"Auto-Login"</string>
 	<string name="dates_sync">"Anzahl der Termine"</string>
 	<string name="Notifi_sync">"Benachrichtigungen"</string>
@@ -69,18 +69,18 @@
         <item>6 Tage</item>               
     </string-array>
     <string-array name="array_warnung_values">
-        <item>3 Tage</item>
-        <item>4 Tage</item>
-        <item>5 Tage</item>
-        <item>6 Tage</item>               
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>               
     </string-array>
     <string-array name="array_Kritisch">
         <item>1 Tag</item>
         <item>2 Tage</item>                    
     </string-array>
     <string-array name="array_Kritisch_values">
-        <item>1 Tag</item>
-        <item>2 Tage</item>                    
+        <item>1</item>
+        <item>2</item>                    
     </string-array>
     
         <string name="testdates">24.12.2012    16 Uhr</string>

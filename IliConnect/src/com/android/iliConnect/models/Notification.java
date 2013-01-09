@@ -1,5 +1,6 @@
 package com.android.iliConnect.models;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,14 +20,13 @@ public class Notification extends PersistableObject {
 	@Element(required = false)
 	public String description;
 	@Element(required = false)
-	public Date date;
+	public Long date;
 	@Element(required = false)
 	public String ref_id;
 	@Element(required = false)
 	public boolean marked;
 
 	public String getDate() {
-
 		if (date != null) {
 			SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM hh:mm");
 			return sFormat.format(date);

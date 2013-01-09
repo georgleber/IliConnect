@@ -14,23 +14,26 @@ import com.android.iliConnect.models.Notification;
 public class NotificationHandler {
 	public List<Notification> loadNotifications(boolean checkSettings) {
 		List<Notification> loadedNotifications = MainActivity.instance.localDataProvider.notifications.Notifications;
-		Collections.sort(loadedNotifications, new NotificationComparator());
-
-		// Eingestellte Anzahl der Termine
-		int numNotifications = loadedNotifications.size();
-		if (checkSettings) {
-			numNotifications = MainActivity.instance.localDataProvider.settings.num_notifications;
-		}
-
-		int cnt = 0;
 		List<Notification> notifications = new ArrayList<Notification>();
-		for (Notification notification : loadedNotifications) {
-			if (notification.date != null && cnt <= numNotifications) {
-				if (isFutureNotification(notification)) {
-					notifications.add(notification);
-				}
 
-				cnt++;
+		if (loadedNotifications != null) {
+			Collections.sort(loadedNotifications, new NotificationComparator());
+
+			// Eingestellte Anzahl der Termine
+			int numNotifications = loadedNotifications.size();
+			if (checkSettings) {
+				numNotifications = MainActivity.instance.localDataProvider.settings.num_notifications;
+			}
+
+			int cnt = 0;
+			for (Notification notification : loadedNotifications) {
+				if (notification.date != null && cnt <= numNotifications) {
+					if (isFutureNotification(notification)) {
+						notifications.add(notification);
+					}
+
+					cnt++;
+				}
 			}
 		}
 
@@ -39,7 +42,7 @@ public class NotificationHandler {
 
 	private boolean isFutureNotification(Notification notification) {
 		Calendar notiDate = new GregorianCalendar();
-		notiDate.set(notification.date.getYear(), notification.date.getMonth(), notification.date.getDay());
+		// notiDate.set(notification.date.getYear(), notification.date.getMonth(), notification.date.getDay());
 
 		Date todayDate = new Date();
 		Calendar today = new GregorianCalendar();

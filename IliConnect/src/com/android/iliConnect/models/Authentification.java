@@ -11,9 +11,9 @@ public class Authentification extends PersistableObject {
 	@Element
 	public boolean autologin = true;
 	@Element (required = false)	
-	public String user_id = "Joerg";
+	public String user_id = "";
 	@Element (required = false)
-	public String password = "schnee";
+	public String password = "";
 	@Element
 	public String url_src;
 	public String api_src = "IliConnect.php";

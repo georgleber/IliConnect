@@ -42,7 +42,7 @@ public class NotificationWatchThread {
 							for (Notification notification : notifications.Notifications) {
 								if (!notification.isMarked()) {
 									Date currentDate = new Date(System.currentTimeMillis());
-									Date notiDate = null; //notification.date;
+									Date notiDate = new Date(notification.date);
 
 									long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
 									if (daysBetween <= critical) {

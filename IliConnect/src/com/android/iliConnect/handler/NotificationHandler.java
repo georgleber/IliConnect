@@ -41,14 +41,15 @@ public class NotificationHandler {
 	}
 
 	private boolean isFutureNotification(Notification notification) {
-		Calendar notiDate = new GregorianCalendar();
-		// notiDate.set(notification.date.getYear(), notification.date.getMonth(), notification.date.getDay());
+		Date notiDate = new Date(notification.date);
+		Calendar notiCal = new GregorianCalendar();
+		notiCal.set(notiDate.getYear(), notiDate.getMonth(), notiDate.getDay());
 
 		Date todayDate = new Date();
 		Calendar today = new GregorianCalendar();
 		today.set(todayDate.getYear(), todayDate.getMonth(), todayDate.getDay());
 
-		if (notiDate.after(today)) {
+		if (notiCal.after(today)) {
 			return true;
 		}
 

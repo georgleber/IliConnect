@@ -1,5 +1,6 @@
 package com.android.iliConnect;
 
+import java.security.acl.LastOwnerException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -248,5 +249,13 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	@Override
+	 public void onBackPressed() {
+		// Immer auf Überischt zurückgehen
+		mTabHost.setCurrentTab(2);
+		this.mViewPager.setCurrentItem(2);
+		//super.onBackPressed();
+	 }
 
 }

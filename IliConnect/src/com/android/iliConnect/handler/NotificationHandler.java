@@ -14,7 +14,7 @@ import com.android.iliConnect.models.Notification;
 public class NotificationHandler {
 	public List<Notification> loadNotifications(boolean checkSettings) {
 		List<Notification> loadedNotifications = MainActivity.instance.localDataProvider.notifications.Notifications;
-		Collections.sort(loadedNotifications, notificationComparator());
+		Collections.sort(loadedNotifications, new NotificationComparator());
 
 		// Eingestellte Anzahl der Termine
 		int numNotifications = loadedNotifications.size();
@@ -52,23 +52,21 @@ public class NotificationHandler {
 		return false;
 	}
 
-	private static Comparator<Notification> notificationComparator() {
-		return new Comparator<Notification>() {
-			public int compare(Notification first, Notification second) {
-				if (first.date == null && second.date == null) {
-					return 0;
-				}
-
-				if (first.date == null) {
-					return 1;
-				}
-
-				if (second.date == null) {
-					return -1;
-				}
-
-				return first.date.compareTo(second.date);
+	private class NotificationComparator implements Comparator<Notification> {
+		public int compare(Notification first, Notification second) {
+			if (first.date == null && second.date == null) {
+				return 0;
 			}
-		};
+
+			if (first.date == null) {
+				return 1;
+			}
+
+			if (second.date == null) {
+				return -1;
+			}
+
+			return first.date.compareTo(second.date);
+		}
 	}
 }

@@ -159,6 +159,7 @@ public class LocalDataProvider {
 	}
 
 	public void deleteAuthentication() {
+
 		File file = new File(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
 
 		try {
@@ -191,6 +192,10 @@ public class LocalDataProvider {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		    
+		MainActivity.instance.localDataProvider.auth.setLogin(false, "", "", "http://swe.k3mp.de/ilias/");
+		MainActivity.instance.localDataProvider.localdata.save();
 	}
 
 }

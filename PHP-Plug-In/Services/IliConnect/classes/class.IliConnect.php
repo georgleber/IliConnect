@@ -3,7 +3,6 @@
 class IliConnect{
   
   function __construct(){
-
     $ref_id = intval($_GET['ref_id']);
 
     switch($_GET["action"]) {
@@ -60,8 +59,7 @@ class IliConnect{
   }
 
   function joinCourse($course, $password=NULL) {
-    global $ilUser;
-    global $ilObjDataCache;
+    global $ilUser, $ilObjDataCache;
 
     if($ilUser->getId() == ANONYMOUS_USER_ID         || // anonymous user not allowed to subscribe
        $course->getSubScriptionLimitationType() == 0 || // subscription deactivated
@@ -120,8 +118,8 @@ class IliConnect{
   }
 
   function printCurrentDesk() {
-
     global $ilUser;
+
     ## Header auf XML stellen
     header ("Content-Type:text/xml");
 
@@ -148,11 +146,9 @@ class IliConnect{
 
     ## AUSGABE DER XML STRUKTUR
     echo $xml->asXML();
-
   }
 
   function printMagazin() {
-
     global $ilUser, $ilAccess;
 
     ## Header auf XML stellen
@@ -166,6 +162,30 @@ class IliConnect{
 
     ## XML ILICONNECT CURRENT NOTIFICATIONS
     $notifications = $current->addChild("Notifications");
+
+/*
+DEBUGGING PURPOSES!!
+*/
+
+    $n1 = $notifications->addChild("Notification");
+    $n2 = $notifications->addChild("Notification");
+    $n3 = $notifications->addChild("Notification");
+
+    $n1->addChild("title","Abnahme durch den Kunden");
+		$n1->addChild("ref_id",0815);
+    $n1->addChild("description","Dieser Termin endet am Montag, den 14.01.");
+    $n1->addChild("date",1358152222);
+
+    $n2->addChild("title","Spätere Abnahme");
+    $n2->addChild("ref_id",0817);
+    $n2->addChild("description","Dieser Termin endet Mi 16. Jan 17:03:42 CET 2013	.");
+    $n2->addChild("date",1358352222);
+
+    $n3->addChild("title","Igendsoeintermin");
+    $n3->addChild("ref_id",1337);
+    $n3->addChild("description","Dieser Termin endet Fr 11. Jan 12:03:42 CET 2013	.");
+    $n3->addChild("date",1357902222);
+
 
     ## XML ILICONNECT CURRENT DESKTOP
     $desktop = $current->addChild("Magazin");
@@ -182,13 +202,10 @@ class IliConnect{
 
     ## AUSGABE DER XML STRUKTUR
     echo $xml->asXML();
-
   }
 
   function searchMagazin() {
     global $ilUser, $tree, $ilAccess;
-
-    require_once("classes/class.ilObjectFactory.php");
 
     $xml = new SimpleXMLElement("<Iliconnect/>");
 
@@ -230,9 +247,9 @@ class IliConnect{
 
   }
 
-
   ## FUNCTION FUER DIE REKURSIVE ABARBEITUNG DER CHILD ITEMS
   function desktopItem2Xml($array,$sxml,$notifications){
+    global $ilAccess;
 
     if(strstr("file|fold|crs|tst|exc",$array["type"]))
     {
@@ -253,33 +270,11 @@ class IliConnect{
         $subitems = $item->addChild("Items");
         foreach($children as $child)
         {
-         $this->desktopItem2Xml($child,$subitems,$notifications);
-        }
-      }
-    } else {
-      # Debugging
-      #print_r($array);
-    }
-
-  }
-  ## FUNCTION FUER DIE REKURSIVE ABARBEITUNG DER CHILD ITEMS
-  function searchInTree($start,$needle,$return){
-
-    if(strstr("fold|crs|",$start["type"]))
-    {
-      global $tree;
-      if(stristr($start['title'],$needle) || stristr($start['description'],$needle)) {
-        $item = $return->addChild("Item");
-        $item->addChild("title",$start[title]);
-        $item->addChild("description",$start[description]);
-        $item->addChild("type",$start[type]);
-        $item->addChild("ref_id",$start[ref_id]);
-      }
-      $children=$tree->getChilds($start[ref_id]);
-      if(count($children) > 0) {
-        foreach($children as $child)
-        {
-          $this->searchInTree($child,$needle,$return);
+	  //if($ilAccess->checkAccess("read", "show", $children["ref_id"], $children["type"], $children["obj_id"]) ||
+	    //($ilAccess->checkAccess("write", "show", $children["ref_id"], $children["type"], $children["obj_id"])) ||
+	    //($ilAccess->checkAccess("visible", "show", $children["ref_id"], $children["type"], $children["obj_id"])) ||
+	    //($ilAccess->checkAccess("edit_permission", "show", $children["ref_id"], $children["type"], $children["obj_id"])))
+            $this->desktopItem2Xml($child,$subitems,$notifications);
         }
       }
     }

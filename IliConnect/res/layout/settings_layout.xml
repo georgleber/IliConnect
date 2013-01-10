@@ -24,7 +24,7 @@
                 <CheckBoxPreference
                         android:title="@string/Wlan_snyc"
                         android:defaultValue="false"
-                        android:summary="Synchronisation nur über Wlan"
+                        android:summary="Synchronisation nur über WLAN"
                         android:key="checkboxPrefWlanSync" />
                 
                 <CheckBoxPreference

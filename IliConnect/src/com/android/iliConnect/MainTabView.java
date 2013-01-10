@@ -1,6 +1,5 @@
 package com.android.iliConnect;
 
-import java.security.acl.LastOwnerException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -17,10 +16,6 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import com.android.iliConnect.PagerAdapter;
-import com.android.iliConnect.dataproviders.LocalDataProvider;
-import com.android.iliConnect.dataproviders.RemoteDataProvider;
-import com.android.iliConnect.dataproviders.Serialization;
-import com.android.iliConnect.models.Authentification;
 
 /*
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager. 
@@ -229,6 +224,17 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		case R.id.Logout:
 //<<<<<<< HEAD
 			MainActivity.instance.logout();
+			MainActivity.instance.localDataProvider.deleteAuthentication();
+
+			// Anmeldebildschirm anzeigen
+			Intent mainActivity = new Intent(instance, MainActivity.class);
+			startActivity(mainActivity);
+			
+			
+			
+			// view upadten
+			return true;
+			//return true;
 //=======
 			/*
 			// TODO: Login-Ansicht aufrufen, autLogin auf false setzen und Daten aus XML entfernen
@@ -257,5 +263,5 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mViewPager.setCurrentItem(2);
 		//super.onBackPressed();
 	 }
-
+	
 }

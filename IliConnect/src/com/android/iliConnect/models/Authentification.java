@@ -28,7 +28,6 @@ public class Authentification extends PersistableObject {
 			Toast t = Toast.makeText(MainActivity.instance, "Fehler beim laden der Authentifizierungsparameter.", Toast.LENGTH_LONG);
 			t.show();
 		}
-
 	}
 
 	public void setLogin(String user_id, String password, String url_src) {
@@ -36,5 +35,14 @@ public class Authentification extends PersistableObject {
 		this.password = password;
 		this.url_src = url_src;
 	}
+
+	public void setLogin(boolean autologin, String user_id, String password, String url_src) {
+		this.autologin = autologin;
+		this.user_id = user_id;
+		this.password = password;
+		this.url_src = url_src;
+	}
+	
+	
 
 }

@@ -64,10 +64,10 @@ public class MainActivity extends Activity {
 			etUserID.setText(localDataProvider.auth.user_id);
 		if(!localDataProvider.auth.user_id.equals("")) 
 			etPassword.setText(localDataProvider.auth.password);
+		if(!localDataProvider.auth.url_src.equals("")) 
+			etPassword.setText(localDataProvider.auth.url_src);
 		
 
-		
-		
 		if(localDataProvider.auth.autologin)
 			login();
 		
@@ -79,9 +79,11 @@ public class MainActivity extends Activity {
 				localDataProvider.auth.user_id = etUserID.getText().toString();
 				EditText etPassword = (EditText) findViewById(R.id.editText2);
 				localDataProvider.auth.password = etPassword.getText().toString();
+				
+				localDataProvider.auth.url_src = etUrl.getText().toString();
 
-				localDataProvider.auth.setLogin(etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
-
+				localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
+				localDataProvider.localdata.save();
 				login();
 
 			}
@@ -158,11 +160,11 @@ public class MainActivity extends Activity {
 			public void run() {
 				synchronized (syncObject) {
 					Date start = new Date();
-					long timeout = 1000;
+					long timeout = 5000;
 
 					while (!remoteDataFile.exists() || !LocalDataProvider.isAvaiable) {
 						try {
-							syncObject.wait(100);
+							syncObject.wait(2000);
 						} catch (InterruptedException e) {
 						}
 						if (new Date().getTime() - start.getTime() > timeout)

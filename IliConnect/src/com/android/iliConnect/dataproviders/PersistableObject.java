@@ -30,7 +30,7 @@ public abstract class PersistableObject {
 			file.delete();
 	}
 	
-	public abstract void load();
+	public abstract void load() throws Exception;
 
 	
 }

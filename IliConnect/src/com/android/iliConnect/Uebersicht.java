@@ -1,5 +1,6 @@
 package com.android.iliConnect;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.android.iliConnect.models.Notification;
@@ -16,9 +17,14 @@ public class Uebersicht extends ListFragment implements Redrawable{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	
 		View v = inflater.inflate(R.layout.uebersicht_layout, container, false);
-		
+		List<Notification> items;
 		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
-		List<Notification> items = this.getNotificationsToShow();
+		if(MainActivity.instance.localDataProvider.notifications.Notifications!=null)
+			items = this.getNotificationsToShow();
+		else
+			items = new ArrayList<Notification>();
+			
+		
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
 	
 		setListAdapter(noteAdapter);

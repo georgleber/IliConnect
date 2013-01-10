@@ -14,25 +14,23 @@ public class RemoteData extends PersistableObject {
 	public Current Current;
 
 	@Override
-	public void load() {
-		try {
-			super.deserialize(MainActivity.instance.localDataProvider.remoteDataFileName);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
+	public void load() throws Exception {
+		super.deserialize(MainActivity.instance.localDataProvider.remoteDataFileName);
 
-		} catch (Exception e) {
-			Toast t = Toast.makeText(MainActivity.instance, "Fehler beim laden der Authentifizierungsparameter.", Toast.LENGTH_LONG);
-			t.show();
-		}
+		for (Item item : this.Current.Desktop.DesktopItem) {
+			if (item.getType().equalsIgnoreCase("crs")) {
+				Item delItem = new Item();
+				delItem.title = "Abmelden";
+				delItem.type = "UNSIGN";
+				delItem.description = "Vom Kurs abmelden";
+				item.Item.add(delItem);
+			}
 
+		}
 	}
-	
-	
-	public String getSyncUrl(){
-		return MainActivity.instance.localDataProvider.auth.url_src+MainActivity.instance.localDataProvider.auth.api_src;
+
+	public String getSyncUrl() {
+		return MainActivity.instance.localDataProvider.auth.url_src + MainActivity.instance.localDataProvider.auth.api_src;
 	}
 
 	public void save() {
@@ -46,9 +44,9 @@ public class RemoteData extends PersistableObject {
 		}
 	}
 
-	public void delete(){
+	public void delete() {
 		super.delete(MainActivity.instance.localDataProvider.remoteDataFileName);
-		
+
 	}
-	
+
 }

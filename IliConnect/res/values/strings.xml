@@ -97,5 +97,6 @@
         <string name="button_kurse">Kurse</string>
         <string name="searching_button">Suche</string>
         <string name="Kurs_default">Physik</string>
+        <string name="titel">Titel</string>
   
 </resources>

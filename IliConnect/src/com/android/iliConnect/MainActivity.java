@@ -41,15 +41,16 @@ public class MainActivity extends Activity {
 
 		instance = this;
 
-		// TODO: Login überspringen, falls Autologin, Auth vorhanden
+		// TODO: Login ï¿½berspringen, falls Autologin, Auth vorhanden
 
 		localDataProvider = LocalDataProvider.getInstance();
 		localDataProvider.init(R.xml.config);
+		
 		localDataProvider.localdata.load();
 		localDataProvider.auth = localDataProvider.localdata.Static.auth;
 		localDataProvider.settings = localDataProvider.localdata.Static.settings;
 
-		localDataProvider.updateLocalData();
+		//localDataProvider.updateLocalData();
 
 		remoteDataProvider = new RemoteDataProvider();
 		etUrl = (EditText) findViewById(R.id.urlText);
@@ -124,9 +125,9 @@ public class MainActivity extends Activity {
 	}
 
 	public void showToast(final String msg) {
-		Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
-		t.show();
-
+				Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
+				t.show();		
+		
 	}
 
 	public void logout() {

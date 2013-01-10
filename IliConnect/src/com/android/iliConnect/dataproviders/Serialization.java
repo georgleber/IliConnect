@@ -18,7 +18,7 @@ public class Serialization {
 	 * @throws Exception
 	 */
 
-	public Object deserialize(Class<?> targetClass, String filename) throws Exception {
+	public Object deserialize(Class<?> targetClass, String filename) throws Exception  {
 		// XML-Dokument parsen
 		Serializer serializer = new Persister();
 		File source = new File(MainActivity.instance.getFilesDir() + "/" + filename);

@@ -17,15 +17,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
-import com.android.iliConnect.MainActivity;
-import com.android.iliConnect.MainTabView;
-import com.android.iliConnect.models.Authentification;
-import com.android.iliConnect.models.Desktop;
-import com.android.iliConnect.models.LocalData;
-import com.android.iliConnect.models.Notifications;
-import com.android.iliConnect.models.RemoteData;
-import com.android.iliConnect.models.Results;
-import com.android.iliConnect.models.Settings;
 
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
@@ -54,28 +45,27 @@ public class LocalDataProvider {
 	public Desktop desktopItems = new Desktop();
 	public Authentification auth = new Authentification();;
 	public Results results = new Results();
-	
+
 	public String searchDataFileName = "SearchData.xml";
 	public String remoteDataFileName = "RemoteData.xml";
 	public String localDataFilename = "LocalData.xml";
-	
+
 	public static boolean isAvaiable = false;
 	public boolean isUpdating = false;
 	public ReentrantLock syncObject;
-	
-	
+
 	public static LocalDataProvider getInstance() {
 		if (instance == null) {
 			instance = new LocalDataProvider();
-	
+
 		}
 		return instance;
 	}
 
 	public void init(int xmLRes) {
-		
+
 		syncObject = new ReentrantLock();
-		
+
 		File config = new File(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
 		if (!config.exists()) {
 			XmlResourceParser xpp = MainActivity.currentActivity.getResources().getXml(xmLRes);
@@ -108,24 +98,28 @@ public class LocalDataProvider {
 
 	public boolean updateLocalData() {
 		try {
-			
-				// desktopItems.load();
-				remoteData.load();
-				desktopItems.DesktopItem = remoteData.Current.Desktop.DesktopItem;
-				notifications.Notifications = remoteData.Current.Notifications;
 
-				isUpdating = false;
-			
-			if(new File(MainActivity.instance.getFilesDir() + "/" + searchDataFileName).exists())
+			remoteData.load();
+			desktopItems.DesktopItem = remoteData.Current.Desktop.DesktopItem;
+			notifications.Notifications = remoteData.Current.Notifications;
+
+			isUpdating = false;
+
+			if (new File(MainActivity.instance.getFilesDir() + "/" + searchDataFileName).exists())
 				results.load();
-			
+
 			synchronized (MainActivity.syncObject) {
 				MainActivity.syncObject.notifyAll();
 			}
-			
-			 MainTabView.getInstance().update();
-			
+
+			if(MainTabView.getInstance()!=null)
+				MainTabView.getInstance().update();
+
 		} catch (Exception e) {
+			
+			MainActivity.instance.showToast(e.getMessage());
+			MainActivity.instance.logout();
+
 			return false;
 		}
 		isAvaiable = true;
@@ -163,38 +157,39 @@ public class LocalDataProvider {
 		}
 
 	}
+
 	public void deleteAuthentication() {
 		File file = new File(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
-		
+
 		try {
-		    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-		    Document doc = docBuilder.parse(file);
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(file);
 
-		    // Change the content of node
-		    Node node = doc.getElementsByTagName("Authentification").item(0);
-		    NodeList childs = node.getChildNodes();
-		    
-		    // Anmeldedaten überschreiben
-		    //autoLoign
-		    childs.item(0).setTextContent("false");
-		    //user_id
-		    childs.item(1).setTextContent("DELETED");
-		    //password
-		    childs.item(2).setTextContent("DELETED");
-		    //url_src
-		    //childs.item(3).setTextContent("DELETED");
+			// Change the content of node
+			Node node = doc.getElementsByTagName("Authentification").item(0);
+			NodeList childs = node.getChildNodes();
 
-		    Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			// Anmeldedaten überschreiben
+			// autoLoign
+			childs.item(0).setTextContent("false");
+			// user_id
+			childs.item(1).setTextContent("DELETED");
+			// password
+			childs.item(2).setTextContent("DELETED");
+			// url_src
+			// childs.item(3).setTextContent("DELETED");
 
-		    // initialize StreamResult with File object to save to file
-		    StreamResult result = new StreamResult(file);
-		    DOMSource source = new DOMSource(doc);
-		    transformer.transform(source, result);
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+			// initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(file);
+			DOMSource source = new DOMSource(doc);
+			transformer.transform(source, result);
 
 		} catch (Exception e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

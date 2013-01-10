@@ -93,8 +93,11 @@ public class Einstellungen extends PreferenceActivity {
 	@Override
 	public void onBackPressed() {
 		MainActivity.instance.localDataProvider.localdata.save();
+		
 		if(syncIntervChanged)
 			MainActivity.instance.watchThread.startTimer();
+		
+		MainTabView.getInstance().update();
 		super.onBackPressed();
 	}
 }

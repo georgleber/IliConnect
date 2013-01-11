@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-public class QR extends Fragment {
+public class QR extends Fragment implements Redrawable {
 	
 
 	public LocalCourseProvider local = new LocalCourseProvider();
@@ -134,6 +134,10 @@ public class QR extends Fragment {
 			 }
 		 });
 		 ad.show();
+	}
+	public void refreshViews() {
+		// TODO Auto-generated method stub
+		
 	}
 			
 }

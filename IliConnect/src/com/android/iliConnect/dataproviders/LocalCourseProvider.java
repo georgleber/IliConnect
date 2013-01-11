@@ -61,7 +61,7 @@ public class LocalCourseProvider {
 	
 	public String leaveCourse(String ref_id) throws JoinCourseException {
 
-		course = new CourseData("join", localProv.auth.user_id, localProv.auth.password, localProv.auth.url_src, localProv.auth.api_src, ref_id, null);
+		course = new CourseData("leave", localProv.auth.user_id, localProv.auth.password, localProv.auth.url_src, localProv.auth.api_src, ref_id, null);
 
 		// Abmeldung im Hintergrund durchfuehren
 		courseProv.execute(course);

@@ -16,10 +16,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.iliConnect.dataproviders.JoinCourseException;
+import com.android.iliConnect.dataproviders.LocalCourseProvider;
 import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
 
 public class DesktopArrayAdapter extends ArrayAdapter<Item> {
+	
+	private String selectedCourse = "";
 
 	private class DesktopViews {
 		TextView title;
@@ -78,7 +82,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			resID = R.drawable.tst;
 			descr = "Test";
 		} else if (type.equalsIgnoreCase("UNSIGN")) {
-			resID = R.drawable.tst; // eigentlich unsign
+			resID = R.drawable.unsign; 
 			descr = "";
 		}
 		
@@ -172,11 +176,25 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			public void onClick(View v) {
 				String s = v.getTag().toString();
 
-				if (parentItem.getType().equalsIgnoreCase("FOLD") || parentItem.getType().equalsIgnoreCase("CRS")) {
+				if(parentItem.getType().equalsIgnoreCase("CRS")) {
+					// ref_id für ggf. Abmeldung merken
+					selectedCourse = parentItem.getRef_id();
 					toggleVisibility(parentItem, v);
-				} else if (parentItem.getType().equalsIgnoreCase("FILE") || parentItem.getType().equalsIgnoreCase("UNSIGN")) {
+				} else if (parentItem.getType().equalsIgnoreCase("FOLD")) {
+					toggleVisibility(parentItem, v);
+				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
 					MainActivity.instance.localDataProvider.openFileOrDownload(s);
-				} else {
+				} else if(parentItem.getType().equalsIgnoreCase("UNSIGN")) {
+					LocalCourseProvider courseProv = new LocalCourseProvider();
+					try {
+						courseProv.leaveCourse(selectedCourse);
+						// neuer Sync und View update wird noch leaveCourse gemacht
+
+					} catch (JoinCourseException e) {
+						// TODO Fehlermeldung einbauen
+						e.printStackTrace();
+					}
+				}else {
 					MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src + "webdav.php?ref_id=" + s);
 				}
 

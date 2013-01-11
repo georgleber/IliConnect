@@ -159,40 +159,6 @@ public class LocalDataProvider {
 	}
 
 	public void deleteAuthentication() {
-
-		File file = new File(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
-
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			Document doc = docBuilder.parse(file);
-
-			// Change the content of node
-			Node node = doc.getElementsByTagName("Authentification").item(0);
-			NodeList childs = node.getChildNodes();
-
-			// Anmeldedaten überschreiben
-			// autoLoign
-			childs.item(0).setTextContent("false");
-			// user_id
-			childs.item(1).setTextContent("DELETED");
-			// password
-			childs.item(2).setTextContent("DELETED");
-			// url_src
-			// childs.item(3).setTextContent("DELETED");
-
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-			// initialize StreamResult with File object to save to file
-			StreamResult result = new StreamResult(file);
-			DOMSource source = new DOMSource(doc);
-			transformer.transform(source, result);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		    
 		MainActivity.instance.localDataProvider.auth.setLogin(false, "", "", "http://swe.k3mp.de/ilias/");
 		MainActivity.instance.localDataProvider.localdata.save();

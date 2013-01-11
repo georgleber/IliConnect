@@ -96,6 +96,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		// Intialise ViewPager
 		this.intialiseViewPager();
 	}
+	
 
 	/*
 	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
@@ -225,16 +226,13 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 //<<<<<<< HEAD
 			MainActivity.instance.logout();
 			MainActivity.instance.localDataProvider.deleteAuthentication();
+			
 
 			// Anmeldebildschirm anzeigen
-			Intent mainActivity = new Intent(instance, MainActivity.class);
-			startActivity(mainActivity);
-			
-			
-			
-			// view upadten
+			//Intent mainActivity = new Intent(instance, MainActivity.class);
+			//startActivity(mainActivity);	
+		
 			return true;
-			//return true;
 //=======
 			/*
 			// TODO: Login-Ansicht aufrufen, autLogin auf false setzen und Daten aus XML entfernen

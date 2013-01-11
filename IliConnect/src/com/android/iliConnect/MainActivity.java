@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
 
 					while (!remoteDataFile.exists() || !LocalDataProvider.isAvaiable) {
 						try {
-							syncObject.wait(2000);
+							syncObject.wait(100);
 						} catch (InterruptedException e) {
 						}
 						if (new Date().getTime() - start.getTime() > timeout)

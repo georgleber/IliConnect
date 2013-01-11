@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
+import com.android.iliConnect.models.Authentification;
 
 public class MainActivity extends Activity {
 
@@ -51,20 +52,21 @@ public class MainActivity extends Activity {
 		//localDataProvider.updateLocalData();
 
 		remoteDataProvider = new RemoteDataProvider();
-		etUrl = (EditText) findViewById(R.id.urlText);
-		etUrl.setText(localDataProvider.auth.url_src);
+		
+		
 
 		View login = findViewById(R.id.button1);
 		
 		EditText etUserID = (EditText) findViewById(R.id.editText1);
 		EditText etPassword = (EditText) findViewById(R.id.editText2);
-		
+		etUrl = (EditText) findViewById(R.id.urlText);
+
 		if(!localDataProvider.auth.user_id.equals("")) 
 			etUserID.setText(localDataProvider.auth.user_id);
 		if(!localDataProvider.auth.user_id.equals("")) 
 			etPassword.setText(localDataProvider.auth.password);
 		if(!localDataProvider.auth.url_src.equals("")) 
-			etPassword.setText(localDataProvider.auth.url_src);
+			etUrl.setText(localDataProvider.auth.url_src);
 		
 
 		if(localDataProvider.auth.autologin)
@@ -79,9 +81,13 @@ public class MainActivity extends Activity {
 				EditText etPassword = (EditText) findViewById(R.id.editText2);
 				localDataProvider.auth.password = etPassword.getText().toString();
 				
-				localDataProvider.auth.url_src = etUrl.getText().toString();
-
-				localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), etUrl.getText().toString());
+				// Prüfen, ob / an Url-Ende vorhaden und ggf. hinzufügen
+				String url = etUrl.getText().toString();
+				if(!url.endsWith("/")) {
+					url = url + "/";		
+				}
+				localDataProvider.auth.url_src = url;
+				localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), url);
 				localDataProvider.localdata.save();
 				login();
 
@@ -186,4 +192,21 @@ public class MainActivity extends Activity {
 			}
 		}).start();
 	}
+	
+	@Override
+	protected void onRestart() {
+		EditText etUserID = (EditText) findViewById(R.id.editText1);
+		EditText etPassword = (EditText) findViewById(R.id.editText2);
+		EditText etUrl = (EditText) findViewById(R.id.urlText);
+		
+		// Bei Ausloggen Textfelder zurücksetzen
+		etUserID.setText("");
+		etPassword.setText("");
+		etUrl.setText(localDataProvider.auth.url_src);
+
+		// Instance von MainTabView überschreiben, da sonst IllegalStateExeption bei Update der View auftitt.
+		MainTabView.instance = null;
+		super.onRestart();
+	}
+
 }

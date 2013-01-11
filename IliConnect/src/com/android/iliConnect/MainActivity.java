@@ -121,14 +121,21 @@ public class MainActivity extends Activity {
 
 	}
 
+	
 	public void sync(Context context) {
-		progressDialog = new ProgressDialog(context);
-		progressDialog.setTitle("Sync");
-		progressDialog.setMessage("Bitte warten...");
-
-		remoteDataProvider = new RemoteDataProvider(progressDialog);
+		// wenn Context null ist, keine Sync-Meldung anzeigen
+		if(context != null) {
+			progressDialog = new ProgressDialog(context);
+			progressDialog.setTitle("Sync");
+			progressDialog.setMessage("Bitte warten...");
+			remoteDataProvider = new RemoteDataProvider(progressDialog);
+		}
+		else {
+			remoteDataProvider = new RemoteDataProvider();
+		}
 		remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 	}
+	
 
 	public void showToast(final String msg) {
 				Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);

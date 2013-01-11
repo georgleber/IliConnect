@@ -22,11 +22,7 @@ import com.android.iliConnect.ssl.HttpsClient;
 import android.os.AsyncTask;
 
 public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String> {
-	
-	// Pfad zum An/Abmelde Plugin
-	// private final String pluginPath = "IliConnect.Courses.php";
-	private final String pluginPath = "IliConnect.php";
-	
+		
 	@Override
 	protected String doInBackground(CourseData... crs)  { 		
 
@@ -40,12 +36,7 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 		HttpClient httpsClient = HttpsClient.createHttpsClient(httpClient);
 		
 		// Url für Request erstellen
-		String url = course.getUrlSrc() + this.pluginPath + "/";
-		url += "?action=" + course.getAction() + "&";
-		if(course.getAction().equals("join") && course.getPassword() != null) {
-			url += "course_pw=" + course.getCoursePw();
-		}
-		url += "&ref_id=" + course.getCourseId();
+		String url = course.getUrlSrc() + course.getApiPath() + "?action=" + course.getAction() + "&ref_id=" + course.getCourseId();
 
 		// Creating HTTP Post
 		HttpPost httpPost = new HttpPost(url);
@@ -54,7 +45,10 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 	    List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 		nameValuePair.add(new BasicNameValuePair("username", course.getUserId()));
 		nameValuePair.add(new BasicNameValuePair("password", course.getPassword()));
-					
+		if(course.getCoursePw() != null) {
+			nameValuePair.add(new BasicNameValuePair("course_pw", course.getCoursePw()));
+		}
+			
 		try {
 			// Url Encoding the POST parameters
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
@@ -63,7 +57,6 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 			 e.printStackTrace();
 		}
 		
-
 		String responseMessage = null;
 		try {
 			// Http-Request ausfuehren

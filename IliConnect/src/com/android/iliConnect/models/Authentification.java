@@ -40,7 +40,7 @@ public class Authentification extends PersistableObject {
 		this.autologin = autologin;
 		this.user_id = user_id;
 		this.password = password;
-		this.url_src = url_src;
+		this.url_src = url_src;	
 	}
 	
 	

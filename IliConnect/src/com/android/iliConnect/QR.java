@@ -56,7 +56,7 @@ public class QR extends Fragment {
 		        	//Launch
 		        	startActivityForResult(intent, REQUEST_SCAN);
 		        	
-		        	joinCourse("49", "4711");
+		        	joinCourse("49", null);
 		        	//leaveCourse("49");
 		        }
 		    });

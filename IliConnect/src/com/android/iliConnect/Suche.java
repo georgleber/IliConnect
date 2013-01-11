@@ -14,9 +14,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 public class Suche extends ListFragment implements Redrawable {
@@ -32,10 +34,9 @@ public class Suche extends ListFragment implements Redrawable {
 		if(MainActivity.instance.localDataProvider.results.Item!=null)
 			curses = MainActivity.instance.localDataProvider.results.Item;
 		
-		fileList = new DesktopArrayAdapter(getActivity(), R.layout.item, curses);
+		fileList = new SearchArrayAdapter(getActivity(), R.layout.item, curses);
 		setListAdapter(fileList);
-		
-		
+
 		if (container == null) {
 			return null;
 		}
@@ -86,7 +87,7 @@ public class Suche extends ListFragment implements Redrawable {
 
 		curses = MainActivity.instance.localDataProvider.results.Item;
 		
-		fileList = new DesktopArrayAdapter(getActivity(), R.layout.item, curses);
+		fileList = new SearchArrayAdapter(getActivity(), R.layout.item, curses);
 		getListView().invalidateViews();
 		setListAdapter(fileList);
 		

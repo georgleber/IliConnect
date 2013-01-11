@@ -12,59 +12,58 @@ public class CourseData {
 	
 	String urlSrc;
 	
+	String apiPath;
+	
 	String courseId;
 	
 	String coursePw;
 	
 	
-	public CourseData(String action, String userId, String password, String urlSrc, String courseId, String coursePw) {
+	public CourseData(String action, String userId, String password, String urlSrc, String apiPath, String courseId, String coursePw) {
 		super();
 		this.action = action;
 		this.userId = userId;
 		this.password = password;
 		this.urlSrc = urlSrc;
+		this.apiPath = apiPath;
 		this.courseId = courseId;
 		this.coursePw = coursePw;
 	}
-	
+
+
 	public String getAction() {
 		return action;
 	}
-	public void setAction(String action) {
-		this.action = action;
-	}
+
+
 	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+
+
 	public String getPassword() {
 		return password;
 	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
+
+
 	public String getUrlSrc() {
 		return urlSrc;
 	}
-	public void setUrlSrc(String urlSrc) {
-		this.urlSrc = urlSrc;
+
+
+	public String getApiPath() {
+		return apiPath;
 	}
+
+
 	public String getCourseId() {
 		return courseId;
 	}
-	public void setCourseId(String courseId) {
-		this.courseId = courseId;
-	}
+
+
 	public String getCoursePw() {
 		return coursePw;
-	}
-	public void setCoursePw(String coursePw) {
-		this.coursePw = coursePw;
-	}
-	
-	
-	
+	}	
+
 	
 }

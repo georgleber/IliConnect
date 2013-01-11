@@ -254,6 +254,13 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		}
 	}
 	
+	// Methode um View wechseln zu können 
+	public void changeViewTo(int i) {
+		mTabHost.setCurrentTab(i);
+		this.mViewPager.setCurrentItem(i);
+		
+	}
+	
 	@Override
 	 public void onBackPressed() {
 		// Immer auf Überischt zurückgehen

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -33,12 +34,13 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		super(context, textViewResourceId);
 	}
 
-	private List<Item> items;
+	protected List<Item> items;
 
 	public DesktopArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
 		super(context, textViewResourceId, items);
 		this.items = items;
 	}
+	
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
@@ -48,16 +50,18 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 
 		v = fillListRecursive(null, items.get(position), vi);
 		
+		
 		v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
 		v.findViewById(R.id.imageButton1).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				Item item = items.get(position);
 				MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src+"webdav.php?ref_id="+items.get(position).ref_id);
 			}
 		});
 		//replaceView(v, (LinearLayout)convertView,items.get(position).getType());
 		return v;
 	}
-
+	
 	private View replaceView(View v1, LinearLayout v, String type) {
 		int resID = 0;
 		String descr = null;
@@ -74,7 +78,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			resID = R.drawable.tst;
 			descr = "Test";
 		} else if (type.equalsIgnoreCase("UNSIGN")) {
-			resID = R.drawable.unsign;
+			resID = R.drawable.tst; // eigentlich unsign
 			descr = "";
 		}
 		
@@ -118,7 +122,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 
 	}
 
-	private LinearLayout fillListRecursive(LinearLayout v, final Item item, LayoutInflater vi) {
+	protected LinearLayout fillListRecursive(LinearLayout v, final Item item, LayoutInflater vi) {
 		DesktopViews desktopViews = new DesktopViews();
 		if (v == null) {
 			v = (LinearLayout) vi.inflate(R.layout.item, null);

@@ -147,20 +147,17 @@ public class MainActivity extends Activity {
 
 		NetworkInfo network = connManager.getActiveNetworkInfo();		
 		
-		if (network == null) {
-			throw new NetworkException("Keine Internetverbindung verfügbar.");
-		}
 		
 		NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
 		if (wlanOnly == true) {
-			if (!wifi.isConnected()) {
+			if (!wifi.isAvailable()) {
 				throw new NetworkException("Benötigte WLAN-Verbindung nicht vorhanden");
 			}
 			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 		} else {
-			if (!mobile.isConnected() && !wifi.isConnected()) {
+			if (!mobile.isAvailable() && !wifi.isAvailable()) {
 				throw new NetworkException("Benötigte Datenverbindung nicht vorhanden");
 			}
 			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");

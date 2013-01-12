@@ -160,7 +160,7 @@ public class MainActivity extends Activity {
 			}
 			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 		} else {
-			if (!mobile.isConnected()) {
+			if (!mobile.isConnected() && !wifi.isConnected()) {
 				throw new NetworkException("Benötigte Datenverbindung nicht vorhanden");
 			}
 			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");

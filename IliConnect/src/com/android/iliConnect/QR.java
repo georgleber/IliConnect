@@ -63,9 +63,8 @@ public class QR extends Fragment implements Redrawable {
 		    });
 
 		    return mLinearLayout;
-		
-		
 	}
+	
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	    if (requestCode == 0) {
 	        if (resultCode != 0) {

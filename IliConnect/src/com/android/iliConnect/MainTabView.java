@@ -174,15 +174,13 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 		int pos = this.mTabHost.getCurrentTab();
 		this.mViewPager.setCurrentItem(pos);
-
+		
 		instance = this;
 
 	}
 
 	public void update() {
-
 		((Redrawable) this.mPagerAdapter.getItem(this.mTabHost.getCurrentTab())).refreshViews();
-
 	}
 
 	/* 

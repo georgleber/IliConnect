@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 		if (localDataProvider.auth.autologin) {
 			// falls AutoLogin true ist kann eine Anmeldung ohne Sync. durchgeführt werden
 			try {
-				login(false);
+				autologin();
 			} catch (NetworkException e) {
 				showToast(e.getMessage());
 				e.printStackTrace();
@@ -100,7 +100,7 @@ public class MainActivity extends Activity {
 				localDataProvider.localdata.save();
 				// Login mit Syncronisation
 				try {
-					login(true);
+					login();
 				} catch (NetworkException e) {
 					showToast(e.getMessage());
 					e.printStackTrace();
@@ -108,13 +108,6 @@ public class MainActivity extends Activity {
 
 			}
 		});
-
-		showNotification("Testmeldung", "Dies ist eine Testmeldung");
-	}
-
-	public static void showNotification(String title, String text) {
-		AndroidNotificationBuilder builder = new AndroidNotificationBuilder(title, text);
-		builder.showNotification();
 	}
 
 	public MainActivity getInstance() {
@@ -180,9 +173,8 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void login(boolean doSync) throws NetworkException {
+	public void login() throws NetworkException {
 		final File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
-		notificationThread.startTimer();
 
 		if (remoteDataFile.exists())
 			remoteDataFile.delete();
@@ -218,6 +210,20 @@ public class MainActivity extends Activity {
 				}
 			}
 		}).start();
+	}
+
+	public void autologin() throws NetworkException {
+		MainActivity.instance.localDataProvider.updateLocalData();
+
+		Intent i = new Intent(MainActivity.this, MainTabView.class);
+		startActivity(i);
+
+		MainActivity.instance.runOnUiThread(new Runnable() {
+			public void run() {
+				if (watchThread.doAsynchronousTask == null)
+					watchThread.startTimer();
+			}
+		});
 	}
 
 	@Override

@@ -1,23 +1,19 @@
 package com.android.iliConnect.dataproviders;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat.Builder;
 
 import com.android.iliConnect.MainActivity;
-import com.android.iliConnect.MainTabView;
-import com.android.iliConnect.R;
+import com.android.iliConnect.handler.AndroidNotificationBuilder;
 import com.android.iliConnect.models.Notification;
 import com.android.iliConnect.models.Notifications;
+import com.android.iliConnect.models.modification.AppData;
+import com.android.iliConnect.models.modification.NotificationData;
+import com.android.iliConnect.models.modification.NotificationItem;
 
 public class NotificationWatchThread {
 	public TimerTask doAsynchronousTask;
@@ -40,17 +36,21 @@ public class NotificationWatchThread {
 							int critical = MainActivity.instance.localDataProvider.settings.level_critical;
 
 							for (Notification notification : notifications.Notifications) {
-								if (!notification.isMarked()) {
+								if (!isNotificationMarked(notification.getRef_id())) {
 									Date currentDate = new Date(System.currentTimeMillis());
 									Date notiDate = new Date(notification.date);
 
+									String title = "IliConnect - Bevorstehender Termin";
 									long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
 									if (daysBetween <= critical) {
 										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
-										createNotification(false, notificationText);
+
+										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
+										notiBuilder.showNotification();
 									} else if (daysBetween <= warning) {
 										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
-										createNotification(true, notificationText);
+										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
+										notiBuilder.showNotification();
 									}
 								}
 							}
@@ -68,25 +68,22 @@ public class NotificationWatchThread {
 		timer.schedule(doAsynchronousTask, 0, MainActivity.instance.localDataProvider.settings.interval * 60 * 1000);
 	}
 
-	private void createNotification(boolean warning, String notificationText) {
-		Intent intent = new Intent(MainActivity.instance, MainTabView.class);
-		PendingIntent pIntent = PendingIntent.getActivity(MainActivity.instance, 0, intent, 0);
+	private boolean isNotificationMarked(String ref_id) {
+		AppData appData = MainActivity.instance.localDataProvider.appData;
+		if (appData.getNotificationData() != null) {
+			NotificationItem item = null;
+			for (NotificationItem notiItem : appData.getNotificationData().NotificationItems) {
+				if (ref_id.equals(notiItem.getRef_id())) {
+					item = notiItem;
+					break;
+				}
+			}
 
-		Builder notificationBuilder = new android.support.v4.app.NotificationCompat.Builder(MainActivity.instance);
-		if (warning) {
-			notificationBuilder.setContentTitle("Warnung");
-		} else {
-			notificationBuilder.setContentTitle("Kritisch");
-		}
-		
-		android.app.Notification notification = null;
-		if (warning) {
-			notification = notificationBuilder.setContentText(notificationText).setSmallIcon(R.drawable.warn).setContentIntent(pIntent).build();
-		} else {
-			notification = notificationBuilder.setContentText(notificationText).setSmallIcon(R.drawable.error).setContentIntent(pIntent).build();
+			if (item != null) {
+				return item.isMarkedRead();
+			}
 		}
 
-		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
-		notificationManager.notify(0, notification);
+		return false;
 	}
 }

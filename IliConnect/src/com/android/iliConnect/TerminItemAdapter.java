@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.android.iliConnect.handler.ModificationHandler;
 import com.android.iliConnect.models.Notification;
 
 public class TerminItemAdapter extends ArrayAdapter<Notification> {
@@ -30,6 +31,7 @@ public class TerminItemAdapter extends ArrayAdapter<Notification> {
 			v = vi.inflate(R.layout.termin_list_item, null);
 		}
 
+		ModificationHandler handler = new ModificationHandler();
 		Notification notification = notifications.get(position);
 		if (notification != null) {
 			TextView date = (TextView) v.findViewById(R.id.terminDatum);
@@ -45,9 +47,16 @@ public class TerminItemAdapter extends ArrayAdapter<Notification> {
 			}
 
 			if (marker != null) {
-				marker.setOnCheckedChangeListener(termineFragment);
-				marker.setChecked(notification.isMarked());
+				System.out.println(notification.getRef_id());
+				marker.setOnCheckedChangeListener(null);
 				marker.setTag(notification.getRef_id());
+
+				if (handler.isNotificationMarked(notification.getRef_id())) {
+					System.out.println("Setting it true");
+					marker.setChecked(true);
+				}
+				
+				marker.setOnCheckedChangeListener(termineFragment);
 			}
 		}
 

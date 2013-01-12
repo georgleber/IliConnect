@@ -4,14 +4,11 @@ import java.io.File;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat.Builder;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,7 +16,7 @@ import android.widget.Toast;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
-import com.android.iliConnect.models.Authentification;
+import com.android.iliConnect.handler.AndroidNotificationBuilder;
 
 public class MainActivity extends Activity {
 
@@ -44,34 +41,32 @@ public class MainActivity extends Activity {
 
 		localDataProvider = LocalDataProvider.getInstance();
 		localDataProvider.init(R.xml.config);
-		
+		localDataProvider.init(R.xml.modification);
+
 		localDataProvider.localdata.load();
 		localDataProvider.auth = localDataProvider.localdata.Static.auth;
 		localDataProvider.settings = localDataProvider.localdata.Static.settings;
 
-		//localDataProvider.updateLocalData();
+		// localDataProvider.updateLocalData();
 
 		remoteDataProvider = new RemoteDataProvider();
-		
-		
 
 		View login = findViewById(R.id.button1);
-		
+
 		EditText etUserID = (EditText) findViewById(R.id.editText1);
 		EditText etPassword = (EditText) findViewById(R.id.editText2);
 		etUrl = (EditText) findViewById(R.id.urlText);
 
-		if(!localDataProvider.auth.user_id.equals("")) 
+		if (!localDataProvider.auth.user_id.equals(""))
 			etUserID.setText(localDataProvider.auth.user_id);
-		if(!localDataProvider.auth.user_id.equals("")) 
+		if (!localDataProvider.auth.user_id.equals(""))
 			etPassword.setText(localDataProvider.auth.password);
-		if(!localDataProvider.auth.url_src.equals("")) 
+		if (!localDataProvider.auth.url_src.equals(""))
 			etUrl.setText(localDataProvider.auth.url_src);
-		
 
-		if(localDataProvider.auth.autologin)
+		if (localDataProvider.auth.autologin)
 			login();
-		
+
 		login.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -80,11 +75,11 @@ public class MainActivity extends Activity {
 				localDataProvider.auth.user_id = etUserID.getText().toString();
 				EditText etPassword = (EditText) findViewById(R.id.editText2);
 				localDataProvider.auth.password = etPassword.getText().toString();
-				
+
 				// Prüfen, ob / an Url-Ende vorhaden und ggf. hinzufügen
 				String url = etUrl.getText().toString();
-				if(!url.endsWith("/")) {
-					url = url + "/";		
+				if (!url.endsWith("/")) {
+					url = url + "/";
 				}
 				localDataProvider.auth.url_src = url;
 				localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), url);
@@ -94,20 +89,12 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		showNotification("Titel", "Text");
+		showNotification("Testmeldung", "Dies ist eine Testmeldung");
 	}
 
 	public static void showNotification(String title, String text) {
-		Intent intent = new Intent(MainActivity.instance, MainTabView.class);
-		PendingIntent pIntent = PendingIntent.getActivity(MainActivity.instance, 0, intent, 0);
-
-		Builder noti = new android.support.v4.app.NotificationCompat.Builder(instance);
-		noti.setContentTitle(title).setContentText(text).setSmallIcon(android.R.drawable.ic_dialog_alert).setContentIntent(pIntent);
-
-		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
-
-		notificationManager.notify(0, noti.build());
-
+		AndroidNotificationBuilder builder = new AndroidNotificationBuilder(title, text);
+		builder.showNotification();
 	}
 
 	public MainActivity getInstance() {
@@ -121,26 +108,23 @@ public class MainActivity extends Activity {
 
 	}
 
-	
 	public void sync(Context context) {
 		// wenn Context null ist, keine Sync-Meldung anzeigen
-		if(context != null) {
+		if (context != null) {
 			progressDialog = new ProgressDialog(context);
 			progressDialog.setTitle("Sync");
 			progressDialog.setMessage("Bitte warten...");
 			remoteDataProvider = new RemoteDataProvider(progressDialog);
-		}
-		else {
+		} else {
 			remoteDataProvider = new RemoteDataProvider();
 		}
 		remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 	}
-	
 
 	public void showToast(final String msg) {
-				Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
-				t.show();		
-		
+		Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
+		t.show();
+
 	}
 
 	public void logout() {
@@ -199,13 +183,13 @@ public class MainActivity extends Activity {
 			}
 		}).start();
 	}
-	
+
 	@Override
 	protected void onRestart() {
 		EditText etUserID = (EditText) findViewById(R.id.editText1);
 		EditText etPassword = (EditText) findViewById(R.id.editText2);
 		EditText etUrl = (EditText) findViewById(R.id.urlText);
-		
+
 		// Bei Ausloggen Textfelder zurücksetzen
 		etUserID.setText("");
 		etPassword.setText("");
@@ -215,5 +199,4 @@ public class MainActivity extends Activity {
 		MainTabView.instance = null;
 		super.onRestart();
 	}
-
 }

@@ -28,7 +28,7 @@ public class MainActivityAnzeige extends FragmentActivity implements Updatetable
         setContentView(R.layout.auswahlseminar);        
        Intent intent = getIntent();
 
-       ((TextView)(findViewById(R.id.auswahl))).setText(intent.getStringExtra("selected")+ " gewählt!");
+       ((TextView)(findViewById(R.id.auswahl))).setText(intent.getStringExtra("selected")+ " gewÃ¤hlt!");
        
 
        final String Kurs=intent.getStringExtra("selected");
@@ -106,7 +106,7 @@ public class MainActivityAnzeige extends FragmentActivity implements Updatetable
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    //respond to menu item selection
 		  Intent intent = getIntent();
-		  ((TextView)(findViewById(R.id.auswahl))).setText(intent.getStringExtra("selected")+ " gewählt!");
+		  ((TextView)(findViewById(R.id.auswahl))).setText(intent.getStringExtra("selected")+ " gewï¿½hlt!");
 	      final String Kurs=intent.getStringExtra("selected");
 		
 		switch (item.getItemId()) {

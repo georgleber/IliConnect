@@ -5,17 +5,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Intent;
@@ -25,6 +14,7 @@ import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.R;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.Desktop;
 import com.android.iliConnect.models.LocalData;
@@ -32,6 +22,7 @@ import com.android.iliConnect.models.Notifications;
 import com.android.iliConnect.models.RemoteData;
 import com.android.iliConnect.models.Results;
 import com.android.iliConnect.models.Settings;
+import com.android.iliConnect.models.modification.AppData;
 
 public class LocalDataProvider {
 
@@ -42,10 +33,12 @@ public class LocalDataProvider {
 
 	public LocalData localdata = new LocalData();
 	public RemoteData remoteData = new RemoteData();
+	public AppData appData = new AppData();
 	public Desktop desktopItems = new Desktop();
 	public Authentification auth = new Authentification();;
 	public Results results = new Results();
 
+	public String appDataFileName = "AppData.xml";
 	public String searchDataFileName = "SearchData.xml";
 	public String remoteDataFileName = "RemoteData.xml";
 	public String localDataFilename = "LocalData.xml";
@@ -62,13 +55,19 @@ public class LocalDataProvider {
 		return instance;
 	}
 
-	public void init(int xmLRes) {
-
+	public void init(int xmlRes) {
 		syncObject = new ReentrantLock();
 
-		File config = new File(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
+		String dataFile = "";
+		if (xmlRes == R.xml.config) {
+			dataFile = localDataFilename;
+		} else {
+			dataFile = appDataFileName;
+		}
+		
+		File config = new File(MainActivity.instance.getFilesDir() + "/" + dataFile);
 		if (!config.exists()) {
-			XmlResourceParser xpp = MainActivity.currentActivity.getResources().getXml(xmLRes);
+			XmlResourceParser xpp = MainActivity.currentActivity.getResources().getXml(xmlRes);
 			StringBuffer stringBuffer = new StringBuffer();
 			try {
 				xpp.next();
@@ -84,7 +83,7 @@ public class LocalDataProvider {
 					}
 					eventType = xpp.next();
 				}
-				OutputStream output = new FileOutputStream(MainActivity.instance.getFilesDir() + "/" + localDataFilename);
+				OutputStream output = new FileOutputStream(MainActivity.instance.getFilesDir() + "/" + dataFile);
 				output.write(stringBuffer.toString().getBytes());
 
 			} catch (Exception e) {
@@ -100,8 +99,13 @@ public class LocalDataProvider {
 		try {
 
 			remoteData.load();
+			appData.load();
 			desktopItems.DesktopItem = remoteData.Current.Desktop.DesktopItem;
 			notifications.Notifications = remoteData.Current.Notifications;
+
+			if (new File(MainActivity.instance.getFilesDir() + "/" + appDataFileName).exists()) {
+				appData.load();
+			}
 
 			isUpdating = false;
 
@@ -112,11 +116,11 @@ public class LocalDataProvider {
 				MainActivity.syncObject.notifyAll();
 			}
 
-			if(MainTabView.getInstance()!=null)
+			if (MainTabView.getInstance() != null)
 				MainTabView.getInstance().update();
 
 		} catch (Exception e) {
-			
+
 			MainActivity.instance.showToast(e.getMessage());
 			MainActivity.instance.logout();
 
@@ -159,7 +163,7 @@ public class LocalDataProvider {
 	}
 
 	public void deleteAuthentication() {
-		    
+
 		MainActivity.instance.localDataProvider.auth.setLogin(false, "", "", "http://swe.k3mp.de/ilias/");
 		MainActivity.instance.localDataProvider.localdata.save();
 	}

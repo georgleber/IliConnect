@@ -16,7 +16,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.iliConnect.dataproviders.JoinCourseException;
+import com.android.iliConnect.Exceptions.JoinCourseException;
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
 import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
@@ -184,10 +185,25 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 					toggleVisibility(parentItem, v);
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
 					MainActivity.instance.localDataProvider.openFileOrDownload(s);
+				} else if (parentItem.getType().equalsIgnoreCase("TST")) {
+					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
+					
+					// Test im Browser starten
+					//String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
+					
+					// Ilias im Browser starten
+					String iliasUrl = url_src + "login.php";
+					MainActivity.instance.showBrowserContent(iliasUrl);
+					
 				} else if(parentItem.getType().equalsIgnoreCase("UNSIGN")) {
 					LocalCourseProvider courseProv = new LocalCourseProvider();
 					try {
-						courseProv.leaveCourse(selectedCourse);
+						try {
+							courseProv.leaveCourse(selectedCourse);
+						} catch (NetworkException e) {
+							// TODO Fehlermeldung anzeigen
+							e.printStackTrace();
+						}
 						// neuer Sync und View update wird noch leaveCourse gemacht
 
 					} catch (JoinCourseException e) {

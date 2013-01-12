@@ -4,6 +4,9 @@ import java.util.concurrent.ExecutionException;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.Exceptions.CoursePasswordException;
+import com.android.iliConnect.Exceptions.JoinCourseException;
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.CourseData;
 
@@ -16,7 +19,7 @@ public class LocalCourseProvider {
 	private RemoteDataProvider remoteProv = MainActivity.instance.remoteDataProvider;
 	private LocalDataProvider localProv = MainActivity.instance.localDataProvider;
 
-	public String joinCourse(String ref_id, String pw) throws JoinCourseException, CoursePasswordException {
+	public String joinCourse(String ref_id, String pw) throws JoinCourseException, CoursePasswordException, NetworkException {
 
 		course = new CourseData("join", localProv.auth.user_id, localProv.auth.password, localProv.auth.url_src, localProv.auth.api_src, ref_id, pw);
 		
@@ -59,7 +62,7 @@ public class LocalCourseProvider {
 	}
 	
 	
-	public String leaveCourse(String ref_id) throws JoinCourseException {
+	public String leaveCourse(String ref_id) throws JoinCourseException, NetworkException {
 
 		course = new CourseData("leave", localProv.auth.user_id, localProv.auth.password, localProv.auth.url_src, localProv.auth.api_src, ref_id, null);
 

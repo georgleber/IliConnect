@@ -1,7 +1,8 @@
 package com.android.iliConnect;
 
-import com.android.iliConnect.dataproviders.CoursePasswordException;
-import com.android.iliConnect.dataproviders.JoinCourseException;
+import com.android.iliConnect.Exceptions.CoursePasswordException;
+import com.android.iliConnect.Exceptions.JoinCourseException;
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
 
 import android.app.AlertDialog;
@@ -87,7 +88,13 @@ public class QR extends Fragment implements Redrawable {
 	
 	private void joinCourse(String ref_id, String crs_pw) {
     	try {
-			String result = this.local.joinCourse("49", "4711");
+			String result = null;
+			try {
+				result = this.local.joinCourse("49", "4711");
+			} catch (NetworkException e) {
+				showAlert("Keine Internetverbidung");
+				e.printStackTrace();
+			}
 			
 			if(result != null && result.contains("JOINED")) {
 				this.showAlert("Sie wurde erfolgreich angemeldet");
@@ -110,7 +117,13 @@ public class QR extends Fragment implements Redrawable {
 	
 	private void leaveCourse(String ref_id) {
 		try {
-			String result = this.local.leaveCourse(ref_id);
+			String result = null;
+			try {
+				result = this.local.leaveCourse(ref_id);
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			if(result != null && result.contains("LEFT")) {
 				this.showAlert("Sie wurde erfolgreich abgemeldet");

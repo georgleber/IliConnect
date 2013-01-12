@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import com.android.iliConnect.PagerAdapter;
+import com.android.iliConnect.Exceptions.NetworkException;
 
 /*
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager. 
@@ -247,7 +248,13 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			//finish();
 >>>>>>> branch 'master' of https://github.com/Develman/IliConnect.git*/
 		case R.id.refresh:
-			MainActivity.instance.sync(instance);
+			try {
+				MainActivity.instance.sync(instance);
+			} catch (NetworkException e) {
+				// TODO Fehlermeldung anzeigen
+				MainActivity.instance.showToast("Keine Internetverbdiung");
+				e.printStackTrace();
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

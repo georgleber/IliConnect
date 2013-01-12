@@ -9,6 +9,9 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat.Builder;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
@@ -44,34 +48,38 @@ public class MainActivity extends Activity {
 
 		localDataProvider = LocalDataProvider.getInstance();
 		localDataProvider.init(R.xml.config);
-		
+
 		localDataProvider.localdata.load();
 		localDataProvider.auth = localDataProvider.localdata.Static.auth;
 		localDataProvider.settings = localDataProvider.localdata.Static.settings;
 
-		//localDataProvider.updateLocalData();
+		// localDataProvider.updateLocalData();
 
 		remoteDataProvider = new RemoteDataProvider();
-		
-		
 
 		View login = findViewById(R.id.button1);
-		
+
 		EditText etUserID = (EditText) findViewById(R.id.editText1);
 		EditText etPassword = (EditText) findViewById(R.id.editText2);
 		etUrl = (EditText) findViewById(R.id.urlText);
 
-		if(!localDataProvider.auth.user_id.equals("")) 
+		if (!localDataProvider.auth.user_id.equals(""))
 			etUserID.setText(localDataProvider.auth.user_id);
-		if(!localDataProvider.auth.user_id.equals("")) 
+		if (!localDataProvider.auth.user_id.equals(""))
 			etPassword.setText(localDataProvider.auth.password);
-		if(!localDataProvider.auth.url_src.equals("")) 
+		if (!localDataProvider.auth.url_src.equals(""))
 			etUrl.setText(localDataProvider.auth.url_src);
-		
 
-		if(localDataProvider.auth.autologin)
-			login();
-		
+		if (localDataProvider.auth.autologin) {
+			// falls AutoLogin true ist kann eine Anmeldung ohne Sync. durchgeführt werden
+			try {
+				login(false);
+			} catch (NetworkException e) {
+				showToast(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
 		login.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -80,16 +88,22 @@ public class MainActivity extends Activity {
 				localDataProvider.auth.user_id = etUserID.getText().toString();
 				EditText etPassword = (EditText) findViewById(R.id.editText2);
 				localDataProvider.auth.password = etPassword.getText().toString();
-				
+
 				// Prüfen, ob / an Url-Ende vorhaden und ggf. hinzufügen
 				String url = etUrl.getText().toString();
-				if(!url.endsWith("/")) {
-					url = url + "/";		
+				if (!url.endsWith("/")) {
+					url = url + "/";
 				}
 				localDataProvider.auth.url_src = url;
 				localDataProvider.auth.setLogin(true, etUserID.getText().toString(), etPassword.getText().toString(), url);
 				localDataProvider.localdata.save();
-				login();
+				// Login mit Syncronisation
+				try {
+					login(true);
+				} catch (NetworkException e) {
+					showToast(e.getMessage());
+					e.printStackTrace();
+				}
 
 			}
 		});
@@ -121,26 +135,45 @@ public class MainActivity extends Activity {
 
 	}
 
-	
-	public void sync(Context context) {
+	public void sync(Context context) throws NetworkException {
+		boolean wlanOnly = this.localDataProvider.settings.sync_wlanonly;
 		// wenn Context null ist, keine Sync-Meldung anzeigen
-		if(context != null) {
+		if (context != null) {
 			progressDialog = new ProgressDialog(context);
-			progressDialog.setTitle("Sync");
+			progressDialog.setTitle("Syncronisation");
 			progressDialog.setMessage("Bitte warten...");
 			remoteDataProvider = new RemoteDataProvider(progressDialog);
-		}
-		else {
+		} else {
 			remoteDataProvider = new RemoteDataProvider();
 		}
-		remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
+
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+		NetworkInfo network = connManager.getActiveNetworkInfo();		
+		
+		if (network == null) {
+			throw new NetworkException("Keine Internetverbindung verfügbar.");
+		}
+		
+		NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+		if (wlanOnly == true) {
+			if (!wifi.isConnected()) {
+				throw new NetworkException("Benötigte WLAN-Verbindung nicht vorhanden");
+			}
+			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
+		} else {
+			if (!mobile.isConnected()) {
+				throw new NetworkException("Benötigte Datenverbindung nicht vorhanden");
+			}
+			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
+		}
 	}
-	
 
 	public void showToast(final String msg) {
-				Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
-				t.show();		
-		
+		Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
+		t.show();
 	}
 
 	public void logout() {
@@ -159,7 +192,7 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void login() {
+	public void login(boolean doSync) throws NetworkException {
 		final File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
 
 		if (remoteDataFile.exists())
@@ -168,7 +201,6 @@ public class MainActivity extends Activity {
 		MainActivity.instance.sync(MainActivity.instance);
 
 		new Thread(new Runnable() {
-
 			public void run() {
 				synchronized (syncObject) {
 					Date start = new Date();
@@ -176,8 +208,9 @@ public class MainActivity extends Activity {
 
 					while (!remoteDataFile.exists() || !LocalDataProvider.isAvaiable) {
 						try {
-							syncObject.wait(100);
+							syncObject.wait(2000);
 						} catch (InterruptedException e) {
+
 						}
 						if (new Date().getTime() - start.getTime() > timeout)
 							break;
@@ -187,25 +220,23 @@ public class MainActivity extends Activity {
 						startActivity(i);
 
 						MainActivity.instance.runOnUiThread(new Runnable() {
-
 							public void run() {
 								if (watchThread.doAsynchronousTask == null)
 									watchThread.startTimer();
 							}
 						});
-
 					}
 				}
 			}
 		}).start();
 	}
-	
+
 	@Override
 	protected void onRestart() {
 		EditText etUserID = (EditText) findViewById(R.id.editText1);
 		EditText etPassword = (EditText) findViewById(R.id.editText2);
 		EditText etUrl = (EditText) findViewById(R.id.urlText);
-		
+
 		// Bei Ausloggen Textfelder zurücksetzen
 		etUserID.setText("");
 		etPassword.setText("");

@@ -1,4 +1,4 @@
-package com.android.iliConnect.dataproviders;
+package com.android.iliConnect.Exceptions;
 
 public class JoinCourseException extends Exception {
 	

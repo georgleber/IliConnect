@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
+import com.android.iliConnect.dataproviders.NotificationWatchThread;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
 import com.android.iliConnect.handler.AndroidNotificationBuilder;
 
@@ -32,6 +33,7 @@ public class MainActivity extends Activity {
 	public LocalDataProvider localDataProvider;
 
 	public DataDownloadThread watchThread = new DataDownloadThread();
+	public NotificationWatchThread notificationThread = new NotificationWatchThread();
 	private EditText etUrl;
 
 	@Override
@@ -47,7 +49,6 @@ public class MainActivity extends Activity {
 		localDataProvider.init(R.xml.config);
 
 		localDataProvider.init(R.xml.modification);
-
 
 		localDataProvider.localdata.load();
 		localDataProvider.auth = localDataProvider.localdata.Static.auth;
@@ -70,7 +71,6 @@ public class MainActivity extends Activity {
 		if (!localDataProvider.auth.url_src.equals(""))
 			etUrl.setText(localDataProvider.auth.url_src);
 
-
 		if (localDataProvider.auth.autologin) {
 			// falls AutoLogin true ist kann eine Anmeldung ohne Sync. durchgeführt werden
 			try {
@@ -80,7 +80,6 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
-
 
 		login.setOnClickListener(new View.OnClickListener() {
 
@@ -129,7 +128,6 @@ public class MainActivity extends Activity {
 
 	}
 
-
 	public void sync(Context context) throws NetworkException {
 		boolean wlanOnly = this.localDataProvider.settings.sync_wlanonly;
 
@@ -145,12 +143,12 @@ public class MainActivity extends Activity {
 
 		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
-		NetworkInfo network = connManager.getActiveNetworkInfo();		
-		
+		NetworkInfo network = connManager.getActiveNetworkInfo();
+
 		if (network == null) {
 			throw new NetworkException("Keine Internetverbindung verfügbar.");
 		}
-		
+
 		NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
@@ -190,6 +188,7 @@ public class MainActivity extends Activity {
 
 	public void login(boolean doSync) throws NetworkException {
 		final File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
+		notificationThread.startTimer();
 
 		if (remoteDataFile.exists())
 			remoteDataFile.delete();

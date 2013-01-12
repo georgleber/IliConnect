@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +12,6 @@ import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat.Builder;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,7 +20,7 @@ import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
-import com.android.iliConnect.models.Authentification;
+import com.android.iliConnect.handler.AndroidNotificationBuilder;
 
 public class MainActivity extends Activity {
 
@@ -49,6 +46,9 @@ public class MainActivity extends Activity {
 		localDataProvider = LocalDataProvider.getInstance();
 		localDataProvider.init(R.xml.config);
 
+		localDataProvider.init(R.xml.modification);
+
+
 		localDataProvider.localdata.load();
 		localDataProvider.auth = localDataProvider.localdata.Static.auth;
 		localDataProvider.settings = localDataProvider.localdata.Static.settings;
@@ -70,6 +70,7 @@ public class MainActivity extends Activity {
 		if (!localDataProvider.auth.url_src.equals(""))
 			etUrl.setText(localDataProvider.auth.url_src);
 
+
 		if (localDataProvider.auth.autologin) {
 			// falls AutoLogin true ist kann eine Anmeldung ohne Sync. durchgeführt werden
 			try {
@@ -79,6 +80,7 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
+
 
 		login.setOnClickListener(new View.OnClickListener() {
 
@@ -108,20 +110,12 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		showNotification("Titel", "Text");
+		showNotification("Testmeldung", "Dies ist eine Testmeldung");
 	}
 
 	public static void showNotification(String title, String text) {
-		Intent intent = new Intent(MainActivity.instance, MainTabView.class);
-		PendingIntent pIntent = PendingIntent.getActivity(MainActivity.instance, 0, intent, 0);
-
-		Builder noti = new android.support.v4.app.NotificationCompat.Builder(instance);
-		noti.setContentTitle(title).setContentText(text).setSmallIcon(android.R.drawable.ic_dialog_alert).setContentIntent(pIntent);
-
-		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
-
-		notificationManager.notify(0, noti.build());
-
+		AndroidNotificationBuilder builder = new AndroidNotificationBuilder(title, text);
+		builder.showNotification();
 	}
 
 	public MainActivity getInstance() {
@@ -135,8 +129,10 @@ public class MainActivity extends Activity {
 
 	}
 
+
 	public void sync(Context context) throws NetworkException {
 		boolean wlanOnly = this.localDataProvider.settings.sync_wlanonly;
+
 		// wenn Context null ist, keine Sync-Meldung anzeigen
 		if (context != null) {
 			progressDialog = new ProgressDialog(context);
@@ -246,5 +242,4 @@ public class MainActivity extends Activity {
 		MainTabView.instance = null;
 		super.onRestart();
 	}
-
 }

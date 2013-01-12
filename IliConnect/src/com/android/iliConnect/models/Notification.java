@@ -1,8 +1,6 @@
 package com.android.iliConnect.models;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.simpleframework.xml.Element;
 
@@ -23,8 +21,6 @@ public class Notification extends PersistableObject {
 	public Long date;
 	@Element(required = false)
 	public String ref_id;
-	@Element(required = false)
-	public boolean marked;
 
 	public String getDate() {
 		if (date != null) {
@@ -50,9 +46,5 @@ public class Notification extends PersistableObject {
 
 	public String getRef_id() {
 		return ref_id;
-	}
-
-	public boolean isMarked() {
-		return marked;
 	}
 }

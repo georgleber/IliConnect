@@ -26,10 +26,17 @@ public class NotificationHandler {
 			}
 
 			int cnt = 0;
+			ModificationHandler handler = new ModificationHandler();
 			for (Notification notification : loadedNotifications) {
-				if (notification.date != null && cnt <= numNotifications) {
+				if (notification.date != null && cnt < numNotifications) {
 					if (isFutureNotification(notification)) {
-						notifications.add(notification);
+						if (checkSettings) {
+							if (!handler.isNotificationMarked(notification.getRef_id())) {
+								notifications.add(notification);
+							}
+						} else {
+							notifications.add(notification);
+						}
 					}
 
 					cnt++;
@@ -53,7 +60,7 @@ public class NotificationHandler {
 			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	private class NotificationComparator implements Comparator<Notification> {

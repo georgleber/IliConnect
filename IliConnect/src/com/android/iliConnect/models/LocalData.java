@@ -18,7 +18,7 @@ public class LocalData extends PersistableObject {
 		try {
 			super.deserialize(MainActivity.instance.localDataProvider.localDataFilename);
 		} catch (Exception e) {
-			
+
 			MainActivity.instance.showToast(e.getMessage());
 		}
 	}

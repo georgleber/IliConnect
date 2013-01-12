@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.android.iliConnect.handler.ModificationHandler;
 import com.android.iliConnect.handler.NotificationHandler;
 import com.android.iliConnect.models.Notification;
 
@@ -59,17 +60,11 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 		CheckBox checkbox = (CheckBox) buttonView;
 		String ref_id = (String) checkbox.getTag();
 
-		Notification selectedNoti = null;
-		for (Notification notification : MainActivity.instance.localDataProvider.notifications.Notifications) {
-			if (notification.getRef_id().equals(ref_id)) {
-				selectedNoti = notification;
-				break;
-			}
-		}
-
-		if (selectedNoti != null) {
-			selectedNoti.marked = true;
-			MainActivity.instance.localDataProvider.remoteData.save();
+		ModificationHandler handler = new ModificationHandler();
+		if (isChecked) {
+			handler.setNotificationMarked(ref_id);
+		} else {
+			handler.setModificationUnmarked(ref_id);
 		}
 	}
 }

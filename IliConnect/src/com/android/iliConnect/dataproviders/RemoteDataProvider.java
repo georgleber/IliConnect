@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.HttpEntity;
@@ -17,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import com.android.iliConnect.MainActivity;
@@ -118,16 +120,30 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 	@Override
 	protected void onPostExecute(Exception e) {
 		// super.onPostExecute(result);
-		if (e != null){
-			MainActivity.instance.logout();
-			MainActivity.instance.showToast(e.getMessage());
+
+		if (e != null) {
+			String errMsg = null;
+			if(e instanceof UnknownHostException) {
+				MainActivity.instance.logout();
+				errMsg = "Der angegebene Server konnte nicht erreicht werden.";
+			}
+			if(e instanceof AuthException) {
+				MainActivity.instance.logout();
+				// falls bei der Sync. die Benutzerdaten falsch sind, alte Daten löschen
+				MainActivity.instance.localDataProvider.deleteAuthentication();
+				errMsg = "Die angegebenen Benutzerdaten sind nicht korrekt.";
+			}
+			else {
+				errMsg = "Es ist ein Fehler während der Synchronisation aufgetreten.";
+			}
+			MainActivity.instance.showToast(errMsg);			
 		}
 
 		MainActivity.instance.localDataProvider.updateLocalData();
 	
-			if (pDialog != null && pDialog.isShowing())
+		if (pDialog != null && pDialog.isShowing()) {
 			pDialog.dismiss();
-
+		}	
 	}
 
 	public String convertStreamToString(InputStream inputStream) throws IOException {

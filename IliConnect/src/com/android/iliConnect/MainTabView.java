@@ -247,10 +247,10 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 >>>>>>> branch 'master' of https://github.com/Develman/IliConnect.git*/
 		case R.id.refresh:
 			try {
-				MainActivity.instance.sync(instance);
+				MainActivity.instance.sync(instance, true);
 			} catch (NetworkException e) {
 				// TODO Fehlermeldung anzeigen
-				MainActivity.instance.showToast("Keine Internetverbdiung");
+				MainActivity.instance.showToast("Keine Internetverbindung");
 				e.printStackTrace();
 			}
 			return true;

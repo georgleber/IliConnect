@@ -1,5 +1,7 @@
 package com.android.iliConnect.dataproviders;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -9,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -18,9 +21,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+
 import com.android.iliConnect.MainActivity;
 
 public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
@@ -29,11 +34,9 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 	private ProgressDialog pDialog;
 
 	public RemoteDataProvider() {
-		
 	}
 
 	public RemoteDataProvider(ProgressDialog pDialog) {
-
 		this.pDialog = pDialog;
 	}
 
@@ -84,8 +87,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
 				if (s.contains("ACCESS_DENIED"))
 					throw new AuthException(s);
-				
-				
+
 				BufferedWriter out = new BufferedWriter(new FileWriter(MainActivity.instance.getFilesDir() + "/" + targetName));
 				out.write(s);
 
@@ -123,27 +125,41 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
 		if (e != null) {
 			String errMsg = null;
-			if(e instanceof UnknownHostException) {
-				MainActivity.instance.logout();
-				errMsg = "Der angegebene Server konnte nicht erreicht werden.";
-			}
-			if(e instanceof AuthException) {
+			if (e instanceof UnknownHostException) {
+				ConnectivityManager connManager = (ConnectivityManager) MainActivity.instance.getSystemService(CONNECTIVITY_SERVICE);
+				NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+				boolean logout = false;
+				if (wifi != null && wifi.isConnected()) {
+					logout = true;
+				} else if (mobile != null && mobile.isConnected()) {
+					logout = true;
+				}
+
+				if (logout) {
+					MainActivity.instance.logout();
+					errMsg = "Der angegebene Server konnte nicht erreicht werden.";
+				}
+			} else if (e instanceof AuthException) {
 				MainActivity.instance.logout();
 				// falls bei der Sync. die Benutzerdaten falsch sind, alte Daten löschen
 				MainActivity.instance.localDataProvider.deleteAuthentication();
 				errMsg = "Die angegebenen Benutzerdaten sind nicht korrekt.";
-			}
-			else {
+			} else {
 				errMsg = "Es ist ein Fehler während der Synchronisation aufgetreten.";
 			}
-			MainActivity.instance.showToast(errMsg);			
+
+			if (errMsg != null) {
+				MainActivity.instance.showToast(errMsg);
+			}
 		}
 
 		MainActivity.instance.localDataProvider.updateLocalData();
-	
+
 		if (pDialog != null && pDialog.isShowing()) {
 			pDialog.dismiss();
-		}	
+		}
 	}
 
 	public String convertStreamToString(InputStream inputStream) throws IOException {

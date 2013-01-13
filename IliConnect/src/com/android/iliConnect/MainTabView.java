@@ -252,7 +252,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 				MainActivity.instance.sync(instance);
 			} catch (NetworkException e) {
 				// TODO Fehlermeldung anzeigen
-				MainActivity.instance.showToast("Keine Internetverbdiung");
+				MainActivity.instance.showToast(e.getMessage());
 				e.printStackTrace();
 			}
 			return true;

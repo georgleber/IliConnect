@@ -59,7 +59,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
 		v.findViewById(R.id.imageButton1).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Item item = items.get(position);
+
 				MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src+"webdav.php?ref_id="+items.get(position).ref_id);
 			}
 		});

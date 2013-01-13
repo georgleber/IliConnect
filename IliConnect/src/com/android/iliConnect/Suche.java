@@ -1,6 +1,8 @@
 package com.android.iliConnect;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -23,18 +25,22 @@ import android.widget.ProgressBar;
 
 public class Suche extends ListFragment implements Redrawable {
 
-	private ArrayList<Item> curses = new ArrayList<Item>();
+	private ArrayList<Item> searchResult = new ArrayList<Item>();
+	private ArrayList<Item> existingCourses = new ArrayList<Item>();
 	private EditText etSearch;
 	private ListAdapter fileList;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+		List<Item> courses = new ArrayList<Item>();
 		LinearLayout mLinearLayout = (LinearLayout) inflater.inflate(R.layout.suche_layout, container, false);
 		
-		if(MainActivity.instance.localDataProvider.results.Item!=null)
-			curses = MainActivity.instance.localDataProvider.results.Item;
+		if(MainActivity.instance.localDataProvider.results.Item != null) {
+			// nur die Kurse als Suchergebnis anzeigen, in denen man noch nicht angemeldet ist.
+			courses = this.getSearchResults();			
+		}				
 		
-		fileList = new SearchArrayAdapter(getActivity(), R.layout.item, curses);
+		fileList = new SearchArrayAdapter(getActivity(), R.layout.item, courses);
 		setListAdapter(fileList);
 
 		if (container == null) {
@@ -53,20 +59,20 @@ public class Suche extends ListFragment implements Redrawable {
 			}
 
 			public void afterTextChanged(Editable s) {
-				updateResults(s.toString());
+				if(s.length() >= 3) {
+					updateResults(s.toString());
+				}
+				
 				
 			}
 		});
-
 		
 		return mLinearLayout;
 
 	}
 
 	private void updateResults(String s) {
-		 
-		
-		
+		 		
 		 ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 		 nameValuePairs.add(new BasicNameValuePair("searchfor", s));
 		  
@@ -84,15 +90,29 @@ public class Suche extends ListFragment implements Redrawable {
 	}
 
 	public void refreshViews() {
-
-		curses = MainActivity.instance.localDataProvider.results.Item;
-		
-		fileList = new SearchArrayAdapter(getActivity(), R.layout.item, curses);
+	
+		// nur die Kurse als Suchergebnis anzeigen, in denen man noch nicht angemeldet ist.
+		List<Item> courses = this.getSearchResults();
+				
+		fileList = new SearchArrayAdapter(getActivity(), R.layout.item, courses);
 		getListView().invalidateViews();
 		setListAdapter(fileList);
 		
 		((ProgressBar)MainTabView.instance.findViewById(R.id.progressBar1)).setVisibility(View.INVISIBLE);
+	}
+	
+	
+	private List<Item> getSearchResults() {
+		ArrayList<Item> courses = new ArrayList<Item>();
 		
+		existingCourses = MainActivity.instance.localDataProvider.desktopItems.DesktopItem;
+		searchResult = MainActivity.instance.localDataProvider.results.Item;
 
+		for (Item item : searchResult) {
+			if (!existingCourses.contains(item)) {
+				courses.add(item);
+			}
+		}
+		return courses;
 	}
 }

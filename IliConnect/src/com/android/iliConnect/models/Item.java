@@ -50,6 +50,17 @@ public class Item extends PersistableObject{
 	public ArrayList<Item> getItems() {
 		return Item;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return (o != null) && 
+			   (o instanceof Item) &&
+			   (this.ref_id.equals(((Item)o).ref_id));
+	}
+	
+	
+	
+	
 
 
 	

@@ -37,9 +37,11 @@ public class SearchArrayAdapter extends DesktopArrayAdapter {
 		v.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
+				v.setBackgroundColor(45739);
 				Item item = items.get(position);
 				joinCourse(item.ref_id);		
 			}
+			
 		});
 
 		/*

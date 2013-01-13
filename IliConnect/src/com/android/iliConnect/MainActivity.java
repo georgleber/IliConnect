@@ -155,7 +155,7 @@ public class MainActivity extends Activity {
 			boolean showSyncError = false;
 			if ((mobile == null || !mobile.isConnected()) && (wifi == null || !wifi.isConnected())) {
 				showSyncError = true;
-			} 
+			}
 
 			if (showSyncError) {
 				// Fehlermeldung nur ausgeben, wenn manuelle Synchronisation
@@ -216,8 +216,13 @@ public class MainActivity extends Activity {
 
 						MainActivity.instance.runOnUiThread(new Runnable() {
 							public void run() {
-								if (watchThread.doAsynchronousTask == null)
+								if (watchThread.doAsynchronousTask == null) {
 									watchThread.startTimer();
+								}
+
+								if (notificationThread.doAsynchronousTask == null) {
+									notificationThread.startTimer();
+								}
 							}
 						});
 					}
@@ -234,8 +239,13 @@ public class MainActivity extends Activity {
 
 		MainActivity.instance.runOnUiThread(new Runnable() {
 			public void run() {
-				if (watchThread.doAsynchronousTask == null)
+				if (watchThread.doAsynchronousTask == null) {
 					watchThread.startTimer();
+				}
+
+				if (notificationThread.doAsynchronousTask == null) {
+					notificationThread.startTimer();
+				}
 			}
 		});
 	}

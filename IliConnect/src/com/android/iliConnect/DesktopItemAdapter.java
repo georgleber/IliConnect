@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.android.iliConnect.models.Item;
 
 public class DesktopItemAdapter extends ArrayAdapter<Item> {
+	public DesktopItemAdapter(Context context, int textViewResourceId) {
+		super(context, textViewResourceId);
+	}
+	
 	private List<Item> items = new ArrayList<Item>();
 
 	public DesktopItemAdapter(Context context, int textViewResourceId, ArrayList<Item> schreibtischItems) {
@@ -35,18 +39,24 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 			desktopViews.title = (TextView) v.findViewById(R.id.itemTitle);
 			desktopViews.description = (TextView) v.findViewById(R.id.itemDescription);
 			desktopViews.type = (TextView) v.findViewById(R.id.itemType);
+			desktopViews.date = (TextView) v.findViewById(R.id.itemDate);
+			desktopViews.owner = (TextView) v.findViewById(R.id.itemOwner);
 
 			v.setTag(desktopViews);
 		} else {
 			desktopViews = (DesktopViews) v.getTag();
+			desktopViews.type.setVisibility(View.GONE);
+			desktopViews.date.setVisibility(View.GONE);		
+			desktopViews.owner.setVisibility(View.GONE);
 		}
 
 		Item item = items.get(position);
-
 		if (item != null) {
 			desktopViews.title.setText(item.getTitle());
 			desktopViews.description.setText(item.getDescription());
-			desktopViews.type.setText("");
+			desktopViews.type.setVisibility(View.GONE);
+			desktopViews.date.setVisibility(View.GONE);
+			desktopViews.owner.setVisibility(View.GONE);
 		}
 
 		return v;
@@ -56,5 +66,7 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 		TextView title;
 		TextView description;
 		TextView type;
+		TextView date;
+		TextView owner;
 	}
 }

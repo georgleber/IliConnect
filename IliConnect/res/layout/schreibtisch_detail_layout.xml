@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#E5F7F7"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="#E5F7F7">
     
-      <TextView
+     <TextView
         android:id="@+id/courseName1"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/courseName"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-      
-
-   <ListView
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="25sp" />
+        
+        <ListView
         android:id="@+id/desktop_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_alignParentLeft="true"
+        style="@style/ListView"
         android:divider="@color/darkmint"
         android:dividerHeight="1dp"
-        android:focusable="true" />
+        android:layout_below="@+id/courseName1" >
 
-</LinearLayout>
+    </ListView>
+        
+</RelativeLayout>

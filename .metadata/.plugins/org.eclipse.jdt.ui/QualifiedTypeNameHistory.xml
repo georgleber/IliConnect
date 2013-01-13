@@ -9,8 +9,10 @@
 <fullyQualifiedTypeName name="com.android.iliConnect.R.layout"/>
 <fullyQualifiedTypeName name="com.android.iliConnect.R.drawable"/>
 <fullyQualifiedTypeName name="android.content.Context"/>
-<fullyQualifiedTypeName name="com.android.iliConnect.MessageBuilder"/>
 <fullyQualifiedTypeName name="android.R"/>
 <fullyQualifiedTypeName name="android.R.drawable"/>
 <fullyQualifiedTypeName name="android.widget.EditText"/>
+<fullyQualifiedTypeName name="android.text.InputType"/>
+<fullyQualifiedTypeName name="android.os.AsyncTask"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.MessageBuilder"/>
 </qualifiedTypeNameHistroy>

@@ -21,6 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:divider="@color/darkmint"
+        android:dividerHeight="1dp"
         />
 
     
@@ -37,6 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:divider="@color/darkmint"
+        android:dividerHeight="1dp"
         />
 
     

@@ -54,6 +54,8 @@ public class TerminItemAdapter extends ArrayAdapter<Notification> {
 				if (handler.isNotificationMarked(notification.getRef_id())) {
 					System.out.println("Setting it true");
 					marker.setChecked(true);
+				} else {
+					marker.setChecked(false);
 				}
 				
 				marker.setOnCheckedChangeListener(termineFragment);

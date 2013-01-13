@@ -139,9 +139,6 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		desktopViews.description.setText(item.getDescription());
 		desktopViews.type.setText(item.getType());
 
-		if(desktopViews.description.getText().equals("")) {
-			v.findViewById(R.id.itemDescription).setVisibility(View.GONE);
-		}
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
 			desktopViews.type.setVisibility(View.GONE);
 
@@ -150,8 +147,6 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		else
 			desktopViews.date.setVisibility(View.GONE);
 
-		// Owner des Kurses nicht auf dem Schreibtisch einblenden
-		v.findViewById(R.id.itemOwner).setVisibility(View.GONE);
 		v.setTag(item.getRef_id());
 
 		if (item.getItems() != null) {

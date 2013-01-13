@@ -1,14 +1,19 @@
 package com.android.iliConnect;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
 import com.android.iliConnect.models.Item;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
@@ -60,7 +65,12 @@ public class Suche extends ListFragment implements Redrawable {
 
 			public void afterTextChanged(Editable s) {
 				if(s.length() >= 3) {
-					updateResults(s.toString());
+					try {
+						updateResults(s.toString());
+					} catch (NetworkException e) {
+						MainActivity.instance.showToast(e.getMessage());
+						e.printStackTrace();
+					}
 				}
 				
 				
@@ -71,16 +81,35 @@ public class Suche extends ListFragment implements Redrawable {
 
 	}
 
-	private void updateResults(String s) {
+	private void updateResults(String s) throws NetworkException {
+		boolean wlanOnly = MainActivity.instance.localDataProvider.settings.sync_wlanonly;
 		 		
-		 ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-		 nameValuePairs.add(new BasicNameValuePair("searchfor", s));
+		ConnectivityManager connManager = (ConnectivityManager) MainActivity.instance.getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		nameValuePairs.add(new BasicNameValuePair("searchfor", s));
 		  
-		 ((ProgressBar)MainTabView.instance.findViewById(R.id.progressBar1)).setVisibility(View.VISIBLE);;
+		((ProgressBar)MainTabView.instance.findViewById(R.id.progressBar1)).setVisibility(View.VISIBLE);;
 		 
-		 RemoteDataProvider rP = new RemoteDataProvider(nameValuePairs);
-		 rP.execute(new String[]{MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=search",MainActivity.instance.localDataProvider.searchDataFileName});
-		
+		if(wlanOnly) {
+			// wenn Wlan-Only gesetzt ist, muss eine Wlan-Verbindung vorhanden sein
+			if (wifi == null || !wifi.isConnected()) {
+				throw new NetworkException("Es wird eine Wlan-Verbindung benötigt.");
+			}
+			RemoteDataProvider rP = new RemoteDataProvider(nameValuePairs);
+			rP.execute(new String[]{MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=search",MainActivity.instance.localDataProvider.searchDataFileName});			
+		}
+		else {
+			// falls keine Internetverdndiung besteht, Fehlermeldung schmeißen
+			if ((mobile == null || !mobile.isConnected()) && (wifi == null || !wifi.isConnected())) {
+				throw new NetworkException("Es wird eine Internetverbindung benötigt.");
+			}
+			else {
+				RemoteDataProvider rP = new RemoteDataProvider(nameValuePairs);
+				rP.execute(new String[]{MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=search",MainActivity.instance.localDataProvider.searchDataFileName});			
+			}
+		}
 	}
 
 	@Override
@@ -113,6 +142,13 @@ public class Suche extends ListFragment implements Redrawable {
 				courses.add(item);
 			}
 		}
+		
 		return courses;
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
 	}
 }

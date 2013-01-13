@@ -8,7 +8,7 @@ class IliConnect{
     switch($_GET["action"]) {
       case "join":
         $course = $this->checkCourse($ref_id);
-        echo $this->joinCourse($course, isset($_GET["course_pw"]) ? $_GET["course_pw"] : null);
+        echo $this->joinCourse($course, isset($_REQUEST["course_pw"]) ? $_REQUEST["course_pw"] : null);
         break;
       case "leave":
         $course = $this->checkCourse($ref_id);
@@ -18,7 +18,7 @@ class IliConnect{
         $this->printCurrentDesk();
         break;
       case "search":
-        $this->searchMagazin();
+        $this->searchMagazin(isset($_REQUEST["group_by_dozent"]) ? (bool) $_REQUEST["group_by_dozent"] : false);
         break;
       case "magazin":
         $this->printMagazin();
@@ -163,30 +163,6 @@ class IliConnect{
     ## XML ILICONNECT CURRENT NOTIFICATIONS
     $notifications = $current->addChild("Notifications");
 
-/*
-DEBUGGING PURPOSES!!
-*/
-
-    $n1 = $notifications->addChild("Notification");
-    $n2 = $notifications->addChild("Notification");
-    $n3 = $notifications->addChild("Notification");
-
-    $n1->addChild("title","Abnahme durch den Kunden");
-		$n1->addChild("ref_id",0815);
-    $n1->addChild("description","Dieser Termin endet am Montag, den 14.01.");
-    $n1->addChild("date",1358152222);
-
-    $n2->addChild("title","Spätere Abnahme");
-    $n2->addChild("ref_id",0817);
-    $n2->addChild("description","Dieser Termin endet Mi 16. Jan 17:03:42 CET 2013	.");
-    $n2->addChild("date",1358352222);
-
-    $n3->addChild("title","Igendsoeintermin");
-    $n3->addChild("ref_id",1337);
-    $n3->addChild("description","Dieser Termin endet Fr 11. Jan 12:03:42 CET 2013	.");
-    $n3->addChild("date",1357902222);
-
-
     ## XML ILICONNECT CURRENT DESKTOP
     $desktop = $current->addChild("Magazin");
 
@@ -204,7 +180,45 @@ DEBUGGING PURPOSES!!
     echo $xml->asXML();
   }
 
-  function searchMagazin() {
+  function searchMagazin($group_by_dozent=false) {
+    global $ilUser, $tree, $ilAccess;
+
+    $xml = new SimpleXMLElement("<Iliconnect/>");
+
+    $current = $xml->addChild("Current");
+    
+    $result_xml = $current->addChild("Results");
+    $results = array();
+
+    $needle = $_REQUEST['searchfor'];
+    $courses = $tree->getChildsByType($tree->getRootId(), "crs");
+    foreach($courses as &$course) {
+        $owner = ilObjectFactory::getInstanceByObjId($course["owner"]);
+        if((stristr($course["title"], $needle) !== false ||
+            stristr($owner->getFullName(), $needle) !== false) &&
+            $ilAccess->checkAccess("visible", "show", $course["ref_id"], "crs", $course["obj_id"])) {
+            if(!is_array($results[$owner->getFullName()])) /* store course results as key (dozent), value (courses) pairs  */
+                $results[$owner->getFullName()] = array();
+            $results[$owner->getFullName()][] = $course;
+        }
+    }
+
+    foreach($results as $dozent => &$courses) {
+        $course_xml = $group_by_dozent ? $result_xml->addChild("Dozent") : $result_xml;
+        foreach($courses as &$course) {
+            $item = $course_xml->addChild("Item");
+            foreach(array("title", "description", "ref_id", "type") as $attribute)
+                $item->addChild($attribute, $course[$attribute]);
+            $item->addChild("owner", $dozent);
+        }
+    }
+
+    ## AUSGABE DER XML STRUKTUR
+    header ("Content-Type:text/xml");
+    echo $xml->asXML();
+  }
+
+  /*function searchMagazin() {
     global $ilUser, $tree, $ilAccess;
 
     $xml = new SimpleXMLElement("<Iliconnect/>");
@@ -213,14 +227,13 @@ DEBUGGING PURPOSES!!
     
     $results = $current->addChild("Results");
 
-    #$needle = $_POST['searchfor'];
     $needle = $_REQUEST['searchfor'];
     $courses = $tree->getChildsByType($tree->getRootId(), "crs");
     foreach($courses as &$course) {
         $owner = ilObjectFactory::getInstanceByObjId($course["owner"]);
         if((stristr($course["title"], $needle) !== false ||
             stristr($owner->getFullName(), $needle) !== false) &&
-            $ilAccess->checkAccess("read", "show", $course["ref_id"], "crs", $course["obj_id"])) {
+            $ilAccess->checkAccess("visible", "show", $course["ref_id"], "crs", $course["obj_id"])) {
             $item = $results->addChild("Item");
             foreach(array("title", "description", "ref_id", "type") as $attribute)
                 $item->addChild($attribute, $course[$attribute]);
@@ -231,19 +244,41 @@ DEBUGGING PURPOSES!!
     ## AUSGABE DER XML STRUKTUR
     header ("Content-Type:text/xml");
     echo $xml->asXML();
-  }
+  }*/
 
   ## Der (un)uebersichtlichkeit halber in eine eigene funktion gepackt.
   ## erzeugt einen eintrag innerhalb des NOTIFICATIONS tag
   function notification2Xml($a,$nxml)
   {
 
-    $notify = $nxml->addChild("Notification");
-    $notify->addChild("title",$a["title"]);
-    #$notify->addChild("date",$assarray->getDeadline());
-    $notify->addChild("ref_id",$a["ref_id"]);
-    $notify->addChild("description",$a["description"]);
-    $notify->addChild("date","");
+    $factory = new IlObjectFactory();
+
+    if($a["type"] == "exc") { /* make a notification for each assignment of an exercise */
+       include_once("./Modules/Exercise/classes/class.ilExAssignment.php");
+       $exc = $factory->getInstanceByRefId($a["ref_id"]);
+       $assignments = ilExAssignment::getAssignmentDataOfExercise($exc->getId());
+       foreach($assignments as &$assignment) {
+           if($assignment["deadline"] > time()) { /* make sure the deadline has not been reached yet */
+               $notify = $nxml->addChild("Notification");
+               $notify->addChild("title", $a["title"]);
+               $notify->addChild("ref_id", $a["ref_id"]);
+               $notify->addChild("description", $assignment["title"]);
+               $notify->addChild("date", $assignment["deadline"]);
+           }
+        }
+    } else if($a["type"] == "tst") {
+        $tst = $factory->getInstanceByRefId($a["ref_id"]);
+        $date_arr = date_parse_from_format("YmdHis", $tst->getEndingTime()); /* convert to unix timestamp */
+        $deadline = mktime($date_arr["hour"], $date_arr["minute"], $date_arr["seconds"],
+            $date_arr["month"], $date_arr["day"], $date_arr["year"]);
+        if($deadline > time()) {
+            $notify = $nxml->addChild("Notification");
+            $notify->addChild("title", $a["title"]);
+            $notify->addChild("ref_id", $a["ref_id"]);
+            $notify->addChild("description", $a["description"]);
+            $notify->addChild("date", $deadline);
+        }
+    }
 
   }
 
@@ -254,18 +289,19 @@ DEBUGGING PURPOSES!!
     if(strstr("file|fold|crs|tst|exc",$array["type"]))
     {
       $item = $sxml->addChild("Item");
-      $item->addChild("title",$array[title]);
-      $item->addChild("description",$array[description]);
-      $item->addChild("type",$array[type]);
-      $item->addChild("ref_id",$array[ref_id]);
+      $item->addChild("title", $array["title"]);
+      $item->addChild("description", $array["description"]);
+      $item->addChild("type", $array["type"]);
+      $item->addChild("ref_id", $array["ref_id"]);
+      $item->addChild("last_update", $array["last_update"]);
 
-      if($array[type] == "exc")
+      if($array["type"] == "exc" || $array["type"] == "tst")
       {
-        $this->notification2Xml($array,$notifications);
+        $this->notification2Xml($array, $notifications);
       }
 
       global $tree;
-      $children=$tree->getChilds($array[ref_id]);
+      $children=$tree->getChilds($array["ref_id"]);
       if(count($children) > 0) {
         $subitems = $item->addChild("Items");
         foreach($children as $child)
@@ -274,7 +310,7 @@ DEBUGGING PURPOSES!!
 	    //($ilAccess->checkAccess("write", "show", $children["ref_id"], $children["type"], $children["obj_id"])) ||
 	    //($ilAccess->checkAccess("visible", "show", $children["ref_id"], $children["type"], $children["obj_id"])) ||
 	    //($ilAccess->checkAccess("edit_permission", "show", $children["ref_id"], $children["type"], $children["obj_id"])))
-            $this->desktopItem2Xml($child,$subitems,$notifications);
+            $this->desktopItem2Xml($child, $subitems, $notifications);
         }
       }
     }

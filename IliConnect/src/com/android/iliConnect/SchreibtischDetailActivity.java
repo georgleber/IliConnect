@@ -96,6 +96,7 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 			desktopViews.description = (TextView) v.findViewById(R.id.itemDescription);
 			desktopViews.date = (TextView) v.findViewById(R.id.itemDate);
 			desktopViews.type = (TextView) v.findViewById(R.id.itemType);
+			desktopViews.owner = (TextView) v.findViewById(R.id.itemOwner);
 
 		} else
 			desktopViews = (DesktopViews) v.getTag();
@@ -103,6 +104,7 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 		desktopViews.title.setText(item.getTitle());
 		desktopViews.description.setText(item.getDescription());
 		desktopViews.type.setText(item.getType());
+		desktopViews.owner.setVisibility(View.GONE);
 
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
 			desktopViews.type.setVisibility(View.GONE);
@@ -196,6 +198,7 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 		TextView description;
 		TextView date;
 		TextView type;
+		TextView owner;
 
 		LinearLayout items;
 	}

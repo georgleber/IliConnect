@@ -36,12 +36,14 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 			desktopViews.description = (TextView) v.findViewById(R.id.itemDescription);
 			desktopViews.type = (TextView) v.findViewById(R.id.itemType);
 			desktopViews.date = (TextView) v.findViewById(R.id.itemDate);
+			desktopViews.owner = (TextView) v.findViewById(R.id.itemOwner);
 
 			v.setTag(desktopViews);
 		} else {
 			desktopViews = (DesktopViews) v.getTag();
 			desktopViews.type.setVisibility(View.GONE);
-			desktopViews.date.setVisibility(View.GONE);			
+			desktopViews.date.setVisibility(View.GONE);		
+			desktopViews.owner.setVisibility(View.GONE);
 		}
 
 		Item item = items.get(position);
@@ -50,6 +52,7 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 			desktopViews.description.setText(item.getDescription());
 			desktopViews.type.setVisibility(View.GONE);
 			desktopViews.date.setVisibility(View.GONE);
+			desktopViews.owner.setVisibility(View.GONE);
 		}
 
 		return v;
@@ -60,5 +63,6 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 		TextView description;
 		TextView type;
 		TextView date;
+		TextView owner;
 	}
 }

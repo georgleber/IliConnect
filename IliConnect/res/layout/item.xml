@@ -42,15 +42,6 @@
                 android:text="Type" />
         </LinearLayout>
 
-
-        <ImageButton
-            android:id="@+id/imageButton1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:visibility="gone"
-            android:src="@drawable/arrow" />
-
     </LinearLayout>
 
 

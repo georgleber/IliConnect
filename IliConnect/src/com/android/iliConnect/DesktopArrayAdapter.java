@@ -51,12 +51,13 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		v = fillListRecursive(null, items.get(position), vi);
 
-		v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
+		/* v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
 		v.findViewById(R.id.imageButton1).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src+"webdav.php?ref_id="+items.get(position).ref_id);
 			}
 		});
+		*/
 
 		// replaceView(v, (LinearLayout)convertView,items.get(position).getType());
 		return v;

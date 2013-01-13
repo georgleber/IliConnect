@@ -9,11 +9,9 @@ import android.os.Handler;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.handler.AndroidNotificationBuilder;
+import com.android.iliConnect.handler.ModificationHandler;
 import com.android.iliConnect.models.Notification;
 import com.android.iliConnect.models.Notifications;
-import com.android.iliConnect.models.modification.AppData;
-import com.android.iliConnect.models.modification.NotificationData;
-import com.android.iliConnect.models.modification.NotificationItem;
 
 public class NotificationWatchThread {
 	public TimerTask doAsynchronousTask;
@@ -35,10 +33,14 @@ public class NotificationWatchThread {
 							int warning = MainActivity.instance.localDataProvider.settings.level_warning;
 							int critical = MainActivity.instance.localDataProvider.settings.level_critical;
 
+							ModificationHandler handler = new ModificationHandler();
 							for (Notification notification : notifications.Notifications) {
-								if (!isNotificationMarked(notification.getRef_id())) {
+								if (!handler.isNotificationMarked(notification.getRef_id())) {
 									Date currentDate = new Date(System.currentTimeMillis());
-									Date notiDate = new Date(notification.date);
+									
+									// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
+									Long date = Long.valueOf(notification.date) * 1000;
+									Date notiDate = new Date(date);
 
 									String title = "IliConnect - Bevorstehender Termin";
 									long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
@@ -66,24 +68,5 @@ public class NotificationWatchThread {
 
 	public void start() {
 		timer.schedule(doAsynchronousTask, 0, MainActivity.instance.localDataProvider.settings.interval * 60 * 1000);
-	}
-
-	private boolean isNotificationMarked(String ref_id) {
-		AppData appData = MainActivity.instance.localDataProvider.appData;
-		if (appData.getNotificationData() != null) {
-			NotificationItem item = null;
-			for (NotificationItem notiItem : appData.getNotificationData().NotificationItems) {
-				if (ref_id.equals(notiItem.getRef_id())) {
-					item = notiItem;
-					break;
-				}
-			}
-
-			if (item != null) {
-				return item.isMarkedRead();
-			}
-		}
-
-		return false;
 	}
 }

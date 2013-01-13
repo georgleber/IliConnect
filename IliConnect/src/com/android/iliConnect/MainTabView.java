@@ -174,15 +174,13 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 		int pos = this.mTabHost.getCurrentTab();
 		this.mViewPager.setCurrentItem(pos);
-
+		
 		instance = this;
 
 	}
 
 	public void update() {
-
 		((Redrawable) this.mPagerAdapter.getItem(this.mTabHost.getCurrentTab())).refreshViews();
-
 	}
 
 	/* 
@@ -249,7 +247,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 >>>>>>> branch 'master' of https://github.com/Develman/IliConnect.git*/
 		case R.id.refresh:
 			try {
-				MainActivity.instance.sync(instance);
+				MainActivity.instance.sync(instance, true);
 			} catch (NetworkException e) {
 				// TODO Fehlermeldung anzeigen
 				MainActivity.instance.showToast(e.getMessage());

@@ -11,7 +11,7 @@ import com.android.iliConnect.dataproviders.PersistableObject;
 @Element
 public class Desktop extends PersistableObject {
 	@ElementList( name="Items", required = true)
-	public ArrayList<Item> DesktopItem;
+	public ArrayList<Item> DesktopItem = new ArrayList<Item>();
 	
 	@Override
 	public void load() {

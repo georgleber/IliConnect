@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -23,7 +22,7 @@ import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
 
 public class DesktopArrayAdapter extends ArrayAdapter<Item> {
-	
+
 	private String selectedCourse = "";
 
 	private class DesktopViews {
@@ -39,34 +38,30 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		super(context, textViewResourceId);
 	}
 
-	protected List<Item> items;
+	protected List<Item> items = new ArrayList<Item>();
 
 	public DesktopArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
 		super(context, textViewResourceId, items);
 		this.items = items;
 	}
-	
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-
 		View v = convertView;
 		LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
 		v = fillListRecursive(null, items.get(position), vi);
-		
-		
+
 		v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
 		v.findViewById(R.id.imageButton1).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
 				MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src+"webdav.php?ref_id="+items.get(position).ref_id);
 			}
 		});
-		//replaceView(v, (LinearLayout)convertView,items.get(position).getType());
+
+		// replaceView(v, (LinearLayout)convertView,items.get(position).getType());
 		return v;
 	}
-	
+
 	private View replaceView(View v1, LinearLayout v, String type) {
 		int resID = 0;
 		String descr = null;
@@ -83,10 +78,10 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			resID = R.drawable.tst;
 			descr = "Test";
 		} else if (type.equalsIgnoreCase("UNSIGN")) {
-			resID = R.drawable.unsign; 
+			resID = R.drawable.unsign;
 			descr = "";
 		}
-		
+
 		v.removeView(v1);
 		LinearLayout layout = new LinearLayout(MainActivity.instance);
 
@@ -97,14 +92,13 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		lp.height = 50;
 		lp.width = 50;
 
-//		ImageButton arrow = new ImageButton(MainActivity.instance);
-//		arrow.setBackgroundResource(R.drawable.arrow);
-		
-		
-		//LinearLayout layoutArrow = new LinearLayout(MainActivity.instance);
-		//layoutArrow.setGravity(Gravity.RIGHT);
-		//layoutArrow.addView(arrow);
-		
+		// ImageButton arrow = new ImageButton(MainActivity.instance);
+		// arrow.setBackgroundResource(R.drawable.arrow);
+
+		// LinearLayout layoutArrow = new LinearLayout(MainActivity.instance);
+		// layoutArrow.setGravity(Gravity.RIGHT);
+		// layoutArrow.addView(arrow);
+
 		ImageButton vSub = new ImageButton(MainActivity.instance);
 
 		vSub.setBackgroundResource(resID);
@@ -112,17 +106,17 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		layout.addView(vSub);
 		((TextView) v1.findViewById(R.id.itemType)).setText(descr);
 		layout.addView(v1);
-//		layout.addView(arrow);
-		
+		// layout.addView(arrow);
+
 		LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		
+
 		v1.setLayoutParams(lp1);
 
-		if (type.equalsIgnoreCase("UNSIGN")){
-				((TextView)v1.findViewById(R.id.itemTitle)).setTextColor(Color.RED);
-				((TextView)v1.findViewById(R.id.itemDescription)).setTextColor(Color.RED);
+		if (type.equalsIgnoreCase("UNSIGN")) {
+			((TextView) v1.findViewById(R.id.itemTitle)).setTextColor(Color.RED);
+			((TextView) v1.findViewById(R.id.itemDescription)).setTextColor(Color.RED);
 		}
-		
+
 		return layout;
 
 	}
@@ -136,7 +130,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			desktopViews.description = (TextView) v.findViewById(R.id.itemDescription);
 			desktopViews.date = (TextView) v.findViewById(R.id.itemDate);
 			desktopViews.type = (TextView) v.findViewById(R.id.itemType);
-			
+
 		} else
 			desktopViews = (DesktopViews) v.getTag();
 
@@ -144,7 +138,6 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		desktopViews.description.setText(item.getDescription());
 		desktopViews.type.setText(item.getType());
 
-		
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
 			desktopViews.type.setVisibility(View.GONE);
 
@@ -177,7 +170,7 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 			public void onClick(View v) {
 				String s = v.getTag().toString();
 
-				if(parentItem.getType().equalsIgnoreCase("CRS")) {
+				if (parentItem.getType().equalsIgnoreCase("CRS")) {
 					// ref_id für ggf. Abmeldung merken
 					selectedCourse = parentItem.getRef_id();
 					toggleVisibility(parentItem, v);
@@ -187,15 +180,15 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 					MainActivity.instance.localDataProvider.openFileOrDownload(s);
 				} else if (parentItem.getType().equalsIgnoreCase("TST")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
-					
+
 					// Test im Browser starten
-					//String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
-					
+					// String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
+
 					// Ilias im Browser starten
 					String iliasUrl = url_src + "login.php";
 					MainActivity.instance.showBrowserContent(iliasUrl);
-					
-				} else if(parentItem.getType().equalsIgnoreCase("UNSIGN")) {
+
+				} else if (parentItem.getType().equalsIgnoreCase("UNSIGN")) {
 					LocalCourseProvider courseProv = new LocalCourseProvider();
 					try {
 						try {
@@ -210,13 +203,13 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 						// TODO Fehlermeldung einbauen
 						e.printStackTrace();
 					}
-				}else {
+				} else {
 					MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src + "webdav.php?ref_id=" + s);
 				}
 
 			}
 		});
-		
+
 		toggleVisibility(item, v);
 
 		return v;

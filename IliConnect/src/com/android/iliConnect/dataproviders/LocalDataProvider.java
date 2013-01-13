@@ -3,6 +3,8 @@ package com.android.iliConnect.dataproviders;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -16,8 +18,11 @@ import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.R;
 import com.android.iliConnect.models.Authentification;
+import com.android.iliConnect.models.Current;
 import com.android.iliConnect.models.Desktop;
+import com.android.iliConnect.models.Item;
 import com.android.iliConnect.models.LocalData;
+import com.android.iliConnect.models.Notification;
 import com.android.iliConnect.models.Notifications;
 import com.android.iliConnect.models.RemoteData;
 import com.android.iliConnect.models.Results;
@@ -64,7 +69,7 @@ public class LocalDataProvider {
 		} else {
 			dataFile = appDataFileName;
 		}
-		
+
 		File config = new File(MainActivity.instance.getFilesDir() + "/" + dataFile);
 		if (!config.exists()) {
 			XmlResourceParser xpp = MainActivity.currentActivity.getResources().getXml(xmlRes);
@@ -100,8 +105,24 @@ public class LocalDataProvider {
 
 			remoteData.load();
 			appData.load();
-			desktopItems.DesktopItem = remoteData.Current.Desktop.DesktopItem;
-			notifications.Notifications = remoteData.Current.Notifications;
+
+			if (remoteData.Current != null) {
+				Current current = remoteData.Current;
+				if (current.Desktop != null && current.Desktop.DesktopItem != null) {
+					desktopItems.DesktopItem = current.Desktop.DesktopItem;
+				} else {
+					ArrayList<Item> items = new ArrayList<Item>();
+					desktopItems.DesktopItem = items;
+				}
+
+				if (current.Notifications != null) {
+					notifications.Notifications = remoteData.Current.Notifications;
+				} else {
+					ArrayList<Notification> notis = new ArrayList<Notification>();
+					notifications.Notifications = notis;
+				}
+
+			}
 
 			if (new File(MainActivity.instance.getFilesDir() + "/" + appDataFileName).exists()) {
 				appData.load();

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -19,8 +18,8 @@ import android.widget.Toast;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
+import com.android.iliConnect.dataproviders.NotificationWatchThread;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
-import com.android.iliConnect.handler.AndroidNotificationBuilder;
 
 public class MainActivity extends Activity {
 
@@ -32,6 +31,7 @@ public class MainActivity extends Activity {
 	public LocalDataProvider localDataProvider;
 
 	public DataDownloadThread watchThread = new DataDownloadThread();
+	public NotificationWatchThread notificationThread = new NotificationWatchThread();
 	private EditText etUrl;
 
 	@Override
@@ -47,7 +47,6 @@ public class MainActivity extends Activity {
 		localDataProvider.init(R.xml.config);
 
 		localDataProvider.init(R.xml.modification);
-
 
 		localDataProvider.localdata.load();
 		localDataProvider.auth = localDataProvider.localdata.Static.auth;
@@ -70,17 +69,16 @@ public class MainActivity extends Activity {
 		if (!localDataProvider.auth.url_src.equals(""))
 			etUrl.setText(localDataProvider.auth.url_src);
 
-
-		if (localDataProvider.auth.autologin) {
+		final File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
+		if (localDataProvider.auth.autologin && remoteDataFile.exists()) {
 			// falls AutoLogin true ist kann eine Anmeldung ohne Sync. durchgeführt werden
 			try {
-				login(false);
+				autologin();
 			} catch (NetworkException e) {
 				showToast(e.getMessage());
 				e.printStackTrace();
 			}
 		}
-
 
 		login.setOnClickListener(new View.OnClickListener() {
 
@@ -101,7 +99,7 @@ public class MainActivity extends Activity {
 				localDataProvider.localdata.save();
 				// Login mit Syncronisation
 				try {
-					login(true);
+					login();
 				} catch (NetworkException e) {
 					showToast(e.getMessage());
 					e.printStackTrace();
@@ -109,13 +107,6 @@ public class MainActivity extends Activity {
 
 			}
 		});
-
-		showNotification("Testmeldung", "Dies ist eine Testmeldung");
-	}
-
-	public static void showNotification(String title, String text) {
-		AndroidNotificationBuilder builder = new AndroidNotificationBuilder(title, text);
-		builder.showNotification();
 	}
 
 	public MainActivity getInstance() {
@@ -129,14 +120,17 @@ public class MainActivity extends Activity {
 
 	}
 
-
 	public void sync(Context context) throws NetworkException {
+		sync(context, false);
+	}
+
+	public void sync(Context context, boolean manual) throws NetworkException {
 		boolean wlanOnly = this.localDataProvider.settings.sync_wlanonly;
 
 		// wenn Context null ist, keine Sync-Meldung anzeigen
 		if (context != null) {
 			progressDialog = new ProgressDialog(context);
-			progressDialog.setTitle("Syncronisation");
+			progressDialog.setTitle("Synchronisation");
 			progressDialog.setMessage("Bitte warten...");
 			remoteDataProvider = new RemoteDataProvider(progressDialog);
 		} else {
@@ -145,28 +139,40 @@ public class MainActivity extends Activity {
 
 		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
-		NetworkInfo network = connManager.getActiveNetworkInfo();		
-		
-		
 		NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
 		if (wlanOnly == true) {
-			if (!wifi.isAvailable()) {
-				throw new NetworkException("Benötigte WLAN-Verbindung nicht vorhanden");
+			if (wifi == null || !wifi.isConnected()) {
+				// Fehlermeldung nur ausgeben, wenn manuelle Synchronisation
+				if (manual) {
+					throw new NetworkException("Benötigte WLAN-Verbindung nicht vorhanden");
+				}
+			} else {
+				remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 			}
-			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 		} else {
-			if (!mobile.isAvailable() && !wifi.isAvailable()) {
-				throw new NetworkException("Benötigte Datenverbindung nicht vorhanden");
+			boolean showSyncError = false;
+			if ((mobile == null || !mobile.isConnected()) && (wifi == null || !wifi.isConnected())) {
+				showSyncError = true;
+			} 
+
+			if (showSyncError) {
+				// Fehlermeldung nur ausgeben, wenn manuelle Synchronisation
+				if (manual) {
+					throw new NetworkException("Benötigte Datenverbindung nicht vorhanden");
+				}
+			} else {
+				remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 			}
-			remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 		}
 	}
 
 	public void showToast(final String msg) {
-		Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
-		t.show();
+		if (msg != null && !msg.equals("")) {
+			Toast t = Toast.makeText(MainActivity.instance, msg, Toast.LENGTH_LONG);
+			t.show();
+		}
 	}
 
 	public void logout() {
@@ -185,13 +191,9 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void login(boolean doSync) throws NetworkException {
+	public void login() throws NetworkException {
 		final File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + localDataProvider.remoteDataFileName);
-
-		if (remoteDataFile.exists())
-			remoteDataFile.delete();
-
-		MainActivity.instance.sync(MainActivity.instance);
+		MainActivity.instance.sync(MainActivity.instance, true);
 
 		new Thread(new Runnable() {
 			public void run() {
@@ -222,6 +224,20 @@ public class MainActivity extends Activity {
 				}
 			}
 		}).start();
+	}
+
+	public void autologin() throws NetworkException {
+		MainActivity.instance.localDataProvider.updateLocalData();
+
+		Intent i = new Intent(MainActivity.this, MainTabView.class);
+		startActivity(i);
+
+		MainActivity.instance.runOnUiThread(new Runnable() {
+			public void run() {
+				if (watchThread.doAsynchronousTask == null)
+					watchThread.startTimer();
+			}
+		});
 	}
 
 	@Override

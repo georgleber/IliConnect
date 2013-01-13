@@ -48,7 +48,10 @@ public class NotificationHandler {
 	}
 
 	private boolean isFutureNotification(Notification notification) {
-		Date notiDate = new Date(notification.date);
+		// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
+		Long date = Long.valueOf(notification.date) * 1000;
+		Date notiDate = new Date(date);
+		
 		Calendar notiCal = new GregorianCalendar();
 		notiCal.set(notiDate.getYear(), notiDate.getMonth(), notiDate.getDay());
 

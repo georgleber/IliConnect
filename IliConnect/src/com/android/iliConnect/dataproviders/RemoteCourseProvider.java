@@ -76,9 +76,9 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 	}
 	
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(String result) {		
 		super.onPostExecute(result);
-
+		
 	}
 	
 	// Liest den Text aus der Http Responsen aus.

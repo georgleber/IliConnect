@@ -26,6 +26,7 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 	public LocalCourseProvider local = new LocalCourseProvider();
 
 
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (container == null) {
@@ -58,7 +59,7 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 		        	//Launch
 		        	startActivityForResult(intent, REQUEST_SCAN);
 		        	
-		        	joinCourse("49", null);
+		        	//joinCourse("49", null);
 		        	//leaveCourse("49");
 		        }
 		    });
@@ -73,8 +74,8 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 	            
 	          
-	            
-	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
+	            joinCourse(contents,null);
+	                      
 	            // Handle successful scan	           
 	            
 	            // Zunaechst Messagebox anzeigen, ob wirklich beitreten will 
@@ -90,7 +91,7 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
     	try {
 			String result = null;
 			try {
-				result = this.local.joinCourse("49", "4711");
+				result = this.local.joinCourse(ref_id, crs_pw);
 			} catch (NetworkException e) {
 				showAlert("Keine Internetverbidung");
 				e.printStackTrace();
@@ -101,19 +102,19 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 			}
 			// Falls Passwort für Anmeldung benötigt wird, Abfrage einblenden
 			if(result != null && result.contains("PASSWORD_NEEDED")) {
-				MessageBuilder.course_password(MainActivity.instance, ref_id, this);
+				MessageBuilder.course_password(MainTabView.instance, ref_id, this);
 				// Passwortabfrage einblenden
 				
 			}
 			//local.leaveCourse("49");
 		} catch (JoinCourseException e) {
-			this.showAlert(e.getMessage());
-			System.out.println(e.getMessage());
+			MessageBuilder.course_alreadysignedin(MainTabView.instance);
 
 		} catch (CoursePasswordException e) {
 			System.out.println(e.getMessage());
 			this.showAlert(e.getMessage());
-		}		
+		}	
+    	
 	}
 	
 	private void leaveCourse(String ref_id) {
@@ -156,7 +157,20 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 	
 	public void onClickCoursePassword(String refID,String password) {
 		// TODO Auto-generated method stub
-		joinCourse(refID,password);
+		LocalCourseProvider PWlocal =  new LocalCourseProvider();
+			try {
+				PWlocal.joinCourse(refID,password);
+			} catch (JoinCourseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CoursePasswordException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();				
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 		
 	}
 			

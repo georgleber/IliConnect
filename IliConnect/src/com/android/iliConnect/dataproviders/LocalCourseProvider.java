@@ -2,8 +2,11 @@ package com.android.iliConnect.dataproviders;
 
 import java.util.concurrent.ExecutionException;
 
+import android.os.AsyncTask;
+
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.Exceptions.CoursePasswordException;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
@@ -24,11 +27,18 @@ public class LocalCourseProvider {
 		course = new CourseData("join", localProv.auth.user_id, localProv.auth.password, localProv.auth.url_src, localProv.auth.api_src, ref_id, pw);
 		
 		// Kursbeitritt im Hintergrund durchfuehren
+		 
+		  
+		  
+		 
 		courseProv.execute(course);
+		  
+			  
 		try {
 			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des 
 			// asnyc. Aufrufs gewartet. 
 			String result = courseProv.get();
+			
 			
 			if(result.contains("JOINED")) {			
 				// Nach Anmeldung, neu syncen. Durch null wird keine Sync-Meldung angezeigt
@@ -36,19 +46,21 @@ public class LocalCourseProvider {
 				
 				// Bei erfolgreicher Anmeldung Schreibtisch anzeigen.
 				MainTabView.instance.changeViewTo(3);
+				
+				MessageBuilder.course_login(MainTabView.instance, "", ref_id);
 			}
 			else if(result.contains("PASSWORD_NEEDED")) {
 				return result;
 			}
 			// Falls andere Response-Message von Server empfangen wurde, entsprchende Eception werfen
 			else if(result.contains("ALREADY_SUBSCRIBED")) {
-				throw new JoinCourseException("Sie sind bereits im Kurs angemeldet.");
+				MessageBuilder.course_alreadysignedin(MainTabView.instance);
 			}
 			else if(result.contains("not a course object")) {
-				throw new JoinCourseException("Der Kurs ist nicht vorhanden");
+				MessageBuilder.course_notexist(MainTabView.instance,ref_id);
 			} 
-			else if(result.contains("WRONG_PASSWORD")) {
-				throw new CoursePasswordException("Das Passwort des Kurses ist nicht korrekt.");
+			else if(result.contains("WRONG_PASSWORD")) {				
+				MessageBuilder.course_passwordfalse(MainTabView.instance,ref_id);
 			}
 			else if(result.contains("PERMISSION_DENIED")) {
 				throw new JoinCourseException("Eine Anmeldung ist nicht möglich.");

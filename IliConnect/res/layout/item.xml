@@ -40,6 +40,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Type" />
+            
+           <TextView
+                android:id="@+id/itemOwner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type" />
         </LinearLayout>
 
 

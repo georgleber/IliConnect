@@ -81,6 +81,7 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 			
 			Intent i = new Intent(SchreibtischDetailActivity.this, MainTabView.class);
 			startActivity(i);
+			
 			return true;
 		}
 		

@@ -11,21 +11,18 @@ import android.widget.ListView;
 import com.android.iliConnect.models.Item;
 
 public class Schreibtisch extends ListFragment implements Redrawable {
-
-	private DesktopItemAdapter desktopAdapter;
-
 	public void refreshViews() {
 		getListView().invalidateViews();
-		desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
+		
+		DesktopItemAdapter desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
 		setListAdapter(desktopAdapter);
-
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.schreibtisch_layout, container, false);
 
-		desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
+		DesktopItemAdapter desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
 		setListAdapter(desktopAdapter);
 
 		if (container == null) {
@@ -57,14 +54,6 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 		intentMain.putExtra("CourseName", item.title);
 		intentMain.putExtra("position", position);
 		MainActivity.currentActivity.startActivity(intentMain);
-
-		/*
-		ItemArrayAdapter desktopAdapter = new ItemArrayAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position).Item);
-
-		((TextView) MainActivity.currentActivity.findViewById(R.id.textView1)).setText(MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position).title);
-		setListAdapter(desktopAdapter);
-		super.onListItemClick(l, v, position, id);
-		 */
 	}
 
 }

@@ -271,5 +271,12 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mViewPager.setCurrentItem(2);
 		// super.onBackPressed();
 	}
+	
+	@Override
+	protected void onRestart() {
+		update();
+		
+		super.onRestart();
+	}
 
 }

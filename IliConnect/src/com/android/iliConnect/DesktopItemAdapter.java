@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.android.iliConnect.models.Item;
 
 public class DesktopItemAdapter extends ArrayAdapter<Item> {
+	public DesktopItemAdapter(Context context, int textViewResourceId) {
+		super(context, textViewResourceId);
+	}
+	
 	private List<Item> items = new ArrayList<Item>();
 
 	public DesktopItemAdapter(Context context, int textViewResourceId, ArrayList<Item> schreibtischItems) {

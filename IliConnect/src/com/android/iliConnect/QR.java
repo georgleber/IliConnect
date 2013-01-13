@@ -86,7 +86,7 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 	    }
 	}
 	
-	public void joinCourse(String ref_id, String crs_pw) {
+	private void joinCourse(String ref_id, String crs_pw) {
     	try {
 			String result = null;
 			try {
@@ -103,7 +103,7 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 			if(result != null && result.contains("PASSWORD_NEEDED")) {
 				MessageBuilder.course_password(MainActivity.instance, ref_id, this);
 				// Passwortabfrage einblenden
-				this.showAlert("Bitte geben Sie das Passwort des Kurses ein");
+				
 			}
 			//local.leaveCourse("49");
 		} catch (JoinCourseException e) {
@@ -154,9 +154,10 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 		
 	}
 	
-	public void onClickCoursePassword(String returnValue) {
+	public void onClickCoursePassword(String refID,String password) {
 		// TODO Auto-generated method stub
-		System.out.println(returnValue);
+		joinCourse(refID,password);
+		
 	}
 			
 }

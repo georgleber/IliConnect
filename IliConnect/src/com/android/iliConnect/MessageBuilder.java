@@ -136,7 +136,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_password(Activity activity, String refID, final QROnClickListener listener) {		
+	 public static void course_password(Activity activity, final String refID, final QROnClickListener listener) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Passwort");
@@ -147,7 +147,7 @@ public class MessageBuilder {
 
 				public void onClick(DialogInterface dialog, int which) {
 					//TODO: Anmeldung mit Join Course mit Password(refID);
-					listener.onClickCoursePassword("TEST");
+					listener.onClickCoursePassword(refID,input.getText().toString());
 					return;
 				}
 			});
@@ -162,4 +162,24 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
+	 public static void course_register(Activity activity, final String refID) {		
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Anmeldung");
+			alertDialog.setMessage("Sie wurden Erfolgreich angemeldet!");
+			final EditText input = new EditText(activity);
+			alertDialog.setView(input);
+			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {					
+					
+					return;
+				}
+			});
+			
+			
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();			
+		}
+	 
 }

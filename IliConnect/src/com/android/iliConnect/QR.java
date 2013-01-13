@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
+import com.android.iliConnect.MessageBuilder;
 
 public class QR extends Fragment implements Redrawable {
 	
@@ -71,10 +71,10 @@ public class QR extends Fragment implements Redrawable {
 	            String contents = intent.getStringExtra("SCAN_RESULT");
 	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 	            
-	            
+	          
 	            
 	            Toast.makeText(getActivity(), contents, Toast.LENGTH_LONG).show();	            
-	            // Handle successful scan
+	            // Handle successful scan	           
 	            
 	            // Zunaechst Messagebox anzeigen, ob wirklich beitreten will 
 	            
@@ -85,7 +85,7 @@ public class QR extends Fragment implements Redrawable {
 	    }
 	}
 	
-	private void joinCourse(String ref_id, String crs_pw) {
+	public void joinCourse(String ref_id, String crs_pw) {
     	try {
 			String result = null;
 			try {

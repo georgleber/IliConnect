@@ -17,7 +17,7 @@ import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
 import com.android.iliConnect.models.Item;
 
-public class SearchArrayAdapter extends DesktopArrayAdapter {
+public class SearchArrayAdapter extends DesktopDetailArrayAdapter {
 	
 	
 	private class SearchView {

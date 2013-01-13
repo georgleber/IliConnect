@@ -21,7 +21,7 @@ import com.android.iliConnect.dataproviders.LocalCourseProvider;
 import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
 
-public class DesktopArrayAdapter extends ArrayAdapter<Item> {
+public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 
 	private String selectedCourse = "";
 
@@ -34,13 +34,13 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		LinearLayout items;
 	}
 
-	public DesktopArrayAdapter(Context context, int textViewResourceId) {
+	public DesktopDetailArrayAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
 	}
 
 	protected List<Item> items = new ArrayList<Item>();
 
-	public DesktopArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
+	public DesktopDetailArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
 		super(context, textViewResourceId, items);
 		this.items = items;
 	}

@@ -1,25 +1,22 @@
 package com.android.iliConnect;
 
-import java.util.ArrayList;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.iliConnect.models.Item;
 
 public class Schreibtisch extends ListFragment implements Redrawable {
 
-	private ArrayList<Item> mItems;
-	private DesktopArrayAdapter desktopAdapter;
+	private DesktopItemAdapter desktopAdapter;
 
 	public void refreshViews() {
 		getListView().invalidateViews();
-		desktopAdapter = new DesktopArrayAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
+		desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
 		setListAdapter(desktopAdapter);
 
 	}
@@ -28,7 +25,7 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.schreibtisch_layout, container, false);
 
-		desktopAdapter = new DesktopArrayAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
+		desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
 		setListAdapter(desktopAdapter);
 
 		if (container == null) {
@@ -53,12 +50,21 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		Item item = MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position);
+
+		// doStuff
+		Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
+		intentMain.putExtra("CourseName", item.title);
+		intentMain.putExtra("position", position);
+		MainActivity.currentActivity.startActivity(intentMain);
+
+		/*
 		ItemArrayAdapter desktopAdapter = new ItemArrayAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position).Item);
 
 		((TextView) MainActivity.currentActivity.findViewById(R.id.textView1)).setText(MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position).title);
 		setListAdapter(desktopAdapter);
 		super.onListItemClick(l, v, position, id);
-
+		 */
 	}
 
 }

@@ -16,17 +16,6 @@ public class RemoteData extends PersistableObject {
 	@Override
 	public void load() throws Exception {
 		super.deserialize(MainActivity.instance.localDataProvider.remoteDataFileName);
-
-		for (Item item : this.Current.Desktop.DesktopItem) {
-			if (item.getType().equalsIgnoreCase("crs")) {
-				Item delItem = new Item();
-				delItem.title = "Abmelden";
-				delItem.type = "UNSIGN";
-				delItem.description = "Vom Kurs abmelden";
-				item.Item.add(delItem);
-			}
-
-		}
 	}
 
 	public String getSyncUrl() {

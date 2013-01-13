@@ -1,6 +1,8 @@
 package com.android.iliConnect;
 
 
+import com.android.iliConnect.message.QROnClickListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -134,7 +136,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_password(Activity activity, String refID) {		
+	 public static void course_password(Activity activity, String refID, final QROnClickListener listener) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Passwort");
@@ -145,7 +147,7 @@ public class MessageBuilder {
 
 				public void onClick(DialogInterface dialog, int which) {
 					//TODO: Anmeldung mit Join Course mit Password(refID);
-					
+					listener.onClickCoursePassword("TEST");
 					return;
 				}
 			});

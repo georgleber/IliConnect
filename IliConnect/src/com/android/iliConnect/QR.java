@@ -4,6 +4,7 @@ import com.android.iliConnect.Exceptions.CoursePasswordException;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
+import com.android.iliConnect.message.QROnClickListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.android.iliConnect.MessageBuilder;
 
-public class QR extends Fragment implements Redrawable {
+public class QR extends Fragment implements Redrawable, QROnClickListener {
 	
 
 	public LocalCourseProvider local = new LocalCourseProvider();
@@ -100,6 +101,7 @@ public class QR extends Fragment implements Redrawable {
 			}
 			// Falls Passwort für Anmeldung benötigt wird, Abfrage einblenden
 			if(result != null && result.contains("PASSWORD_NEEDED")) {
+				MessageBuilder.course_password(MainActivity.instance, ref_id, this);
 				// Passwortabfrage einblenden
 				this.showAlert("Bitte geben Sie das Passwort des Kurses ein");
 			}
@@ -150,6 +152,11 @@ public class QR extends Fragment implements Redrawable {
 	public void refreshViews() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void onClickCoursePassword(String returnValue) {
+		// TODO Auto-generated method stub
+		System.out.println(returnValue);
 	}
 			
 }

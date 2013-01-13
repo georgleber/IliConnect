@@ -15,6 +15,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
+import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.models.CourseData;
 import com.android.iliConnect.ssl.HttpsClient;
 
@@ -79,6 +82,7 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 
+		MainTabView.instance.update();
 	}
 	
 	// Liest den Text aus der Http Responsen aus.

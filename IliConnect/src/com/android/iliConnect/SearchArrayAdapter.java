@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 
 import com.android.iliConnect.Exceptions.CoursePasswordException;
 import com.android.iliConnect.Exceptions.JoinCourseException;
@@ -17,11 +17,17 @@ import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
 import com.android.iliConnect.models.Item;
 
-public class SearchArrayAdapter extends DesktopArrayAdapter {
+public class SearchArrayAdapter extends DesktopDetailArrayAdapter {
 	
+	
+	private class SearchView {
+		TextView title;
+		TextView description;
+		TextView owner;
+	}
+
 	public SearchArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
 		super(context, textViewResourceId, items);
-		// TODO Auto-generated constructor stub
 		this.items = items;
 	}
 	
@@ -29,30 +35,45 @@ public class SearchArrayAdapter extends DesktopArrayAdapter {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 
+		Item item = items.get(position);
+			
 		View v = convertView;
 		LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		v = fillListRecursive(null, items.get(position), vi);
+		v = (LinearLayout) vi.inflate(R.layout.item, null);
+		
+		SearchView searchView = new SearchView();
+		
+		searchView.title = (TextView) v.findViewById(R.id.itemTitle);
+		searchView.description = (TextView) v.findViewById(R.id.itemDescription);
+		searchView.owner = (TextView) v.findViewById(R.id.itemOwner);
+		
+		searchView.title.setText(item.getTitle());
+		searchView.description.setText(item.getDescription());
+		searchView.owner.setText(item.getOwner());
+		
+		// Falls Description leer ist, keine Leerzeile anzeigen
+		if(searchView.description.getText().equals("")) {
+			v.findViewById(R.id.itemDescription).setVisibility(View.GONE);
+		}
+		
+		if(searchView.owner.getText().equals("")) {
+			v.findViewById(R.id.itemOwner).setVisibility(View.GONE);
+		}
+		
+		// Date und Type in der Ergebnislist ausblenden
+		v.findViewById(R.id.itemDate).setVisibility(View.GONE);
+		v.findViewById(R.id.itemType).setVisibility(View.GONE);
 		
 		v.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				v.setBackgroundColor(45739);
+				v.setBackgroundColor(R.color.darkmint);
 				Item item = items.get(position);
 				joinCourse(item.ref_id);		
 			}
-			
 		});
 
-		/*
-		v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
-		v.findViewById(R.id.imageButton1).setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src+"webdav.php?ref_id="+items.get(position).ref_id);
-			}
-		});
-		*/
-		//replaceView(v, (LinearLayout)convertView,items.get(position).getType());
 		return v;
 	}
 	

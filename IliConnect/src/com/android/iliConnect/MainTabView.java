@@ -97,7 +97,6 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		// Intialise ViewPager
 		this.intialiseViewPager();
 	}
-	
 
 	/*
 	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
@@ -174,7 +173,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 		int pos = this.mTabHost.getCurrentTab();
 		this.mViewPager.setCurrentItem(pos);
-		
+
 		instance = this;
 
 	}
@@ -222,17 +221,16 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			startActivity(settingsActivity);
 			return true;
 		case R.id.Logout:
-//<<<<<<< HEAD
+			// <<<<<<< HEAD
 			MainActivity.instance.logout();
 			MainActivity.instance.localDataProvider.deleteAuthentication();
-			
 
 			// Anmeldebildschirm anzeigen
-			//Intent mainActivity = new Intent(instance, MainActivity.class);
-			//startActivity(mainActivity);	
-		
+			// Intent mainActivity = new Intent(instance, MainActivity.class);
+			// startActivity(mainActivity);
+
 			return true;
-//=======
+			// =======
 			/*
 			// TODO: Login-Ansicht aufrufen, autLogin auf false setzen und Daten aus XML entfernen
 			LocalDataProvider prov = new LocalDataProvider();
@@ -244,7 +242,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			startActivity(mainActivity);
 
 			//finish();
->>>>>>> branch 'master' of https://github.com/Develman/IliConnect.git*/
+			>>>>>>> branch 'master' of https://github.com/Develman/IliConnect.git*/
 		case R.id.refresh:
 			try {
 				MainActivity.instance.sync(instance, true);
@@ -258,20 +256,20 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	// Methode um View wechseln zu können 
+
+	// Methode um View wechseln zu können
 	public void changeViewTo(int i) {
 		mTabHost.setCurrentTab(i);
 		this.mViewPager.setCurrentItem(i);
-		
+
 	}
-	
+
 	@Override
-	 public void onBackPressed() {
+	public void onBackPressed() {
 		// Immer auf Überischt zurückgehen
 		mTabHost.setCurrentTab(2);
 		this.mViewPager.setCurrentItem(2);
-		//super.onBackPressed();
-	 }
-	
+		// super.onBackPressed();
+	}
+
 }

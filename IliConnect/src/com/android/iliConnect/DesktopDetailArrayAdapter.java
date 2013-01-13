@@ -21,7 +21,7 @@ import com.android.iliConnect.dataproviders.LocalCourseProvider;
 import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
 
-public class DesktopArrayAdapter extends ArrayAdapter<Item> {
+public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 
 	private String selectedCourse = "";
 
@@ -34,13 +34,13 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		LinearLayout items;
 	}
 
-	public DesktopArrayAdapter(Context context, int textViewResourceId) {
+	public DesktopDetailArrayAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
 	}
 
 	protected List<Item> items = new ArrayList<Item>();
 
-	public DesktopArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
+	public DesktopDetailArrayAdapter(Context context, int textViewResourceId, List<Item> items) {
 		super(context, textViewResourceId, items);
 		this.items = items;
 	}
@@ -51,12 +51,13 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		v = fillListRecursive(null, items.get(position), vi);
 
-		v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
+		/* v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
 		v.findViewById(R.id.imageButton1).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src+"webdav.php?ref_id="+items.get(position).ref_id);
 			}
 		});
+		*/
 
 		// replaceView(v, (LinearLayout)convertView,items.get(position).getType());
 		return v;
@@ -138,6 +139,9 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		desktopViews.description.setText(item.getDescription());
 		desktopViews.type.setText(item.getType());
 
+		if(desktopViews.description.getText().equals("")) {
+			v.findViewById(R.id.itemDescription).setVisibility(View.GONE);
+		}
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
 			desktopViews.type.setVisibility(View.GONE);
 
@@ -146,6 +150,8 @@ public class DesktopArrayAdapter extends ArrayAdapter<Item> {
 		else
 			desktopViews.date.setVisibility(View.GONE);
 
+		// Owner des Kurses nicht auf dem Schreibtisch einblenden
+		v.findViewById(R.id.itemOwner).setVisibility(View.GONE);
 		v.setTag(item.getRef_id());
 
 		if (item.getItems() != null) {

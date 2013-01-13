@@ -20,6 +20,8 @@ public class Item extends PersistableObject{
 	public String type = "";
 	@Element (required = false)
 	public String ref_id = "";
+	@Element (required = false)
+	public String owner = "";
 	@ElementList (required = false, name="Items")
 	public ArrayList<Item> Item;
 	//public Date timestamp = new Date();
@@ -44,6 +46,10 @@ public class Item extends PersistableObject{
 
 	public String getRef_id() {
 		return ref_id;
+	}
+	
+	public String getOwner() {
+		return owner;
 	}
 
 

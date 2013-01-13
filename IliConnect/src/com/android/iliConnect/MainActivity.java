@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
 			if (wifi == null || !wifi.isConnected()) {
 				// Fehlermeldung nur ausgeben, wenn manuelle Synchronisation
 				if (manual) {
-					throw new NetworkException("Benötigte WLAN-Verbindung nicht vorhanden");
+					throw new NetworkException("Benötigte WLAN-Verbindung nicht vorhanden.");
 				}
 			} else {
 				remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");

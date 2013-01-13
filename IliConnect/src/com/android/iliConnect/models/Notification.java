@@ -27,7 +27,7 @@ public class Notification extends PersistableObject {
 			// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
 			Long reDate = Long.valueOf(date) * 1000;
 
-			SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM hh:mm");
+			SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 			return sFormat.format(reDate);
 		} else
 			return "";

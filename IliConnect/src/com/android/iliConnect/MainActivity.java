@@ -21,6 +21,7 @@ import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.NotificationWatchThread;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
 
+
 public class MainActivity extends Activity {
 
 	public static MainActivity instance;
@@ -39,6 +40,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		
+	
 		currentActivity = this;
 
 		instance = this;

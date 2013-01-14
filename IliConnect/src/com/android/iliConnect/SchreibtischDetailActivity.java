@@ -3,17 +3,14 @@ package com.android.iliConnect;
 import java.util.ArrayList;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -53,13 +50,13 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 		final ListView lv = (ListView) findViewById(R.id.desktop_content);
 		lv.setAdapter(adapter);
 	}
-	
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.kurs_menu, menu);
 		return true;
 	}
-	
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// respond to menu item selection
 		switch (item.getItemId()) {
@@ -78,13 +75,13 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 				// TODO Fehlermeldung einbauen
 				e.printStackTrace();
 			}
-			
+
 			Intent i = new Intent(SchreibtischDetailActivity.this, MainTabView.class);
 			startActivity(i);
-			
+
 			return true;
 		}
-		
+
 		return true;
 	}
 
@@ -104,10 +101,10 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 
 		desktopViews.title.setText(item.getTitle());
 		desktopViews.description.setText(item.getDescription());
-		desktopViews.type.setText(item.getType());
+		desktopViews.type.setVisibility(View.GONE);
 		desktopViews.owner.setVisibility(View.GONE);
-		
-		if(desktopViews.description.getText().equals("")) {
+
+		if (desktopViews.description.getText().equals("")) {
 			desktopViews.description.setVisibility(View.GONE);
 		}
 
@@ -133,7 +130,7 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 			}
 
 		}
-		
+
 		final Item parentItem = item;
 		v.setOnClickListener(new OnClickListener() {
 

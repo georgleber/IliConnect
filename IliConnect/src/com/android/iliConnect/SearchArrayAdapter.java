@@ -123,4 +123,10 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 		
 	}
 
+
+	public void onClickMessageBox() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

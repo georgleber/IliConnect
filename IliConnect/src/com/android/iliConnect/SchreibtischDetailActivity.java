@@ -224,5 +224,10 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 		Intent i = new Intent(SchreibtischDetailActivity.this, MainTabView.class);
 		startActivity(i);
 	}
+
+	public void onClickMessageBox() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

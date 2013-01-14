@@ -311,5 +311,25 @@ public class MessageBuilder {
 		AlertDialog alertDialog1 = alertDialog.create();
 		alertDialog1.show();
 	}
+	
+	public static void sync_exception(Activity activity, String errMsg, final IliOnClickListener listener) {
+		if(activity == null) {
+			activity = MainActivity.instance;
+		}
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setIcon(R.drawable.error);
+		alertDialog.setTitle("Synchronisation fehlgeschlagen");
+		alertDialog.setMessage(errMsg);
+		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				listener.onClickMessageBox();
+				return;
+			}
+		});
+
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+	}
 	 
 }

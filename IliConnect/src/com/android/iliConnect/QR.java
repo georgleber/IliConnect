@@ -167,5 +167,10 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 		
 		
 	}
+
+	public void onClickMessageBox() {
+		// TODO Auto-generated method stub
+		
+	}
 			
 }

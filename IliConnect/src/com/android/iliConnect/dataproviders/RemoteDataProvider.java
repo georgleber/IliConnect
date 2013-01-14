@@ -34,10 +34,13 @@ import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.Exceptions.NetworkException;
+import com.android.iliConnect.message.IliOnClickListener;
 import com.android.iliConnect.ssl.HttpsClient;
 
-public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
+public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> implements IliOnClickListener {
 
+	private Object instance = this;
+	private boolean doLogout = false;
 	private List<NameValuePair> nameValuePairs;
 	private ProgressDialog pDialog;
 
@@ -153,13 +156,13 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 				}
 
 				if (logout) {
-					MainActivity.instance.logout();
+					doLogout = true;
 					errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
 							" die Serveradresse und versuchen Sie es erneut.";
 				}
 			} else if (e instanceof AuthException) {
-				MainActivity.instance.logout();
-				// falls bei der Sync. die Benutzerdaten falsch sind, alte Daten löschen
+				// Logout soll nach Bestätigung durchgeführt werden
+				doLogout = true;
 				MainActivity.instance.localDataProvider.deleteAuthentication();
 				errMsg = "Ihr Benutzername oder Kennwort ist falsch.";
 			} else {
@@ -167,8 +170,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 			}
 
 			if (errMsg != null) {
-				//MainActivity.instance.showToast(errMsg);
-				MessageBuilder.exception_message(MainTabView.instance, errMsg);
+				MessageBuilder.sync_exception(MainTabView.instance, errMsg, (IliOnClickListener) instance);
 			} 
 		}
 		else {
@@ -196,6 +198,29 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 			return sb.toString();
 		} else {
 			return "";
+		}
+	}
+
+	public void onClickCoursePassword(String refID, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickJoinCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickLeftCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickMessageBox() {
+		// falls bei der Sync. die Benutzerdaten falsch sind, alte Daten löschen
+		if(doLogout) {
+			doLogout = true;
+			MainActivity.instance.logout();
 		}
 	}
 }

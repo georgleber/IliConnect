@@ -15,6 +15,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.net.Uri;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
@@ -164,14 +165,16 @@ public class LocalDataProvider {
 		progressDialog.setTitle("Download");
 		progressDialog.setMessage("Bitte warten...");
 
-		String dirPath = MainActivity.instance.getFilesDir() + "/" + MainActivity.instance.localDataProvider.auth.user_id;
 
-		// Prüfen, ob bereits ein Verzeichnis für den Benutzer exisitiert, falls nicht neu anlegen
+		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+		
+		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id; 
+		// IliConnect-Ordner erstellen, falls noch nicht vorhanden
 		File f = new File(dirPath);
 		if (!f.exists() && !f.isDirectory()) {
 			f.mkdirs();
 		}
-
+		
 		String filePath = dirPath + "/" + item.getTitle();
 		File file = new File(filePath);
 

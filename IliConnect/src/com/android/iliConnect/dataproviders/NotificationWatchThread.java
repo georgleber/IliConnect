@@ -42,15 +42,15 @@ public class NotificationWatchThread {
 									Long date = Long.valueOf(notification.date) * 1000;
 									Date notiDate = new Date(date);
 
-									String title = "IliConnect - Bevorstehender Termin";
+									String title = "IliConnect: " + notification.getTitle();
 									long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
 									if (daysBetween <= critical) {
-										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
+										String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
 										notiBuilder.showNotification(notiDate.getDate());
 									} else if (daysBetween <= warning) {
-										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
+										String notificationText ="Frist endet " + notification.getDate() + "Uhr";
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
 										notiBuilder.showNotification(notiDate.getDate());
 									}

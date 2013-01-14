@@ -1,7 +1,7 @@
 package com.android.iliConnect;
 
 
-import com.android.iliConnect.message.QROnClickListener;
+import com.android.iliConnect.message.IliOnClickListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,7 +28,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_singnout(Activity activity, final String refID,final String course_name, final QROnClickListener listener) {		
+	 public static void course_singnout(Activity activity, final String refID,final String course_name, final IliOnClickListener listener) {		
 		 String message = "Wollen Sie sich vom Kurs abmelden?";
 		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 		   alertDialog.setIcon(R.drawable.warn);
@@ -119,7 +119,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_login(Activity activity,final String course_name, final String refID, final QROnClickListener listener) {		
+	 public static void course_login(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {		
 		 String message = "Wollen Sie sich am Kurs anmelden?";
 		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 		   alertDialog.setIcon(R.drawable.warn);
@@ -146,7 +146,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_login_acc(Activity activity,final String course_name, final String refID, final QROnClickListener listener) {	
+	 public static void course_login_acc(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {	
 		 	String message ="Wollen Sie sich am Kurs anmelden?";
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
@@ -174,7 +174,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();	
 		}
-	 public static void course_password(Activity activity, final String refID, final QROnClickListener listener) {		
+	 public static void course_password(Activity activity, final String refID, final IliOnClickListener listener) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Passwort");

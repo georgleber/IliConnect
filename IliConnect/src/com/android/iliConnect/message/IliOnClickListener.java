@@ -1,6 +1,6 @@
 package com.android.iliConnect.message;
 
-public interface QROnClickListener {
+public interface IliOnClickListener {
 	
 	public void onClickCoursePassword(String refID,String password);
 	public void onClickJoinCourse(String refID, String courseName);

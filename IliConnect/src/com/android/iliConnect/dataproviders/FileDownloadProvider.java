@@ -81,14 +81,19 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 			}
 			FileOutputStream fos = new FileOutputStream(file);
 
-			byte[] buffer = new byte[1024];
-			int len1 = 0;
-
-			while ((len1 = in.read(buffer)) > 0) {
-				fos.write(buffer, 0, len1);
-			}
-
+			byte data[] = new byte[1024];
+            long total = 0;
+            int count;
+            while ((count = in.read(data)) != -1) {
+                total += count;
+                // publishing the progress....
+                //publishProgress((int) (total * 100 / fileLength));
+                fos.write(data, 0, count);
+            }
+            
+            fos.flush();
 			fos.close();
+			in.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

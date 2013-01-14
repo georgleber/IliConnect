@@ -154,7 +154,8 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
 				if (logout) {
 					MainActivity.instance.logout();
-					errMsg = "Der angegebene Server konnte nicht erreicht werden.";
+					errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
+							" die Serveradresse und versuchen Sie es erneut.";
 				}
 			} else if (e instanceof AuthException) {
 				MainActivity.instance.logout();

@@ -178,7 +178,7 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 				} else if (parentItem.getType().equalsIgnoreCase("FOLD")) {
 					toggleVisibility(parentItem, v);
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
-					MainActivity.instance.localDataProvider.openFileOrDownload(s);
+					MainActivity.instance.localDataProvider.openFileOrDownload(item);
 				} else if (parentItem.getType().equalsIgnoreCase("TST")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
 

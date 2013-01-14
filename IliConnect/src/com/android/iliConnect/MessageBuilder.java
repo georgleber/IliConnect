@@ -236,4 +236,22 @@ public class MessageBuilder {
 			alertDialog1.show();			
 		}
 	 
+	 public static void download_error(Activity activity, String fileName) {		
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Download fehlgeschlagen");
+			alertDialog.setMessage("Die Datei " + fileName + " konnte nicht heruntergeladen werden");			
+			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {					
+					
+					return;
+				}
+			});
+			
+			
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();			
+		}
+	 
 }

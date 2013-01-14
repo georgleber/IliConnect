@@ -2,6 +2,7 @@ package com.android.iliConnect.dataproviders;
 
 import java.util.concurrent.ExecutionException;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 
 import com.android.iliConnect.MainActivity;
@@ -51,7 +52,12 @@ public class LocalCourseProvider {
 			else if(result.contains("PASSWORD_NEEDED")) {
 				return result;
 			}
-			// Falls andere Response-Message von Server empfangen wurde, entsprchende Eception werfen
+			else if(result.contains("JOIN_REQUEST_SENT")) {
+				MessageBuilder.course_join_request_send(MainTabView.instance);
+			}
+			else if(result.contains("WAITING_FOR_CONFIRMATION")) {
+				MessageBuilder.course_waiting_for_confirm(MainTabView.instance);
+			}
 			else if(result.contains("ALREADY_SUBSCRIBED")) {
 				MessageBuilder.course_alreadysignedin(MainTabView.instance);
 			}

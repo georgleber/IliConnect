@@ -218,6 +218,43 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
+	 
+	 public static void course_join_request_send(Activity activity) {		
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Anmeldung");
+			alertDialog.setMessage("Ihre Anmeldung am Kurs wurde versendet. Ihrem Beitritt muss jedoch noch zugestimmt werden.");			
+			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {					
+					
+					return;
+				}
+			});
+			
+			
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();			
+		}
+	 
+	 public static void course_waiting_for_confirm(Activity activity) {		
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Anmeldung");
+			alertDialog.setMessage("Sie haben bereits einen Aufnahmeantrag gestellt! Bitte warten Sie auf die Bestätigung.");			
+			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {					
+					
+					return;
+				}
+			});
+			
+			
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();			
+		}
+	 
 	 public static void course_notexist(Activity activity, final String refID) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);

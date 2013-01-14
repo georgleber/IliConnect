@@ -150,9 +150,9 @@ public class MessageBuilder {
 		 	String message ="Wollen Sie sich am Kurs anmelden?";
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
-			alertDialog.setTitle("Kursanmeldung!");
+			alertDialog.setTitle("Kursanmeldung");
 			if(!course_name.equals("") || course_name != null) {
-				message = "Wollen Sie sich am Kurs: " + "\"" + course_name + "\"" + " anmelden?";
+				message = "Wollen Sie sich am Kurs " + "\"" + course_name + "\"" + " anmelden?";
 			}
 			alertDialog.setMessage(message);
 		

@@ -221,8 +221,7 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 			// TODO Fehlermeldung einbauen
 			e.printStackTrace();
 		}		
-		Intent i = new Intent(SchreibtischDetailActivity.this, MainTabView.class);
-		startActivity(i);
+		this.finish();
 	}
 
 	public void onClickMessageBox() {

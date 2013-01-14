@@ -1,21 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.iliConnect"
+    android:installLocation="auto"
     android:versionCode="1"
-    android:versionName="1.2"
-    android:installLocation="auto" >
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="6"
         android:targetSdkVersion="11" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        >        
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -23,36 +23,64 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="e" />
-             <intent-filter>
+
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data android:scheme="file" />
+                <data android:mimeType="application/pdf" />
+                <data android:host="*" />
+            </intent-filter>
         </activity>
-         
-       <activity android:label="@string/app_name" android:name=".MainTabView" android:screenOrientation="portrait" />
-    <activity android:label="@string/app_name" android:name="com.android.iliConnect.MainActivityAnzeige" android:screenOrientation="portrait" /> 
-    <activity android:label="@string/app_name" android:name=".Dozent_kurse" android:screenOrientation="portrait" />     
-     <activity android:label="@string/app_name" android:name=".Menu_setting" android:screenOrientation="portrait" />
-     <activity android:label="@string/settings_menu" android:name=".Einstellungen" android:screenOrientation="portrait" />
-     <activity android:label="@string/app_name" android:name=".SchreibtischDetailActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainTabView"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.android.iliConnect.MainActivityAnzeige"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Dozent_kurse"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Menu_setting"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Einstellungen"
+            android:label="@string/settings_menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SchreibtischDetailActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.google.zxing.client.android.CaptureActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-   
-    <activity android:name="com.google.zxing.client.android.CaptureActivity"
-   android:screenOrientation="landscape"
-   android:configChanges="orientation|keyboardHidden"
-   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-   android:windowSoftInputMode="stateAlwaysHidden">
-   <intent-filter>
-      <action android:name="android.intent.action.MAIN"/>
-      <category android:name="android.intent.category.DEFAULT"/>
-   </intent-filter>
-   <intent-filter>
-      <action android:name="com.google.zxing.client.android.SCAN"/>
-      <category android:name="android.intent.category.DEFAULT"/>
-    </intent-filter>
-</activity>
-    
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.zxing.client.android.SCAN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
-
 
 </manifest>

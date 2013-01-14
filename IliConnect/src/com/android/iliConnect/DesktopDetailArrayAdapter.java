@@ -49,8 +49,10 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		View v = convertView;
-		LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		v = fillListRecursive(null, items.get(position), vi);
+		if (v == null) {
+			LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			v = fillListRecursive(null, items.get(position), vi);
+		}
 
 		/* v.findViewById(R.id.imageButton1).setVisibility(View.VISIBLE);
 		v.findViewById(R.id.imageButton1).setOnClickListener(new OnClickListener() {
@@ -139,29 +141,27 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 
 		desktopViews.title.setText(item.getTitle());
 		desktopViews.description.setText(item.getDescription());
-		
-		if(item.getType().equalsIgnoreCase("TST")) {
+
+		if (item.getType().equalsIgnoreCase("TST")) {
 			desktopViews.type.setText("Test");
 		}
-		if(item.getType().equalsIgnoreCase("EXC")) {
+		if (item.getType().equalsIgnoreCase("EXC")) {
 			desktopViews.type.setText("Übung");
 		}
-		if(item.getType().equalsIgnoreCase("FILE")) {
+		if (item.getType().equalsIgnoreCase("FILE")) {
 			desktopViews.type.setText("Datei");
 		}
 
-		
-		if(desktopViews.description.getText().equals("")) {
+		if (desktopViews.description.getText().equals("")) {
 			desktopViews.description.setVisibility(View.GONE);
 		}
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD")) {
 			desktopViews.type.setVisibility(View.GONE);
 		}
-			
+
 		if (item.getClass().equals(DesktopItem.class) && !((DesktopItem) item).getDate().equals("")) {
 			desktopViews.date.setText(((DesktopItem) item).getDate());
-		}
-		else {
+		} else {
 			desktopViews.date.setVisibility(View.GONE);
 		}
 
@@ -203,8 +203,8 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 				} else if (parentItem.getType().equalsIgnoreCase("TST") || parentItem.getType().equalsIgnoreCase("EXC")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
 					String iliasUrl = url_src + "login.php";
-					//String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
-					
+					// String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
+
 					// Ilias Im Bowser aufrufen
 					MainActivity.instance.showBrowserContent(iliasUrl);
 
@@ -223,7 +223,7 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 						// TODO Fehlermeldung einbauen
 						e.printStackTrace();
 					}
-				} 
+				}
 			}
 		});
 
@@ -239,10 +239,12 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		if (childItem.Item != null)
 			childItems = childItem.Item;
 
-		for (Item item : childItems)
-			if ((vSub = v.findViewWithTag(item.getRef_id())).getVisibility() == View.VISIBLE)
+		for (Item item : childItems) {
+			vSub = v.findViewWithTag(item.getRef_id());
+			if (vSub.getVisibility() == View.VISIBLE)
 				vSub.setVisibility(View.GONE);
 			else
 				vSub.setVisibility(View.VISIBLE);
+		}
 	}
 }

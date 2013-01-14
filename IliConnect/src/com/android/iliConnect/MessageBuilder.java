@@ -32,7 +32,7 @@ public class MessageBuilder {
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Abmeldung!");
-			alertDialog.setMessage("Wollen Sie sich wirklich vom Kurs " +"\"" + course_name + "\""  + " abmelden?");
+			alertDialog.setMessage("Wollen Sie sich wirklich vom Kurs " + "\"" + course_name + "\""  + " abmelden?");
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
@@ -114,28 +114,33 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_login(Activity activity,String course_name, String refID) {		
+	 public static void course_login(Activity activity,String course_name, final String refID, final QROnClickListener listener) {	
+		 String message = "Wollen Sie sich am Kurs anmelden?";
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Kursanmeldung!");
-			alertDialog.setMessage("Wollen Sie sich zu dem Kurs: " + "\"" + course_name + "\"" + " anmelden?");
+			if(!course_name.equals("") || course_name != null) {
+				message = "Wollen Sie sich am Kurs: " + "\"" + course_name + "\"" + " anmelden?";
+			}
+			alertDialog.setMessage(message);
+		
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
-					//TODO: Anmeldung mit Join Course(refID);
+					listener.onClickSignOnCourse(refID, null);
 					return;
 				}
 			});
+			
 			alertDialog.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
 					
 					return;
 				}
-			});
-			
+			});		
 			AlertDialog alertDialog1 = alertDialog.create();
-			alertDialog1.show();			
+			alertDialog1.show();	
 		}
 	 public static void course_password(Activity activity, final String refID, final QROnClickListener listener) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);

@@ -15,10 +15,10 @@ import com.android.iliConnect.Exceptions.CoursePasswordException;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
-import com.android.iliConnect.message.QROnClickListener;
+import com.android.iliConnect.message.IliOnClickListener;
 import com.android.iliConnect.models.Item;
 
-public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements QROnClickListener {
+public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements IliOnClickListener {
 	
 	
 	private class SearchView {

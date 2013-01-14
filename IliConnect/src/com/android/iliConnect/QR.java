@@ -4,7 +4,7 @@ import com.android.iliConnect.Exceptions.CoursePasswordException;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
-import com.android.iliConnect.message.QROnClickListener;
+import com.android.iliConnect.message.IliOnClickListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.android.iliConnect.MessageBuilder;
 
-public class QR extends Fragment implements Redrawable, QROnClickListener {
+public class QR extends Fragment implements Redrawable, IliOnClickListener {
 	
 
 

@@ -19,11 +19,11 @@ import android.widget.TextView;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
-import com.android.iliConnect.message.QROnClickListener;
+import com.android.iliConnect.message.IliOnClickListener;
 import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
 
-public class SchreibtischDetailActivity extends FragmentActivity implements QROnClickListener  {
+public class SchreibtischDetailActivity extends FragmentActivity implements IliOnClickListener  {
 
 	private Object listener = this;
 	private String selectedCourse = "";
@@ -65,7 +65,7 @@ public class SchreibtischDetailActivity extends FragmentActivity implements QROn
 		// respond to menu item selection
 		switch (item.getItemId()) {
 		case R.id.abmeldung:
-			MessageBuilder.course_singnout(this, selectedCourse , selectedCourseName, (QROnClickListener)listener);
+			MessageBuilder.course_singnout(this, selectedCourse , selectedCourseName, (IliOnClickListener)listener);
 
 
 			

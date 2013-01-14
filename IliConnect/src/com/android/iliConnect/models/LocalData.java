@@ -6,6 +6,8 @@ import org.simpleframework.xml.Root;
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.dataproviders.PersistableObject;
 
 @Root(name = "Iliconnect")

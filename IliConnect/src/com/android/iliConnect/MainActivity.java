@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
 			try {
 				autologin();
 			} catch (NetworkException e) {
-				showToast(e.getMessage());
+				MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
 				try {
 					login();
 				} catch (NetworkException e) {
-					showToast(e.getMessage());
+					MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 					e.printStackTrace();
 				}
 

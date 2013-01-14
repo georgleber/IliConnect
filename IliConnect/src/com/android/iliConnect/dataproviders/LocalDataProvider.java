@@ -146,7 +146,8 @@ public class LocalDataProvider {
 
 		} catch (Exception e) {
 
-			MainActivity.instance.showToast(e.getMessage());
+			//MainActivity.instance.showToast(e.getMessage());
+			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 			MainActivity.instance.logout();
 
 			return false;

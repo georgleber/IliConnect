@@ -43,6 +43,8 @@ public class LocalDataProvider {
 	public LocalData localdata = new LocalData();
 	public RemoteData remoteData = new RemoteData();
 	public AppData appData = new AppData();
+
+	
 	public Desktop desktopItems = new Desktop();
 	public Authentification auth = new Authentification();;
 	public Results results = new Results();

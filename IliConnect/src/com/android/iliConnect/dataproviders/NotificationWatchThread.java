@@ -1,5 +1,7 @@
 package com.android.iliConnect.dataproviders;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,8 +10,11 @@ import java.util.concurrent.TimeUnit;
 import android.os.Handler;
 
 import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.handler.AndroidNotificationBuilder;
 import com.android.iliConnect.handler.ModificationHandler;
+import com.android.iliConnect.handler.NotificationComparator;
 import com.android.iliConnect.models.Notification;
 import com.android.iliConnect.models.Notifications;
 
@@ -34,10 +39,14 @@ public class NotificationWatchThread {
 							int critical = MainActivity.instance.localDataProvider.settings.level_critical;
 
 							ModificationHandler handler = new ModificationHandler();
-							for (Notification notification : notifications.Notifications) {
+							
+							ArrayList<Notification> nextNotifications = notifications.Notifications;
+							Collections.sort(nextNotifications, new NotificationComparator(false));
+							
+							for (Notification notification : nextNotifications) {
 								if (!handler.isNotificationMarked(notification.getRef_id())) {
 									Date currentDate = new Date(System.currentTimeMillis());
-									
+
 									// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
 									Long date = Long.valueOf(notification.date) * 1000;
 									Date notiDate = new Date(date);
@@ -49,10 +58,14 @@ public class NotificationWatchThread {
 
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
 										notiBuilder.showNotification(notiDate.getDate());
+
+										MessageBuilder.critical_message(MainTabView.instance, notificationText);
 									} else if (daysBetween <= warning) {
-										String notificationText ="Frist endet " + notification.getDate() + "Uhr";
+										String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
 										notiBuilder.showNotification(notiDate.getDate());
+
+										MessageBuilder.warning_message(MainTabView.instance, notificationText);
 									}
 								}
 							}

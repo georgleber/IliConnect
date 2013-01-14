@@ -47,7 +47,13 @@ public class LocalCourseProvider {
 				
 				// Bei erfolgreicher Anmeldung Schreibtisch anzeigen.
 				MainTabView.instance.changeViewTo(3);
-							
+				
+				if (MainActivity.instance.notificationThread.doAsynchronousTask != null) {
+					MainActivity.instance.notificationThread.doAsynchronousTask.cancel();
+					
+					MainActivity.instance.notificationThread.startTimer();
+				}
+				
 			}
 			else if(result.contains("PASSWORD_NEEDED")) {
 				return result;

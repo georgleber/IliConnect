@@ -9,7 +9,6 @@ import android.support.v4.app.NotificationCompat.Builder;
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.R;
-import com.android.iliConnect.Termine;
 
 public class AndroidNotificationBuilder {
 	public static final int STATUS_NORMAL = 0;

@@ -46,8 +46,7 @@ public class LocalCourseProvider {
 				
 				// Bei erfolgreicher Anmeldung Schreibtisch anzeigen.
 				MainTabView.instance.changeViewTo(3);
-				
-				MessageBuilder.course_login(MainTabView.instance, "", ref_id);
+							
 			}
 			else if(result.contains("PASSWORD_NEEDED")) {
 				return result;
@@ -63,8 +62,11 @@ public class LocalCourseProvider {
 				MessageBuilder.course_passwordfalse(MainTabView.instance,ref_id);
 			}
 			else if(result.contains("PERMISSION_DENIED")) {
-				throw new JoinCourseException("Eine Anmeldung ist nicht möglich.");
+				MessageBuilder.course_permissondenied(MainTabView.instance, ref_id);
 			} 
+			else{
+				MessageBuilder.QR_error(MainTabView.instance);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

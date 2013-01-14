@@ -28,15 +28,20 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_singnout(Activity activity,String course_name, String refID) {		
-			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-			alertDialog.setIcon(R.drawable.error);
-			alertDialog.setTitle("Abmeldung!");
-			alertDialog.setMessage("Wollen Sie sich wirklich vom Kurs " +"\"" + course_name + "\""  + " abmelden?");
+	 public static void course_singnout(Activity activity, final String refID,final String course_name, final QROnClickListener listener) {		
+		 String message = "Wollen Sie sich vom Kurs abmelden?";
+		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		   alertDialog.setIcon(R.drawable.warn);
+		   alertDialog.setTitle("Kursabmeldung!");
+		   if(!course_name.equals("") || course_name != null) {
+		    message = "Wollen Sie sich vom Kurs: " + "\"" + course_name + "\"" + " abmelden?";
+		   }
+			alertDialog.setMessage(message);
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
-					//TODO: Kurs abmelden mit REFID
+					
+					listener.onClickLeftCourse(refID, course_name);
 					return;
 				}
 			});
@@ -114,15 +119,41 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_login(Activity activity,String course_name, String refID) {		
-			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-			alertDialog.setIcon(R.drawable.warn);
-			alertDialog.setTitle("Kursanmeldung!");
-			alertDialog.setMessage("Wollen Sie sich zu dem Kurs: " + "\"" + course_name + "\"" + " anmelden?");
+	 public static void course_login(Activity activity,final String course_name, final String refID, final QROnClickListener listener) {		
+		 String message = "Wollen Sie sich am Kurs anmelden?";
+		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		   alertDialog.setIcon(R.drawable.warn);
+		   alertDialog.setTitle("Kursanmeldung!");
+		   if(!course_name.equals("") || course_name != null) {
+		    message = "Wollen Sie sich am Kurs: " + "\"" + course_name + "\"" + " anmelden?";
+		   }
+			alertDialog.setMessage(message);
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
-					//TODO: Anmeldung mit Join Course(refID);
+					listener.onClickJoinCourse(refID, course_name);
+					return;
+				}
+			});
+			alertDialog.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					
+					return;
+				}
+			});
+			
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();			
+		}
+	 public static void course_login_acc(Activity activity,final String course_name, final String refID) {		
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Kursanmeldung!");
+			alertDialog.setMessage("Sie wurden Erfolgreich zum Kurs: " + "\"" + course_name + "\"" + " angemeldet!");
+			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {					
 					return;
 				}
 			});
@@ -235,5 +266,6 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
+	
 	 
 }

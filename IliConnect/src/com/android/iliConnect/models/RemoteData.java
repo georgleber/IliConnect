@@ -1,5 +1,9 @@
 package com.android.iliConnect.models;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -13,9 +17,14 @@ public class RemoteData extends PersistableObject {
 	@Element
 	public Current Current;
 
+	private HashMap<String, Long> fileDates;
+	
 	@Override
 	public void load() throws Exception {
+
 		super.deserialize(MainActivity.instance.localDataProvider.remoteDataFileName);
+		
+		this.getChangedFiles(this.Current.Desktop.DesktopItem);
 	}
 
 	public String getSyncUrl() {
@@ -37,5 +46,15 @@ public class RemoteData extends PersistableObject {
 		super.delete(MainActivity.instance.localDataProvider.remoteDataFileName);
 
 	}
+	public void getChangedFiles(ArrayList<Item> items){
+		for(Item item : items){
+			if(item.type.equalsIgnoreCase("FILE") && item.changed)
+					MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles.add(item);
+			if(item.Item!=null)
+				getChangedFiles(item.Item);
+		}
+	}
+	
+	
 
 }

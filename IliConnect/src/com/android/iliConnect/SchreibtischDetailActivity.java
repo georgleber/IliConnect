@@ -220,7 +220,7 @@ public class SchreibtischDetailActivity extends FragmentActivity implements QROn
 		} catch (JoinCourseException e) {
 			// TODO Fehlermeldung einbauen
 			e.printStackTrace();
-		}
+		}		
 		Intent i = new Intent(SchreibtischDetailActivity.this, MainTabView.class);
 		startActivity(i);
 	}

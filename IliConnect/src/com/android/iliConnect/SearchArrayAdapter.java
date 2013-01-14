@@ -108,8 +108,19 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements QRO
 	}
 
 
-	public void onClickSignOnCourse(String ref_id, String password) {
-		this.joinCourse(ref_id, null);
+	
+
+
+	public void onClickJoinCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		this.joinCourse(refID, null);
+		
+	}
+
+
+	public void onClickLeftCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

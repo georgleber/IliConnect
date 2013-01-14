@@ -146,7 +146,8 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_login_acc(Activity activity,final String course_name, final String refID) {		
+	 public static void course_login_acc(Activity activity,final String course_name, final String refID, final QROnClickListener listener) {	
+		 	String message ="Wollen Sie sich am Kurs anmelden?";
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Kursanmeldung!");
@@ -158,7 +159,7 @@ public class MessageBuilder {
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
-					listener.onClickSignOnCourse(refID, null);
+					listener.onClickJoinCourse(refID, course_name);
 					return;
 				}
 			});

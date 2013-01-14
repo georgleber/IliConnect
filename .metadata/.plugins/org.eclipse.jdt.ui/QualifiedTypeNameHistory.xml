@@ -15,4 +15,5 @@
 <fullyQualifiedTypeName name="android.text.InputType"/>
 <fullyQualifiedTypeName name="android.os.AsyncTask"/>
 <fullyQualifiedTypeName name="com.android.iliConnect.MessageBuilder"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.message.QROnClickListener"/>
 </qualifiedTypeNameHistroy>

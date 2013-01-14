@@ -106,6 +106,10 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 		desktopViews.description.setText(item.getDescription());
 		desktopViews.type.setText(item.getType());
 		desktopViews.owner.setVisibility(View.GONE);
+		
+		if(desktopViews.description.getText().equals("")) {
+			desktopViews.description.setVisibility(View.GONE);
+		}
 
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
 			desktopViews.type.setVisibility(View.GONE);

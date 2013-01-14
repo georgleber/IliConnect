@@ -30,6 +30,7 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		TextView description;
 		TextView date;
 		TextView type;
+		TextView owner;
 
 		LinearLayout items;
 	}
@@ -68,7 +69,7 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		String descr = null;
 		if (type.equalsIgnoreCase("FILE")) {
 			resID = R.drawable.dl;
-			descr = "Download";
+			descr = "Datei";
 		} else if (type.equalsIgnoreCase("FOLD")) {
 			resID = R.drawable.fold;
 			descr = "Ordner";
@@ -131,21 +132,41 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 			desktopViews.description = (TextView) v.findViewById(R.id.itemDescription);
 			desktopViews.date = (TextView) v.findViewById(R.id.itemDate);
 			desktopViews.type = (TextView) v.findViewById(R.id.itemType);
+			desktopViews.owner = (TextView) v.findViewById(R.id.itemOwner);
 
 		} else
 			desktopViews = (DesktopViews) v.getTag();
 
 		desktopViews.title.setText(item.getTitle());
 		desktopViews.description.setText(item.getDescription());
-		desktopViews.type.setText(item.getType());
+		
+		if(item.getType().equalsIgnoreCase("TST")) {
+			desktopViews.type.setText("Test");
+		}
+		if(item.getType().equalsIgnoreCase("EXC")) {
+			desktopViews.type.setText("Übung");
+		}
+		if(item.getType().equalsIgnoreCase("FILE")) {
+			desktopViews.type.setText("Datei");
+		}
 
-		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD"))
+		
+		if(desktopViews.description.getText().equals("")) {
+			desktopViews.description.setVisibility(View.GONE);
+		}
+		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD")) {
 			desktopViews.type.setVisibility(View.GONE);
-
-		if (item.getClass().equals(DesktopItem.class) && !((DesktopItem) item).getDate().equals(""))
+		}
+			
+		if (item.getClass().equals(DesktopItem.class) && !((DesktopItem) item).getDate().equals("")) {
 			desktopViews.date.setText(((DesktopItem) item).getDate());
-		else
+		}
+		else {
 			desktopViews.date.setVisibility(View.GONE);
+		}
+
+		// Owner immer ausblenden
+		desktopViews.owner.setVisibility(View.GONE);
 
 		v.setTag(item.getRef_id());
 
@@ -179,14 +200,12 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 					toggleVisibility(parentItem, v);
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
 					MainActivity.instance.localDataProvider.openFileOrDownload(item);
-				} else if (parentItem.getType().equalsIgnoreCase("TST")) {
+				} else if (parentItem.getType().equalsIgnoreCase("TST") || parentItem.getType().equalsIgnoreCase("EXC")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
-
-					// Test im Browser starten
-					// String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
-
-					// Ilias im Browser starten
 					String iliasUrl = url_src + "login.php";
+					//String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
+					
+					// Ilias Im Bowser aufrufen
 					MainActivity.instance.showBrowserContent(iliasUrl);
 
 				} else if (parentItem.getType().equalsIgnoreCase("UNSIGN")) {
@@ -204,10 +223,7 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 						// TODO Fehlermeldung einbauen
 						e.printStackTrace();
 					}
-				} else {
-					MainActivity.instance.showBrowserContent(MainActivity.instance.localDataProvider.auth.url_src + "webdav.php?ref_id=" + s);
-				}
-
+				} 
 			}
 		});
 

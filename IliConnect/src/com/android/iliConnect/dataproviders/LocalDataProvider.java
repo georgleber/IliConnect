@@ -13,6 +13,8 @@ import org.xmlpull.v1.XmlPullParser;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.XmlResourceParser;
 import android.net.Uri;
 import android.os.Environment;
@@ -193,7 +195,7 @@ public class LocalDataProvider {
 			}
 			synchronized (MainActivity.instance.localDataProvider.syncObject) {
 				try {
-					MainActivity.instance.localDataProvider.syncObject.wait(1000);
+					MainActivity.instance.localDataProvider.syncObject.wait(5000);
 				} catch (InterruptedException e) {
 
 				}
@@ -201,22 +203,12 @@ public class LocalDataProvider {
 		}
 		if (file.exists()) {
 
-			Intent intent = new Intent();
+			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.setDataAndType(Uri.fromFile(file), "application/*");
 
-			intent.setAction(android.content.Intent.ACTION_VIEW);
-
-			intent.setData(Uri.fromFile(file));
-
-			try {
-
-				MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
-
-			} catch (ActivityNotFoundException e) {
-				// TODO andere Fehlermeldung anzeigen
-				MessageBuilder.download_error(MainTabView.instance, item.getTitle());
-			}
-
+			MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
+			
 		} else {
 			MessageBuilder.download_error(MainTabView.instance, item.getTitle());
 		}

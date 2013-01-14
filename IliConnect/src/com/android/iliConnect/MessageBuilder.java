@@ -239,7 +239,7 @@ public class MessageBuilder {
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Passwort Falsch!");
-			alertDialog.setMessage("Das eingegebene Passwort ist falsch! Bitte scannen Sie den QRCode erneut.");	
+			alertDialog.setMessage("Das eingegebene Passwort ist falsch!");	
 //			final EditText input = new EditText(activity);
 //			input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 //			alertDialog.setView(input);
@@ -255,6 +255,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
+	 
 	 public static void course_permissondenied(Activity activity, final String refID) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.error);

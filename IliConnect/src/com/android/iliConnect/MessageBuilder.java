@@ -150,23 +150,28 @@ public class MessageBuilder {
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Kursanmeldung!");
-			alertDialog.setMessage("Sie wurden Erfolgreich zum Kurs: " + "\"" + course_name + "\"" + " angemeldet!");
+			if(!course_name.equals("") || course_name != null) {
+				message = "Wollen Sie sich am Kurs: " + "\"" + course_name + "\"" + " anmelden?";
+			}
+			alertDialog.setMessage(message);
+		
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
-				public void onClick(DialogInterface dialog, int which) {					
+				public void onClick(DialogInterface dialog, int which) {
+					listener.onClickSignOnCourse(refID, null);
 					return;
 				}
 			});
+			
 			alertDialog.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
 					
 					return;
 				}
-			});
-			
+			});		
 			AlertDialog alertDialog1 = alertDialog.create();
-			alertDialog1.show();			
+			alertDialog1.show();	
 		}
 	 public static void course_password(Activity activity, final String refID, final QROnClickListener listener) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
@@ -267,5 +272,23 @@ public class MessageBuilder {
 			alertDialog1.show();			
 		}
 	
+	 
+	 public static void download_error(Activity activity, String fileName) {		
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Download fehlgeschlagen");
+			alertDialog.setMessage("Die Datei " + fileName + " konnte nicht heruntergeladen werden");			
+			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {					
+					
+					return;
+				}
+			});
+			
+			
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();			
+		}
 	 
 }

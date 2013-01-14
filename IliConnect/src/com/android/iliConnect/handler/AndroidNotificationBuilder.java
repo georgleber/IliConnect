@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat.Builder;
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.R;
+import com.android.iliConnect.Termine;
 
 public class AndroidNotificationBuilder {
 	public static final int STATUS_NORMAL = 0;
@@ -30,9 +31,9 @@ public class AndroidNotificationBuilder {
 		this.status = status;
 	}
 
-	public void showNotification() {
+	public void showNotification(int notificationId) {
 		Intent intent = new Intent(MainActivity.instance, MainTabView.class);
-		PendingIntent pIntent = PendingIntent.getActivity(MainActivity.instance, 0, intent, 0);
+		PendingIntent pIntent = PendingIntent.getActivity(MainActivity.instance, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		Builder notificationBuilder = new android.support.v4.app.NotificationCompat.Builder(MainActivity.instance);
 
@@ -51,8 +52,7 @@ public class AndroidNotificationBuilder {
 			break;
 		}
 
-		android.app.Notification notification = null;
-		notification = notificationBuilder.setContentTitle(title).setContentText(text).setSmallIcon(icon).setContentIntent(pIntent).build();
+		android.app.Notification notification = notificationBuilder.setContentTitle(title).setContentText(text).setSmallIcon(icon).setContentIntent(pIntent).setAutoCancel(true).build();
 
 		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.notify(0, notification);

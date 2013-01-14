@@ -48,11 +48,11 @@ public class NotificationWatchThread {
 										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
 
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
-										notiBuilder.showNotification();
+										notiBuilder.showNotification(notiDate.getDate());
 									} else if (daysBetween <= warning) {
 										String notificationText = "Termin " + notification.getTitle() + " läuft am " + notification.getDate() + " ab";
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
-										notiBuilder.showNotification();
+										notiBuilder.showNotification(notiDate.getDate());
 									}
 								}
 							}

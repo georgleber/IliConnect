@@ -5,10 +5,13 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.net.Uri;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.R;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.Current;
@@ -152,33 +156,65 @@ public class LocalDataProvider {
 
 	}
 
-	public void openFileOrDownload(String refID) {
+	public void openFileOrDownload(Item item) {
 
-		File file = new File(MainActivity.instance.getFilesDir() + "/" + refID);
+		// ProgessDialog für Downlaod definieren
+		ProgressDialog progressDialog = new ProgressDialog(MainTabView.instance);
+		progressDialog.setTitle("Download");
+		progressDialog.setMessage("Bitte warten...");
+
+		String dirPath = MainActivity.instance.getFilesDir() + "/" + MainActivity.instance.localDataProvider.auth.user_id;
+
+		// Prüfen, ob bereits ein Verzeichnis für den Benutzer exisitiert, falls nicht neu anlegen
+		File f = new File(dirPath);
+		if (!f.exists() && !f.isDirectory()) {
+			f.mkdirs();
+		}
+
+		String filePath = dirPath + "/" + item.getTitle();
+		File file = new File(filePath);
+
 		if (!file.exists()) {
-			RemoteDataProvider download = new RemoteDataProvider();
-			download.execute(new String[] { auth.url_src + "webdav.php?ref_id=" + refID, refID });
+			FileDownloadProvider download = new FileDownloadProvider(progressDialog);
+			download.execute(new String[] { auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=sendfile", filePath });
+
+			try {
+				download.get();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			synchronized (MainActivity.instance.localDataProvider.syncObject) {
 				try {
-					MainActivity.instance.localDataProvider.syncObject.wait(100);
+					MainActivity.instance.localDataProvider.syncObject.wait(1000);
 				} catch (InterruptedException e) {
 
 				}
 			}
 		}
 		if (file.exists()) {
+
 			Intent intent = new Intent();
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
 			intent.setAction(android.content.Intent.ACTION_VIEW);
-			// Setting up the data and the type for the intent
 
 			intent.setData(Uri.fromFile(file));
 
-			// will start the activtiy found by android or show a dialog to select one
-			MainActivity.instance.startActivity(intent);
+			try {
+
+				MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
+
+			} catch (ActivityNotFoundException e) {
+				// TODO andere Fehlermeldung anzeigen
+				MessageBuilder.download_error(MainTabView.instance, item.getTitle());
+			}
+
 		} else {
-			Toast t = Toast.makeText(MainActivity.instance, "Download Fehlgeschlagen", Toast.LENGTH_LONG);
-			t.show();
+			MessageBuilder.download_error(MainTabView.instance, item.getTitle());
 		}
 
 	}

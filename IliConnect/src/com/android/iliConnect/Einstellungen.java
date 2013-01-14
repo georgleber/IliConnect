@@ -37,6 +37,7 @@ public class Einstellungen extends PreferenceActivity {
 			}
 		}); 
 		
+		/*
 		CheckBoxPreference cPsLogin = (CheckBoxPreference) findPreference("checkboxPrefAutologin");
 		cPsLogin.setChecked(MainActivity.instance.localDataProvider.auth.autologin);
 		cPsLogin.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -46,7 +47,7 @@ public class Einstellungen extends PreferenceActivity {
 				return true;
 			}
 		}); 
-		
+		*/
 		
 		ListPreference lP = (ListPreference) findPreference("listPrefInterv");
 		lP.setDefaultValue(MainActivity.instance.localDataProvider.settings.interval);

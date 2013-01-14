@@ -54,6 +54,10 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 		if (item != null) {
 			desktopViews.title.setText(item.getTitle());
 			desktopViews.description.setText(item.getDescription());
+			// falls keine Beschreibung vorhanden, Zeile ausblenden
+			if(desktopViews.description.getText().equals("")) {
+				desktopViews.description.setVisibility(View.GONE);
+			}
 			desktopViews.type.setVisibility(View.GONE);
 			desktopViews.date.setVisibility(View.GONE);
 			desktopViews.owner.setVisibility(View.GONE);

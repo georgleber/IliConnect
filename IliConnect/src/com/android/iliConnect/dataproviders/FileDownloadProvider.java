@@ -70,9 +70,15 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 			InputStream in = entity.getContent();
 
 			// Save the file to SD
-			/*File path = Environment.getExternalStoragePublicDirectory(filePath);
-			path.mkdirs();*/
+			/*
+			File path = Environment.getExternalStoragePublicDirectory(filePath);
+			path.mkdirs();
+			
+			*/
 			File file = new File(filePath);
+			if(!file.exists()) {
+				file.createNewFile();
+			}
 			FileOutputStream fos = new FileOutputStream(file);
 
 			byte[] buffer = new byte[1024];

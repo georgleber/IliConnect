@@ -3,17 +3,14 @@ package com.android.iliConnect;
 import java.util.ArrayList;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -22,12 +19,15 @@ import android.widget.TextView;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
+import com.android.iliConnect.message.IliOnClickListener;
 import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
 
-public class SchreibtischDetailActivity extends FragmentActivity {
+public class SchreibtischDetailActivity extends FragmentActivity implements IliOnClickListener  {
 
+	private Object listener = this;
 	private String selectedCourse = "";
+	private String selectedCourseName= "";
 	public static SchreibtischDetailActivity instance;
 
 	@Override
@@ -49,42 +49,29 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 		}
 
 		selectedCourse = item.ref_id;
+		selectedCourseName = item.title;
 		ListAdapter adapter = new DesktopDetailArrayAdapter(getApplicationContext(), R.id.desktop_content, item.getItems());
 		final ListView lv = (ListView) findViewById(R.id.desktop_content);
 		lv.setAdapter(adapter);
 	}
-	
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.kurs_menu, menu);
 		return true;
 	}
-	
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// respond to menu item selection
 		switch (item.getItemId()) {
 		case R.id.abmeldung:
-			LocalCourseProvider courseProv = new LocalCourseProvider();
-			try {
-				try {
-					courseProv.leaveCourse(selectedCourse);
-				} catch (NetworkException e) {
-					// TODO Fehlermeldung anzeigen
-					e.printStackTrace();
-				}
-				// neuer Sync und View update wird noch leaveCourse gemacht
+			MessageBuilder.course_singnout(this, selectedCourse , selectedCourseName, (IliOnClickListener)listener);
 
-			} catch (JoinCourseException e) {
-				// TODO Fehlermeldung einbauen
-				e.printStackTrace();
-			}
-			
-			Intent i = new Intent(SchreibtischDetailActivity.this, MainTabView.class);
-			startActivity(i);
+
 			
 			return true;
 		}
-		
+
 		return true;
 	}
 
@@ -104,10 +91,10 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 
 		desktopViews.title.setText(item.getTitle());
 		desktopViews.description.setText(item.getDescription());
-		desktopViews.type.setText(item.getType());
+		desktopViews.type.setVisibility(View.GONE);
 		desktopViews.owner.setVisibility(View.GONE);
-		
-		if(desktopViews.description.getText().equals("")) {
+
+		if (desktopViews.description.getText().equals("")) {
 			desktopViews.description.setVisibility(View.GONE);
 		}
 
@@ -133,7 +120,7 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 			}
 
 		}
-		
+
 		final Item parentItem = item;
 		v.setOnClickListener(new OnClickListener() {
 
@@ -207,4 +194,35 @@ public class SchreibtischDetailActivity extends FragmentActivity {
 
 		LinearLayout items;
 	}
+
+	public void onClickCoursePassword(String refID, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickJoinCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickLeftCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		LocalCourseProvider courseProv = new LocalCourseProvider();
+		try {
+			try {
+				courseProv.leaveCourse(selectedCourse);
+			} catch (NetworkException e) {
+				// TODO Fehlermeldung anzeigen
+				e.printStackTrace();
+			}
+			// neuer Sync und View update wird noch leaveCourse gemacht
+
+		} catch (JoinCourseException e) {
+			// TODO Fehlermeldung einbauen
+			e.printStackTrace();
+		}		
+		Intent i = new Intent(SchreibtischDetailActivity.this, MainTabView.class);
+		startActivity(i);
+	}
+	
 }

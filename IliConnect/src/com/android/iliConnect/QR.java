@@ -4,7 +4,7 @@ import com.android.iliConnect.Exceptions.CoursePasswordException;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
-import com.android.iliConnect.message.QROnClickListener;
+import com.android.iliConnect.message.IliOnClickListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,10 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.android.iliConnect.MessageBuilder;
 
-public class QR extends Fragment implements Redrawable, QROnClickListener {
+public class QR extends Fragment implements Redrawable, IliOnClickListener {
 	
 
-	public LocalCourseProvider local = new LocalCourseProvider();
+
 
 
 
@@ -73,8 +73,15 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 	            String contents = intent.getStringExtra("SCAN_RESULT");
 	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 	            
-	          
-	            joinCourse(contents,null);
+	            
+	            if (contents.matches("[0-9]+")){
+	            	 MessageBuilder.course_login(MainTabView.instance, "", contents, this);
+	            }
+	            else{
+	            	MessageBuilder.QR_error(MainTabView.instance);
+	            }
+	           
+	            
 	                      
 	            // Handle successful scan	           
 	            
@@ -88,17 +95,17 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 	}
 	
 	private void joinCourse(String ref_id, String crs_pw) {
+		LocalCourseProvider local =  new LocalCourseProvider();
     	try {
 			String result = null;
 			try {
-				result = this.local.joinCourse(ref_id, crs_pw);
-			} catch (NetworkException e) {
-				showAlert("Keine Internetverbidung");
+				result = local.joinCourse(ref_id, crs_pw);
+			} catch (NetworkException e) {				
 				e.printStackTrace();
 			}
 			
 			if(result != null && result.contains("JOINED")) {
-				this.showAlert("Sie wurde erfolgreich angemeldet");
+				//MessageBuilder.course_login_acc(MainTabView.instance, "", ref_id);
 			}
 			// Falls Passwort für Anmeldung benötigt wird, Abfrage einblenden
 			if(result != null && result.contains("PASSWORD_NEEDED")) {
@@ -112,64 +119,51 @@ public class QR extends Fragment implements Redrawable, QROnClickListener {
 
 		} catch (CoursePasswordException e) {
 			System.out.println(e.getMessage());
-			this.showAlert(e.getMessage());
+			
 		}	
     	
 	}
 	
-	private void leaveCourse(String ref_id) {
-		try {
-			String result = null;
-			try {
-				result = this.local.leaveCourse(ref_id);
-			} catch (NetworkException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(result != null && result.contains("LEFT")) {
-				this.showAlert("Sie wurde erfolgreich abgemeldet");
-			}
-		} catch (JoinCourseException e) {
-			this.showAlert(e.getMessage());
-			e.printStackTrace();
-		}	
-	}
-	
-	// Fuer Ausgabetest etwas zum Anzeigen!!
-	private void showAlert(String text) {
-		 AlertDialog ad = new AlertDialog.Builder(getActivity())
-         .create();
-		 ad.setCancelable(false);
-		 ad.setTitle("Test");
-		 ad.setMessage(text);
-		 ad.setButton(getActivity().toString(), new DialogInterface.OnClickListener() {
-			 public void onClick(DialogInterface dialog, int which) {
-				 dialog.dismiss();
-			 }
-		 });
-		 ad.show();
-	}
+//	private void leaveCourse(String ref_id) {
+//		LocalCourseProvider local =  new LocalCourseProvider();
+//		try {
+//			String result = null;
+//			try {
+//				result = this.local.leaveCourse(ref_id);
+//			} catch (NetworkException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//			if(result != null && result.contains("LEFT")) {
+//				this.showAlert("Sie wurde erfolgreich abgemeldet");
+//			}
+//		} catch (JoinCourseException e) {
+//			this.showAlert(e.getMessage());
+//			e.printStackTrace();
+//		}	
+//	}	
+
 	public void refreshViews() {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	public void onClickCoursePassword(String refID,String password) {
-		// TODO Auto-generated method stub
-		LocalCourseProvider PWlocal =  new LocalCourseProvider();
-			try {
-				PWlocal.joinCourse(refID,password);
-			} catch (JoinCourseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CoursePasswordException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();				
-			} catch (NetworkException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		// TODO Auto-generated method stub		
+				this.joinCourse(refID,password);		
+		
+	}
+	public void onClickLeftCourse(String refID, String courseName){
+		//TODO: Kurs abmelden mit REFID
+	}
+
+	public void onClickJoinCourse(String refID, String courseName) {
+		//TODO: Anmeldung mit Join Course(refID);
+	
+			this.joinCourse(refID, null);
+		
+		
 		
 		
 	}

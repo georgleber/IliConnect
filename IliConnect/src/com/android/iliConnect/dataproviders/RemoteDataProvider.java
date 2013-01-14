@@ -13,20 +13,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.accounts.NetworkErrorException;
 import android.app.ProgressDialog;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.MessageBuilder;
+import com.android.iliConnect.Exceptions.NetworkException;
+import com.android.iliConnect.ssl.HttpsClient;
 
 public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
@@ -56,6 +64,8 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 		try {
 
 			HttpClient httpclient = new DefaultHttpClient();
+
+			HttpClient httpsClient = HttpsClient.createHttpsClient(httpclient);
 			HttpPost httppost = new HttpPost(sUrl[0]);
 
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -68,7 +78,12 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 			// Execute HTTP Post Request
-			HttpResponse response = httpclient.execute(httppost);
+			HttpResponse response = httpsClient.execute(httppost);
+			StatusLine status = response.getStatusLine();
+			
+			if(status.getStatusCode() == 404 || status.getStatusCode() == 401) {
+				throw new HttpException(status.getReasonPhrase());
+			}
 
 			HttpEntity entity = response.getEntity();
 
@@ -125,7 +140,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
 		if (e != null) {
 			String errMsg = null;
-			if (e instanceof UnknownHostException) {
+			if (e instanceof UnknownHostException || e instanceof HttpException) {
 				ConnectivityManager connManager = (ConnectivityManager) MainActivity.instance.getSystemService(CONNECTIVITY_SERVICE);
 				NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 				NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -139,23 +154,27 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
 				if (logout) {
 					MainActivity.instance.logout();
-					errMsg = "Der angegebene Server konnte nicht erreicht werden.";
+					errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
+							" die Serveradresse und versuchen Sie es erneut.";
 				}
 			} else if (e instanceof AuthException) {
 				MainActivity.instance.logout();
 				// falls bei der Sync. die Benutzerdaten falsch sind, alte Daten löschen
 				MainActivity.instance.localDataProvider.deleteAuthentication();
-				errMsg = "Die angegebenen Benutzerdaten sind nicht korrekt.";
+				errMsg = "Ihr Benutzername oder Kennwort ist falsch.";
 			} else {
 				errMsg = "Es ist ein Fehler während der Synchronisation aufgetreten.";
 			}
 
 			if (errMsg != null) {
-				MainActivity.instance.showToast(errMsg);
-			}
+				//MainActivity.instance.showToast(errMsg);
+				MessageBuilder.exception_message(MainTabView.instance, errMsg);
+			} 
+		}
+		else {
+			MainActivity.instance.localDataProvider.updateLocalData();
 		}
 
-		MainActivity.instance.localDataProvider.updateLocalData();
 
 		if (pDialog != null && pDialog.isShowing()) {
 			pDialog.dismiss();

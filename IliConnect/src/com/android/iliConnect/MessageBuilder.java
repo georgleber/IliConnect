@@ -1,7 +1,7 @@
 package com.android.iliConnect;
 
 
-import com.android.iliConnect.message.QROnClickListener;
+import com.android.iliConnect.message.IliOnClickListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,15 +28,20 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_singnout(Activity activity,String course_name, String refID) {		
-			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-			alertDialog.setIcon(R.drawable.error);
-			alertDialog.setTitle("Abmeldung!");
-			alertDialog.setMessage("Wollen Sie sich wirklich vom Kurs " +"\"" + course_name + "\""  + " abmelden?");
+	 public static void course_singnout(Activity activity, final String refID,final String course_name, final IliOnClickListener listener) {		
+		 String message = "Wollen Sie sich vom Kurs abmelden?";
+		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		   alertDialog.setIcon(R.drawable.warn);
+		   alertDialog.setTitle("Kursabmeldung!");
+		   if(!course_name.equals("") || course_name != null) {
+		    message = "Wollen Sie sich vom Kurs: " + "\"" + course_name + "\"" + " abmelden?";
+		   }
+			alertDialog.setMessage(message);
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
-					//TODO: Kurs abmelden mit REFID
+					
+					listener.onClickLeftCourse(refID, course_name);
 					return;
 				}
 			});
@@ -114,15 +119,19 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_login(Activity activity,String course_name, String refID) {		
-			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-			alertDialog.setIcon(R.drawable.warn);
-			alertDialog.setTitle("Kursanmeldung!");
-			alertDialog.setMessage("Wollen Sie sich zu dem Kurs: " + "\"" + course_name + "\"" + " anmelden?");
+	 public static void course_login(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {		
+		 String message = "Wollen Sie sich am Kurs anmelden?";
+		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		   alertDialog.setIcon(R.drawable.warn);
+		   alertDialog.setTitle("Kursanmeldung!");
+		   if(!course_name.equals("") || course_name != null) {
+		    message = "Wollen Sie sich am Kurs: " + "\"" + course_name + "\"" + " anmelden?";
+		   }
+			alertDialog.setMessage(message);
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
-					//TODO: Anmeldung mit Join Course(refID);
+					listener.onClickJoinCourse(refID, course_name);
 					return;
 				}
 			});
@@ -137,7 +146,35 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
-	 public static void course_password(Activity activity, final String refID, final QROnClickListener listener) {		
+	 public static void course_login_acc(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {	
+		 	String message ="Wollen Sie sich am Kurs anmelden?";
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Kursanmeldung!");
+			if(!course_name.equals("") || course_name != null) {
+				message = "Wollen Sie sich am Kurs: " + "\"" + course_name + "\"" + " anmelden?";
+			}
+			alertDialog.setMessage(message);
+		
+			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					listener.onClickJoinCourse(refID, course_name);
+					return;
+				}
+			});
+			
+			alertDialog.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					
+					return;
+				}
+			});		
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();	
+		}
+	 public static void course_password(Activity activity, final String refID, final IliOnClickListener listener) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Passwort");
@@ -202,7 +239,7 @@ public class MessageBuilder {
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Passwort Falsch!");
-			alertDialog.setMessage("Das eingegebene Passwort ist falsch! Bitte scannen Sie den QRCode erneut.");	
+			alertDialog.setMessage("Das eingegebene Passwort ist falsch!");	
 //			final EditText input = new EditText(activity);
 //			input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 //			alertDialog.setView(input);
@@ -218,6 +255,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
+	 
 	 public static void course_permissondenied(Activity activity, final String refID) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.error);
@@ -235,6 +273,7 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
+	
 	 
 	 public static void download_error(Activity activity, String fileName) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
@@ -253,5 +292,24 @@ public class MessageBuilder {
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
+	 
+	public static void exception_message(Activity activity, String errMsg) {
+		if(activity == null) {
+			activity = MainActivity.instance;
+		}
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setIcon(R.drawable.error);
+		alertDialog.setTitle("Fehler");
+		alertDialog.setMessage(errMsg);
+		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				return;
+			}
+		});
+
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+	}
 	 
 }

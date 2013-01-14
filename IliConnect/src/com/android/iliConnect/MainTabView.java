@@ -247,8 +247,8 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			try {
 				MainActivity.instance.sync(instance, true);
 			} catch (NetworkException e) {
-				// TODO Fehlermeldung anzeigen
-				MainActivity.instance.showToast(e.getMessage());
+				//MainActivity.instance.showToast(e.getMessage());
+				MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 				e.printStackTrace();
 			}
 			return true;

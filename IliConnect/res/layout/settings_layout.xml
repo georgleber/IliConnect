@@ -27,11 +27,13 @@
                         android:summary="Synchronisation nur über WLAN"
                         android:key="checkboxPrefWlanSync" />
                 
+                <!-- 
                 <CheckBoxPreference
                         android:title="@string/Auto_Login"
                         android:defaultValue="false"
                         android:summary="Automatisch einloggen"
                         android:key="checkboxPrefAutologin" />
+                -->
                 
         </PreferenceCategory>
         <PreferenceCategory

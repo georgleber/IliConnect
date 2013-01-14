@@ -13,7 +13,7 @@ import com.android.iliConnect.models.Item;
 public class Schreibtisch extends ListFragment implements Redrawable {
 	public void refreshViews() {
 		getListView().invalidateViews();
-		
+
 		DesktopItemAdapter desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
 		setListAdapter(desktopAdapter);
 	}

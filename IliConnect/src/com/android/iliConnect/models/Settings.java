@@ -11,15 +11,15 @@ public class Settings extends PersistableObject {
 	@Element
 	public boolean sync = true;
 	@Element
-	public int interval = 30;
+	public int interval = 60;
 	@Element
 	public boolean sync_wlanonly = false;
 	@Element
-	public int num_notifications = 0;
+	public int num_notifications = 2;
 	@Element
-	public int level_warning = 0;
+	public int level_warning = 3;
 	@Element
-	public int level_critical = 0;
+	public int level_critical = 1;
 
 	public Settings() {
 

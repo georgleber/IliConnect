@@ -33,6 +33,8 @@ public class NotificationHandler {
 						if (checkSettings) {
 							if (!handler.isNotificationMarked(notification.getRef_id())) {
 								notifications.add(notification);
+							} else {
+								cnt--;
 							}
 						} else {
 							notifications.add(notification);

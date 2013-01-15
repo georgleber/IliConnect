@@ -64,7 +64,7 @@ public class Suche extends ListFragment implements Redrawable {
 			}
 
 			public void afterTextChanged(Editable s) {
-				if(s.length() >= 3) {
+				if(s.length() >= 1) {
 					try {
 						updateResults(s.toString());
 					} catch (NetworkException e) {

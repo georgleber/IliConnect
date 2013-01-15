@@ -39,10 +39,10 @@ public class NotificationWatchThread {
 							int critical = MainActivity.instance.localDataProvider.settings.level_critical;
 
 							ModificationHandler handler = new ModificationHandler();
-							
+
 							ArrayList<Notification> nextNotifications = notifications.Notifications;
 							Collections.sort(nextNotifications, new NotificationComparator(false));
-							
+
 							for (Notification notification : nextNotifications) {
 								if (!handler.isNotificationMarked(notification.getRef_id())) {
 									Date currentDate = new Date(System.currentTimeMillis());
@@ -59,13 +59,15 @@ public class NotificationWatchThread {
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
 										notiBuilder.showNotification(notiDate.getDate());
 
-										MessageBuilder.critical_message(MainTabView.instance, notificationText);
+										String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
+										MessageBuilder.critical_message(MainTabView.instance, messageText);
 									} else if (daysBetween <= warning) {
 										String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
 										notiBuilder.showNotification(notiDate.getDate());
 
-										MessageBuilder.warning_message(MainTabView.instance, notificationText);
+										String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
+										MessageBuilder.warning_message(MainTabView.instance, messageText);
 									}
 								}
 							}

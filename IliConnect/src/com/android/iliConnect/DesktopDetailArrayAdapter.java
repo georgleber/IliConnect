@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,8 +92,6 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		lp.setMargins(20, 30, 0, 0);
-		lp.height = 50;
-		lp.width = 50;
 
 		// ImageButton arrow = new ImageButton(MainActivity.instance);
 		// arrow.setBackgroundResource(R.drawable.arrow);
@@ -139,29 +138,27 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 
 		desktopViews.title.setText(item.getTitle());
 		desktopViews.description.setText(item.getDescription());
-		
-		if(item.getType().equalsIgnoreCase("TST")) {
+
+		if (item.getType().equalsIgnoreCase("TST")) {
 			desktopViews.type.setText("Test");
 		}
-		if(item.getType().equalsIgnoreCase("EXC")) {
+		if (item.getType().equalsIgnoreCase("EXC")) {
 			desktopViews.type.setText("Übung");
 		}
-		if(item.getType().equalsIgnoreCase("FILE")) {
+		if (item.getType().equalsIgnoreCase("FILE")) {
 			desktopViews.type.setText("Datei");
 		}
 
-		
-		if(desktopViews.description.getText().equals("")) {
+		if (desktopViews.description.getText().equals("")) {
 			desktopViews.description.setVisibility(View.GONE);
 		}
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD")) {
 			desktopViews.type.setVisibility(View.GONE);
 		}
-			
+
 		if (item.getClass().equals(DesktopItem.class) && !((DesktopItem) item).getDate().equals("")) {
 			desktopViews.date.setText(((DesktopItem) item).getDate());
-		}
-		else {
+		} else {
 			desktopViews.date.setVisibility(View.GONE);
 		}
 
@@ -203,8 +200,8 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 				} else if (parentItem.getType().equalsIgnoreCase("TST") || parentItem.getType().equalsIgnoreCase("EXC")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
 					String iliasUrl = url_src + "login.php";
-					//String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
-					
+					// String testUrl = url_src + "ilias.php?baseClass=ilObjTestGUI&ref_id=" + s + "&cmd=infoScreen";
+
 					// Ilias Im Bowser aufrufen
 					MainActivity.instance.showBrowserContent(iliasUrl);
 
@@ -223,12 +220,12 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 						// TODO Fehlermeldung einbauen
 						e.printStackTrace();
 					}
-				} 
+				}
 			}
 		});
 
 		toggleVisibility(item, v);
-
+		
 		return v;
 
 	}
@@ -239,10 +236,12 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		if (childItem.Item != null)
 			childItems = childItem.Item;
 
-		for (Item item : childItems)
-			if ((vSub = v.findViewWithTag(item.getRef_id())).getVisibility() == View.VISIBLE)
+		for (Item item : childItems) {
+			if ((vSub = v.findViewWithTag(item.getRef_id())).getVisibility() == View.VISIBLE) {
 				vSub.setVisibility(View.GONE);
-			else
+			} else {
 				vSub.setVisibility(View.VISIBLE);
+			}
+		}
 	}
 }

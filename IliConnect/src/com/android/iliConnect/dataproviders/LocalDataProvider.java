@@ -4,17 +4,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.xmlpull.v1.XmlPullParser;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.XmlResourceParser;
 import android.net.Uri;
 import android.os.Environment;
@@ -24,6 +20,7 @@ import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.R;
+import com.android.iliConnect.SchreibtischDetailActivity;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.Current;
 import com.android.iliConnect.models.Desktop;
@@ -149,7 +146,7 @@ public class LocalDataProvider {
 
 		} catch (Exception e) {
 
-			//MainActivity.instance.showToast(e.getMessage());
+			// MainActivity.instance.showToast(e.getMessage());
 			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 			MainActivity.instance.logout();
 
@@ -161,22 +158,20 @@ public class LocalDataProvider {
 	}
 
 	public void openFileOrDownload(Item item) {
-
 		// ProgessDialog für Downlaod definieren
-		ProgressDialog progressDialog = new ProgressDialog(MainTabView.instance);
+		ProgressDialog progressDialog = new ProgressDialog(SchreibtischDetailActivity.instance);
 		progressDialog.setTitle("Download");
 		progressDialog.setMessage("Bitte warten...");
 
-
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-		
-		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id; 
+
+		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id;
 		// IliConnect-Ordner erstellen, falls noch nicht vorhanden
 		File f = new File(dirPath);
 		if (!f.exists() && !f.isDirectory()) {
 			f.mkdirs();
 		}
-		
+
 		String filePath = dirPath + "/" + item.getTitle();
 		File file = new File(filePath);
 
@@ -208,7 +203,7 @@ public class LocalDataProvider {
 			intent.setDataAndType(Uri.fromFile(file), "application/*");
 
 			MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
-			
+
 		} else {
 			MessageBuilder.download_error(MainTabView.instance, item.getTitle());
 		}

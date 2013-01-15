@@ -33,7 +33,7 @@ public class LocalCourseProvider {
 			String result = courseProv.get();
 			
 			if(result == null) {
-				return null;
+				throw new NetworkException("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.");
 			}
 
 			if (result.contains("JOINED")) {
@@ -87,6 +87,10 @@ public class LocalCourseProvider {
 			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des
 			// asnyc. Aufrufs gewartet.
 			String result = courseProv.get();
+			
+			if(result == null) {
+				throw new NetworkException("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.");
+			}
 
 			if (result.contains("not a course object")) {
 				throw new JoinCourseException("Der Kurs ist nicht vorhanden");

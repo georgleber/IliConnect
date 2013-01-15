@@ -336,7 +336,7 @@ public class MessageBuilder {
 		alertDialog.setIcon(R.drawable.error);
 		alertDialog.setTitle("Fehler");
 		alertDialog.setMessage(errMsg);
-		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
 				return;
@@ -348,6 +348,14 @@ public class MessageBuilder {
 	}
 
 	public static void sync_exception(Activity activity, String errMsg, final IliOnClickListener listener) {
+		/* 	
+		 * Änderungen von Gregor
+		 * Defaultverhalten beibehalten,
+		 * jedoch um Titel ergänzt
+		*/
+		
+		sync_exception( activity,  "Synchronisation fehlgeschlagen", errMsg, listener);
+		/*
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
@@ -355,7 +363,28 @@ public class MessageBuilder {
 		alertDialog.setIcon(R.drawable.error);
 		alertDialog.setTitle("Synchronisation fehlgeschlagen");
 		alertDialog.setMessage(errMsg);
-		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				listener.onClickMessageBox();
+				return;
+			}
+		});
+
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+		*/
+	}
+	
+	public static void sync_exception(Activity activity, String errTtl, String errMsg, final IliOnClickListener listener) {
+		if (activity == null) {
+			activity = MainActivity.instance;
+		}
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setIcon(R.drawable.error);
+		alertDialog.setTitle(errTtl);
+		alertDialog.setMessage(errMsg);
+		alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
 				listener.onClickMessageBox();

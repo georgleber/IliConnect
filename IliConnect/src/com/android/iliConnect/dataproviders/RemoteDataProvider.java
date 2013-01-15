@@ -143,6 +143,8 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 
 		if (e != null) {
 			String errMsg = null;
+			String errTtl = "Synchronisation fehlgeschlagen";
+			
 			if (e instanceof UnknownHostException || e instanceof HttpException) {
 				ConnectivityManager connManager = (ConnectivityManager) MainActivity.instance.getSystemService(CONNECTIVITY_SERVICE);
 				NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -159,6 +161,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 					doLogout = true;
 					errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
 							" die Serveradresse und versuchen Sie es erneut.";
+					errTtl = "Verbindung fehlgeschlagen";
 				}
 			} else if (e instanceof AuthException) {
 				// Logout soll nach Bestätigung durchgeführt werden
@@ -170,7 +173,8 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 			}
 
 			if (errMsg != null) {
-				MessageBuilder.sync_exception(MainTabView.instance, errMsg, (IliOnClickListener) instance);
+				//TODO: connection_failed
+				MessageBuilder.sync_exception(MainTabView.instance, errTtl, errMsg, (IliOnClickListener) instance);
 			} 
 		}
 		else {

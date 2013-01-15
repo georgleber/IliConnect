@@ -12,6 +12,7 @@ public class MessageBuilder {
 	
 	 public static void course_alreadysignedin(Activity activity) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Bereits im Kurs angemeldet");
 			alertDialog.setMessage("Ein erneuter Beitritt zum Kurs ist nicht möglich");
@@ -29,6 +30,7 @@ public class MessageBuilder {
 	 public static void course_singnout(Activity activity, final String refID,final String course_name, final IliOnClickListener listener) {		
 		 String message = "Wollen Sie sich vom Kurs abmelden?";
 		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		   alertDialog.setCancelable(false);
 		   alertDialog.setIcon(R.drawable.warn);
 		   alertDialog.setTitle("Kursabmeldung!");
 		   if(!course_name.equals("") || course_name != null) {
@@ -55,6 +57,7 @@ public class MessageBuilder {
 		}
 	 public static void login_false(Activity activity) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Logindaten falsch");
 			alertDialog.setMessage("Ihr Benutzername oder Kennwort ist falsch!");
@@ -71,6 +74,7 @@ public class MessageBuilder {
 		}
 	 public static void no_folder(Activity activity) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Ordner nicht mehr verfügbar");
 			alertDialog.setMessage("Der aktuelle Ordner ist nicht mehr verfügbar.");
@@ -87,6 +91,7 @@ public class MessageBuilder {
 		}
 	 public static void QR_error(Activity activity) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("QR Code nicht erkannt!");
 			alertDialog.setMessage("Der eingescannte QR-Code ist ungültig");
@@ -103,6 +108,7 @@ public class MessageBuilder {
 		}
 	 public static void connection_failed(Activity activity) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Verbindung fehlgeschlagen");
 			alertDialog.setMessage("Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie Ihre Internetverbindung und die Serveradresse und versuchen Sie es erneut!");
@@ -120,6 +126,7 @@ public class MessageBuilder {
 	 public static void course_login(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {		
 		 String message = "Wollen Sie sich wirklich am Kurs anmelden?";
 		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		   alertDialog.setCancelable(false);
 		   alertDialog.setIcon(R.drawable.warn);
 		   alertDialog.setTitle("Kursanmeldung!");
 		   if(!course_name.equals("") && course_name != null) {
@@ -127,10 +134,11 @@ public class MessageBuilder {
 		   }
 			alertDialog.setMessage(message);
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-
+				
 				public void onClick(DialogInterface dialog, int which) {
 					listener.onClickJoinCourse(refID, course_name);
 					return;
+					
 				}
 			});
 			alertDialog.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
@@ -147,13 +155,13 @@ public class MessageBuilder {
 	 public static void course_login_acc(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {	
 		 	String message ="Wollen Sie sich wirklich am Kurs anmelden?";
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Kursanmeldung");
 			if(!course_name.equals("") || course_name != null) {
 				message = "Wollen Sie sich wirklich am Kurs " + "\"" + course_name + "\"" + " anmelden?";
 			}
 			alertDialog.setMessage(message);
-		
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
@@ -174,6 +182,7 @@ public class MessageBuilder {
 		}
 	 public static void course_password(Activity activity, final String refID, final IliOnClickListener listener) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Passwort");
 			alertDialog.setMessage("Bitte geben Sie ein Passwort für diesen Kurs ein!");
@@ -201,6 +210,7 @@ public class MessageBuilder {
 		}
 	 public static void course_register(Activity activity, final String refID) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Anmeldung");
 			alertDialog.setMessage("Sie wurden Erfolgreich angemeldet!");			
@@ -212,13 +222,13 @@ public class MessageBuilder {
 				}
 			});
 			
-			
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
 	 
 	 public static void course_join_request_send(Activity activity) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Anmeldung");
 			alertDialog.setMessage("Ihre Anmeldung am Kurs wurde versendet. Ihrem Beitritt muss jedoch noch zugestimmt werden.");			
@@ -230,13 +240,13 @@ public class MessageBuilder {
 				}
 			});
 			
-			
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
 	 
 	 public static void course_waiting_for_confirm(Activity activity) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Anmeldung");
 			alertDialog.setMessage("Sie haben bereits einen Aufnahmeantrag gestellt! Bitte warten Sie auf die Bestätigung.");			
@@ -248,13 +258,13 @@ public class MessageBuilder {
 				}
 			});
 			
-			
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
 	 
 	 public static void course_notexist(Activity activity, final String refID) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Kurs nicht vorhanden");
 			alertDialog.setMessage("Der gesuchte Kurs ist nicht vorhanden!");			
@@ -266,12 +276,12 @@ public class MessageBuilder {
 				}
 			});
 			
-			
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
 	 public static void course_passwordfalse(Activity activity, final String refID) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Passwort Falsch!");
 			alertDialog.setMessage("Das eingegebene Passwort ist falsch!");	
@@ -286,13 +296,13 @@ public class MessageBuilder {
 				}
 			});
 			
-			
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
 	 
 	 public static void course_permissondenied(Activity activity, final String refID) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Zugriff verweigert!");
 			alertDialog.setMessage("Die Anmeldung ist nicht möglich!");			
@@ -304,7 +314,6 @@ public class MessageBuilder {
 				}
 			});
 			
-			
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
@@ -312,6 +321,7 @@ public class MessageBuilder {
 	 
 	 public static void download_error(Activity activity, String fileName) {		
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Download fehlgeschlagen");
 			alertDialog.setMessage("Die Datei " + fileName + " konnte nicht heruntergeladen werden");			
@@ -323,7 +333,6 @@ public class MessageBuilder {
 				}
 			});
 			
-			
 			AlertDialog alertDialog1 = alertDialog.create();
 			alertDialog1.show();			
 		}
@@ -333,6 +342,7 @@ public class MessageBuilder {
 			activity = MainActivity.instance;
 		}
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setCancelable(false);
 		alertDialog.setIcon(R.drawable.error);
 		alertDialog.setTitle("Fehler");
 		alertDialog.setMessage(errMsg);
@@ -381,6 +391,7 @@ public class MessageBuilder {
 			activity = MainActivity.instance;
 		}
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setCancelable(false);
 		alertDialog.setIcon(R.drawable.error);
 		alertDialog.setTitle(errTtl);
 		alertDialog.setMessage(errMsg);
@@ -400,8 +411,8 @@ public class MessageBuilder {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
-
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setCancelable(false);
 		alertDialog.setIcon(R.drawable.warn);
 		alertDialog.setTitle("Warnung");
 		alertDialog.setMessage(text);
@@ -420,8 +431,8 @@ public class MessageBuilder {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
-
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setCancelable(false);
 		alertDialog.setIcon(R.drawable.error);
 		alertDialog.setTitle("Kritisch");
 		alertDialog.setMessage(text);

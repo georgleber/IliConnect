@@ -82,23 +82,22 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 	private void joinCourse(String ref_id, String password) {
 		LocalCourseProvider courseProv = new LocalCourseProvider();
 		try {
-			try {
-				String result = courseProv.joinCourse(ref_id, password);
-				if(result != null && result.contains("PASSWORD_NEEDED")) {
-					// Passwortabfrage einblenden
-					MessageBuilder.course_password(MainTabView.instance, ref_id, this);
-				}
-			} catch (NetworkException e) {
-				// TODO Fehlermeldung anzeigen!!
-				e.printStackTrace();
+
+			String result = courseProv.joinCourse(ref_id, password);
+			if (result != null && result.contains("PASSWORD_NEEDED")) {
+				// Passwortabfrage einblenden
+				MessageBuilder.course_password(MainTabView.instance, ref_id, this);
 			}
+
 		} catch (JoinCourseException e) {
-			e.printStackTrace();
+			MessageBuilder.course_alreadysignedin(MainTabView.instance);
 		} catch (CoursePasswordException e) {
 			MessageBuilder.course_password(MainTabView.instance, ref_id, this);
 			e.printStackTrace();
+		} catch (NetworkException e) {
+			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 		}
-		
+
 	}
 
 

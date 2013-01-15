@@ -16,6 +16,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -145,7 +146,8 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 			String errMsg = null;
 			String errTtl = "Synchronisation fehlgeschlagen";
 			
-			if (e instanceof UnknownHostException || e instanceof HttpException) {
+			// Exceptions angepasst um DNS Fehler abzufangen.
+			if (e instanceof UnknownHostException || e instanceof UnknownHostException || e instanceof NoHttpResponseException) {
 				ConnectivityManager connManager = (ConnectivityManager) MainActivity.instance.getSystemService(CONNECTIVITY_SERVICE);
 				NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 				NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);

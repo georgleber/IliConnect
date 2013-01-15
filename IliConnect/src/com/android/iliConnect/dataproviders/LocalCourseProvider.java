@@ -31,6 +31,10 @@ public class LocalCourseProvider {
 			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des
 			// asnyc. Aufrufs gewartet.
 			String result = courseProv.get();
+			
+			if(result == null) {
+				return null;
+			}
 
 			if (result.contains("JOINED")) {
 				if (MainActivity.instance.localDataProvider.settings.sync) {

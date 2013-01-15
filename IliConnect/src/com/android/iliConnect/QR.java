@@ -104,8 +104,9 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 				e.printStackTrace();
 			}
 			
-			if(result != null && result.contains("JOINED")) {
-				//MessageBuilder.course_login_acc(MainTabView.instance, "", ref_id);
+			if(result == null) {
+				MessageBuilder.exception_message(MainTabView.instance, "Es ist ein Fehler bei der Anmeldung " +
+						"augetreten. Bitte versuchen Sie es erneut");
 			}
 			// Falls Passwort für Anmeldung benötigt wird, Abfrage einblenden
 			if(result != null && result.contains("PASSWORD_NEEDED")) {

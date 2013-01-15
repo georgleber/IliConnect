@@ -118,12 +118,12 @@ public class MessageBuilder {
 			alertDialog1.show();			
 		}
 	 public static void course_login(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {		
-		 String message = "Wollen Sie sich am Kurs anmelden?";
+		 String message = "Wollen Sie sich wirklich am Kurs anmelden?";
 		   AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 		   alertDialog.setIcon(R.drawable.warn);
 		   alertDialog.setTitle("Kursanmeldung!");
-		   if(!course_name.equals("") || course_name != null) {
-		    message = "Wollen Sie sich am Kurs: " + "\"" + course_name + "\"" + " anmelden?";
+		   if(!course_name.equals("") && course_name != null) {
+		    message = "Wollen Sie sich wirklich am Kurs " + "\"" + course_name + "\"" + " anmelden?";
 		   }
 			alertDialog.setMessage(message);
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
@@ -145,12 +145,12 @@ public class MessageBuilder {
 			alertDialog1.show();			
 		}
 	 public static void course_login_acc(Activity activity,final String course_name, final String refID, final IliOnClickListener listener) {	
-		 	String message ="Wollen Sie sich am Kurs anmelden?";
+		 	String message ="Wollen Sie sich wirklich am Kurs anmelden?";
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Kursanmeldung");
 			if(!course_name.equals("") || course_name != null) {
-				message = "Wollen Sie sich am Kurs " + "\"" + course_name + "\"" + " anmelden?";
+				message = "Wollen Sie sich wirklich am Kurs " + "\"" + course_name + "\"" + " anmelden?";
 			}
 			alertDialog.setMessage(message);
 		
@@ -295,7 +295,7 @@ public class MessageBuilder {
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setIcon(R.drawable.error);
 			alertDialog.setTitle("Zugriff verweigert!");
-			alertDialog.setMessage("Die Anmeldung ist nicht Möglich!");			
+			alertDialog.setMessage("Die Anmeldung ist nicht möglich!");			
 			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {					

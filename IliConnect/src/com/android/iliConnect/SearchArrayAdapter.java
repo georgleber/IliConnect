@@ -3,6 +3,7 @@ package com.android.iliConnect;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,15 +53,17 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 		searchView.title.setText(item.getTitle());
 		searchView.description.setText(item.getDescription());
 		searchView.owner.setText(item.getOwner());
-		
+		searchView.owner.setTypeface(null, Typeface.BOLD);
+
 		// Falls Description leer ist, keine Leerzeile anzeigen
 		if(searchView.description.getText().equals("")) {
-			v.findViewById(R.id.itemDescription).setVisibility(View.GONE);
+			v.findViewById(R.id.itemDescription).setVisibility(View.INVISIBLE);
 		}
-		
+		/*
 		if(searchView.owner.getText().equals("")) {
 			v.findViewById(R.id.itemOwner).setVisibility(View.GONE);
 		}
+		*/
 		
 		// Date und Type in der Ergebnislist ausblenden
 		v.findViewById(R.id.itemDate).setVisibility(View.GONE);

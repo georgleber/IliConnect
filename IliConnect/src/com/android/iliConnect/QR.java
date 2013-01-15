@@ -21,6 +21,12 @@ import android.widget.Toast;
 import com.android.iliConnect.MessageBuilder;
 
 public class QR extends Fragment implements Redrawable, IliOnClickListener {
+	
+	private Object insancte = this;
+	// Attribute zum Speichern der Daten aus gescanntem QR
+	private String courseName = null;
+	private String courseId = null;
+	private String coursePassword = null;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container == null) {
@@ -49,11 +55,9 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 				// intent.putExtra("SCAN_FORMATS", "EAN13");
 				// intent.putExtra("SCAN_FORMATS", "EAN8");
 				intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+				
 				// Launch
 				startActivityForResult(intent, REQUEST_SCAN);
-
-				// joinCourse("49", null);
-				// leaveCourse("49");
 			}
 		});
 
@@ -66,17 +70,29 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
-				if (contents.matches("[0-9]+")) {
-					MessageBuilder.course_login(MainTabView.instance, "", contents, this);
+				// Format: Kursname;ref_id;Passwort (falls vorhanden)
+				String qrString[] = contents.split(";");
+				
+				int count = qrString.length;
+				// Falls qrString weniger als 2 Elemente hat ist er ungültig
+				if(count < 2) {
+					MessageBuilder.QR_error(MainTabView.instance);
+					return;
+				}
+				courseName = qrString[0];
+				courseId = qrString[1];
+				
+				// Password evtl. nicht angegeben, dann nur 2 Elemente in qrString
+				if(count == 3) {
+					coursePassword = qrString[2];
+				}
+
+				// ref_id darf nur aus Zahlen bestehen
+				if (courseId.matches("[0-9]+") && courseName.matches("[a-zA-z][a-zA-Z0-9]*")) {
+					MessageBuilder.course_login(MainTabView.instance, courseName, courseId, (IliOnClickListener) insancte);
 				} else {
 					MessageBuilder.QR_error(MainTabView.instance);
 				}
-
-				// Handle successful scan
-
-				// Zunaechst Messagebox anzeigen, ob wirklich beitreten will
-
-				// Bei Best��tigung joinCourse() aufrufen
 			} else if (resultCode == 0) {
 				// Handle cancel
 			}
@@ -88,14 +104,11 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 		try {
 			String result = null;
 			result = local.joinCourse(ref_id, crs_pw);
-
+			
 			// Falls Passwort für Anmeldung benötigt wird, Abfrage einblenden
 			if (result != null && result.contains("PASSWORD_NEEDED")) {
 				MessageBuilder.course_password(MainTabView.instance, ref_id, this);
-				// Passwortabfrage einblenden
-
 			}
-			// local.leaveCourse("49");
 		} catch (JoinCourseException e) {
 			MessageBuilder.course_alreadysignedin(MainTabView.instance);
 
@@ -105,38 +118,15 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 		} catch (NetworkException e) {
 			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 		}
-
 	}
-
-	// private void leaveCourse(String ref_id) {
-	// LocalCourseProvider local = new LocalCourseProvider();
-	// try {
-	// String result = null;
-	// try {
-	// result = this.local.leaveCourse(ref_id);
-	// } catch (NetworkException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// if(result != null && result.contains("LEFT")) {
-	// this.showAlert("Sie wurde erfolgreich abgemeldet");
-	// }
-	// } catch (JoinCourseException e) {
-	// this.showAlert(e.getMessage());
-	// e.printStackTrace();
-	// }
-	// }
 
 	public void refreshViews() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void onClickCoursePassword(String refID, String password) {
-		// TODO Auto-generated method stub
+		// Hier wird das Passwort aus der Passwortabfrage verwendet.
 		this.joinCourse(refID, password);
-
 	}
 
 	public void onClickLeftCourse(String refID, String courseName) {
@@ -145,14 +135,12 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 
 	public void onClickJoinCourse(String refID, String courseName) {
 		// TODO: Anmeldung mit Join Course(refID);
-
-		this.joinCourse(refID, null);
+		this.joinCourse(refID, this.coursePassword);
 
 	}
 
 	public void onClickMessageBox() {
 		// TODO Auto-generated method stub
-
 	}
 
 }

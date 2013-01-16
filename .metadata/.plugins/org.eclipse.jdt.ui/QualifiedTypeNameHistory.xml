@@ -5,15 +5,18 @@
 <fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
 <fullyQualifiedTypeName name="android.widget.TextView"/>
 <fullyQualifiedTypeName name="android.graphics.Typeface"/>
-<fullyQualifiedTypeName name="com.android.iliConnect.R.id"/>
 <fullyQualifiedTypeName name="com.android.iliConnect.R.layout"/>
-<fullyQualifiedTypeName name="com.android.iliConnect.R.drawable"/>
 <fullyQualifiedTypeName name="android.content.Context"/>
-<fullyQualifiedTypeName name="android.R"/>
-<fullyQualifiedTypeName name="android.R.drawable"/>
 <fullyQualifiedTypeName name="android.widget.EditText"/>
 <fullyQualifiedTypeName name="android.text.InputType"/>
 <fullyQualifiedTypeName name="android.os.AsyncTask"/>
 <fullyQualifiedTypeName name="com.android.iliConnect.MessageBuilder"/>
 <fullyQualifiedTypeName name="com.android.iliConnect.message.QROnClickListener"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.MainActivity"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.SchreibtischDetailActivity"/>
+<fullyQualifiedTypeName name="android.R.drawable"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.R.drawable"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.R.id"/>
+<fullyQualifiedTypeName name="android.R"/>
+<fullyQualifiedTypeName name="android.R.id"/>
 </qualifiedTypeNameHistroy>

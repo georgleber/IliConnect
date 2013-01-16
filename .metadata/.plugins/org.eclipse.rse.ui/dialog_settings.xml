@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<section name="RemoteSearchPage">
-		<item value="false" key="stringRegex"/>
+	<section name="RemoteSearchPage.data3">
+		<item value="*" key="fileNames"/>
 		<item value="true" key="includeSubfolders"/>
-		<item value="3" key="dataSize"/>
+		<item value="false" key="stringRegex"/>
+		<item value="warning_message" key="searchString"/>
+		<item value="true" key="fileNameCaseSensitive"/>
+		<item value="false" key="caseSensitive"/>
+		<item value="E:\Google Drive\FH-Aachen\SWE Projekt" key="folderName"/>
+		<item value="false" key="fileNameRegex"/>
+		<item value="false" key="includeArchives"/>
+		<item value="Local" key="connectionName"/>
+		<item value="Pierre-PC" key="profileName"/>
+	</section>
+	<section name="RemoteSearchPage">
+		<item value="true" key="includeSubfolders"/>
+		<item value="false" key="stringRegex"/>
+		<item value="4" key="dataSize"/>
 		<item value="true" key="fileNameCaseSensitive"/>
 		<item value="false" key="caseSensitive"/>
 		<item value="false" key="fileNameRegex"/>
@@ -11,41 +24,41 @@
 	</section>
 	<section name="RemoteSearchPage.data0">
 		<item value="*" key="fileNames"/>
-		<item value="false" key="stringRegex"/>
 		<item value="false" key="includeSubfolders"/>
+		<item value="false" key="stringRegex"/>
 		<item value="Barcode Scanner" key="searchString"/>
 		<item value="true" key="fileNameCaseSensitive"/>
 		<item value="false" key="caseSensitive"/>
-		<item value="false" key="fileNameRegex"/>
 		<item value="E:\Google Drive\FH-Aachen\SWE Projekt" key="folderName"/>
-		<item value="Pierre-PC" key="profileName"/>
-		<item value="Local" key="connectionName"/>
+		<item value="false" key="fileNameRegex"/>
 		<item value="false" key="includeArchives"/>
+		<item value="Local" key="connectionName"/>
+		<item value="Pierre-PC" key="profileName"/>
 	</section>
 	<section name="RemoteSearchPage.data1">
 		<item value="*" key="fileNames"/>
-		<item value="false" key="includeSubfolders"/>
 		<item value="false" key="stringRegex"/>
+		<item value="false" key="includeSubfolders"/>
 		<item value="alertili" key="searchString"/>
 		<item value="true" key="fileNameCaseSensitive"/>
 		<item value="false" key="caseSensitive"/>
-		<item value="E:\Google Drive\FH-Aachen\SWE Projekt" key="folderName"/>
 		<item value="false" key="fileNameRegex"/>
-		<item value="false" key="includeArchives"/>
-		<item value="Local" key="connectionName"/>
+		<item value="E:\Google Drive\FH-Aachen\SWE Projekt" key="folderName"/>
 		<item value="Pierre-PC" key="profileName"/>
+		<item value="Local" key="connectionName"/>
+		<item value="false" key="includeArchives"/>
 	</section>
 	<section name="RemoteSearchPage.data2">
 		<item value="*" key="fileNames"/>
-		<item value="true" key="includeSubfolders"/>
 		<item value="false" key="stringRegex"/>
+		<item value="true" key="includeSubfolders"/>
 		<item value="AlertIli" key="searchString"/>
 		<item value="true" key="fileNameCaseSensitive"/>
 		<item value="false" key="caseSensitive"/>
-		<item value="E:\Google Drive\FH-Aachen\SWE Projekt" key="folderName"/>
 		<item value="false" key="fileNameRegex"/>
-		<item value="false" key="includeArchives"/>
-		<item value="Local" key="connectionName"/>
+		<item value="E:\Google Drive\FH-Aachen\SWE Projekt" key="folderName"/>
 		<item value="Pierre-PC" key="profileName"/>
+		<item value="Local" key="connectionName"/>
+		<item value="false" key="includeArchives"/>
 	</section>
 </section>

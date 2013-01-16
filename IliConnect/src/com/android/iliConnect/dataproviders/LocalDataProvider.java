@@ -24,6 +24,7 @@ import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.R;
+import com.android.iliConnect.SchreibtischDetailActivity;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.Current;
 import com.android.iliConnect.models.Desktop;
@@ -163,9 +164,10 @@ public class LocalDataProvider {
 	public void openFileOrDownload(Item item) {
 
 		// ProgessDialog für Downlaod definieren
-		ProgressDialog progressDialog = new ProgressDialog(MainTabView.instance);
+		ProgressDialog progressDialog = new ProgressDialog(SchreibtischDetailActivity.instance);
 		progressDialog.setTitle("Download");
 		progressDialog.setMessage("Bitte warten...");
+		
 
 
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -210,7 +212,7 @@ public class LocalDataProvider {
 			MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
 			
 		} else {
-			MessageBuilder.download_error(MainTabView.instance, item.getTitle());
+			MessageBuilder.download_error(SchreibtischDetailActivity.instance, item.getTitle());
 		}
 
 	}

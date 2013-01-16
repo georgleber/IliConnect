@@ -50,8 +50,9 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 
 		selectedCourse = item.ref_id;
 		selectedCourseName = item.title;
-		ListAdapter adapter = new DesktopDetailArrayAdapter(getApplicationContext(), R.id.desktop_content, item.getItems());
-		final ListView lv = (ListView) findViewById(R.id.desktop_content);
+		ListAdapter adapter = new DesktopDetailArrayAdapter(getApplicationContext(), R.layout.black_list_item, item.getItems());
+		final ListView lv = (ListView) findViewById(android.R.id.list);
+		lv.setSelector(R.drawable.list_selector);
 		lv.setAdapter(adapter);
 	}
 
@@ -132,7 +133,7 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 					toggleVisibility(parentItem, v);
 				} else if (parentItem.getType().equalsIgnoreCase("FOLD")) {
 					toggleVisibility(parentItem, v);
-				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
+				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {					
 					MainActivity.instance.localDataProvider.openFileOrDownload(item);
 				} else if (parentItem.getType().equalsIgnoreCase("TST")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;

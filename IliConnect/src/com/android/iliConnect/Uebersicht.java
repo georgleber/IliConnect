@@ -29,6 +29,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 		List<Notification> items = handler.loadNotifications(true);
 		lv1 = (ListView) v.findViewById(R.id.listNotifications);
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
+
 		lv1.setAdapter(noteAdapter);
 		
 		lv2 =(ListView) v.findViewById(R.id.listViewNewFiles);

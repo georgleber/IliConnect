@@ -163,6 +163,11 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		if (item.getType().equalsIgnoreCase("FOLD")) {
 			desktopViews.type.setText("Ordner");
 		}
+		
+		if(item.changed) {
+			String text = (String) desktopViews.type.getText();
+			desktopViews.type.setText(text + " 'Inhalt geändert'");
+		}
 
 		desktopViews.type.setTypeface(null, Typeface.BOLD);
 

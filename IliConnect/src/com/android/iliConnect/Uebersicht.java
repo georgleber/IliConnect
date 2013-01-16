@@ -28,8 +28,13 @@ public class Uebersicht extends Fragment implements Redrawable {
 		
 		List<Notification> items = handler.loadNotifications(true);
 		lv1 = (ListView) v.findViewById(R.id.listNotifications);
+		
+		if(items.size() == 0) {
+			Notification empty = new Notification();
+			empty.title = "Kein Termin vorhanden!";
+			items.add(empty);
+		}
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-
 		lv1.setAdapter(noteAdapter);
 		
 		lv2 =(ListView) v.findViewById(R.id.listViewNewFiles);
@@ -62,6 +67,11 @@ public class Uebersicht extends Fragment implements Redrawable {
 		
 		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
 		List<Notification> items = handler.loadNotifications(true);
+		if(items.size() == 0) {
+			Notification empty = new Notification();
+			empty.title = "Kein Termin vorhanden!";
+			items.add(empty);
+		}
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
 		lv1.setAdapter(noteAdapter);
 		lv2.setAdapter(fileAdapter);

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="25dp"
         android:background="@color/darkmint"
         android:paddingLeft="5dp"
@@ -17,16 +17,15 @@
 
     <ListView
         android:id="@+id/listNotifications"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:divider="@color/darkmint"
-        android:dividerHeight="1dp"
-        />
+        android:dividerHeight="1dp" />
 
     <TextView
         android:id="@+id/textNewFiles"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="25dp"
         android:background="@color/darkmint"
         android:paddingLeft="5dp"
@@ -35,13 +34,10 @@
 
     <ListView
         android:id="@+id/listViewNewFiles"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:divider="@color/darkmint"
-        android:dividerHeight="1dp"
-        />
-
-    
+        android:dividerHeight="1dp" />
 
 </LinearLayout>

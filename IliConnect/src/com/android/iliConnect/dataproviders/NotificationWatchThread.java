@@ -57,14 +57,14 @@ public class NotificationWatchThread {
 										String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
-										notiBuilder.showNotification(notiDate.getDate());
+										notiBuilder.showNotification();
 
 										String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
 										MessageBuilder.critical_message(MainTabView.instance, messageText);
 									} else if (daysBetween <= warning) {
 										String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
-										notiBuilder.showNotification(notiDate.getDate());
+										notiBuilder.showNotification();
 
 										String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
 										MessageBuilder.warning_message(MainTabView.instance, messageText);

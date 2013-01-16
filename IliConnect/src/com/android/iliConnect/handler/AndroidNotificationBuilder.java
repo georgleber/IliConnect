@@ -30,7 +30,7 @@ public class AndroidNotificationBuilder {
 		this.status = status;
 	}
 
-	public void showNotification(int notificationId) {
+	public void showNotification() {
 		Intent intent = new Intent(MainActivity.instance, MainTabView.class);
 		PendingIntent pIntent = PendingIntent.getActivity(MainActivity.instance, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -55,5 +55,10 @@ public class AndroidNotificationBuilder {
 
 		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.notify(0, notification);
+	}
+
+	public static void cancelNotification() {
+		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
+		notificationManager.cancel(0);
 	}
 }

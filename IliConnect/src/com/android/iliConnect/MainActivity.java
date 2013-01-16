@@ -20,7 +20,7 @@ import com.android.iliConnect.dataproviders.DataDownloadThread;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.NotificationWatchThread;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
-
+import com.android.iliConnect.handler.AndroidNotificationBuilder;
 
 public class MainActivity extends Activity {
 
@@ -40,7 +40,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-	
 		currentActivity = this;
 
 		instance = this;
@@ -127,7 +126,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void sync(Context context, boolean manual) throws NetworkException {
-		
+
 		boolean wlanOnly = this.localDataProvider.settings.sync_wlanonly;
 
 		// wenn Context null ist, keine Sync-Meldung anzeigen
@@ -185,11 +184,18 @@ public class MainActivity extends Activity {
 		localDataProvider.remoteData.delete();
 
 		remoteDataProvider.cancel(true);
+		AndroidNotificationBuilder.cancelNotification();
+
 		LocalDataProvider.isAvaiable = false;
 
 		if (watchThread.doAsynchronousTask != null) {
 			watchThread.doAsynchronousTask.cancel();
 			watchThread.doAsynchronousTask = null;
+		}
+
+		if (notificationThread.doAsynchronousTask != null) {
+			notificationThread.doAsynchronousTask.cancel();
+			notificationThread.doAsynchronousTask = null;
 		}
 
 	}

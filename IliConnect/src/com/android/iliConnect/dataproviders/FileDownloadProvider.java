@@ -34,6 +34,10 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 		this.progressDialog = progressDialog;
 		
 	}
+	
+	public FileDownloadProvider() {
+		
+	}
 
 	@Override
 	protected String doInBackground(String... sUrl) {
@@ -103,7 +107,9 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		progressDialog.dismiss();
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 		isRunning = false;
 		synchronized (MainActivity.syncObject) {
 			MainActivity.syncObject.notifyAll();
@@ -114,7 +120,9 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 	@Override
 	protected void onPreExecute() {
 		isRunning = true;
-		progressDialog.show();
+		if (progressDialog != null) {
+			progressDialog.show();
+		}
 		super.onPreExecute();
 
 	}
@@ -122,7 +130,9 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 	@Override
 	protected void onProgressUpdate(Integer... progress) {
 		super.onProgressUpdate(progress);
-		progressDialog.setProgress(progress[0]);
+		if (progressDialog != null) {
+			progressDialog.setProgress(progress[0]);
+		}
 	}
 
 }

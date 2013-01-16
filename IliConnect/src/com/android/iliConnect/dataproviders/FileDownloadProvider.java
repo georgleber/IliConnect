@@ -1,18 +1,15 @@
 package com.android.iliConnect.dataproviders;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -21,18 +18,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import com.android.iliConnect.MainActivity;
-import com.android.iliConnect.models.CourseData;
-import com.android.iliConnect.ssl.HttpsClient;
-
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.os.Environment;
+
+import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.ssl.HttpsClient;
 
 public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
-	
+
 	ProgressDialog progressDialog;
-	
+
 	public FileDownloadProvider(ProgressDialog progressDialog) {
 		this.progressDialog = progressDialog;
 	}
@@ -45,10 +40,10 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 			String filePath = sUrl[1];
 			// Creating HTTP client
 			HttpClient httpClient = new DefaultHttpClient();
-			
+
 			// mache aus http einen httpsClient
 			HttpClient httpsClient = HttpsClient.createHttpsClient(httpClient);
-		
+
 			// erst Post gegenüber Login durchführen
 			HttpPost post = new HttpPost(MainActivity.instance.localDataProvider.auth.url_src + "login.php");
 
@@ -70,19 +65,30 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 			InputStream in = entity.getContent();
 
 			// Save the file to SD
-			/*File path = Environment.getExternalStoragePublicDirectory(filePath);
-			path.mkdirs();*/
+			/*
+			File path = Environment.getExternalStoragePublicDirectory(filePath);
+			path.mkdirs();
+			
+			*/
 			File file = new File(filePath);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
 			FileOutputStream fos = new FileOutputStream(file);
 
-			byte[] buffer = new byte[1024];
-			int len1 = 0;
-
-			while ((len1 = in.read(buffer)) > 0) {
-				fos.write(buffer, 0, len1);
+			byte data[] = new byte[1024];
+			long total = 0;
+			int count;
+			while ((count = in.read(data)) != -1) {
+				total += count;
+				// publishing the progress....
+				// publishProgress((int) (total * 100 / fileLength));
+				fos.write(data, 0, count);
 			}
 
+			fos.flush();
 			fos.close();
+			in.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

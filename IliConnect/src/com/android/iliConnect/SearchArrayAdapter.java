@@ -3,6 +3,7 @@ package com.android.iliConnect;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,15 +53,17 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 		searchView.title.setText(item.getTitle());
 		searchView.description.setText(item.getDescription());
 		searchView.owner.setText(item.getOwner());
-		
+		searchView.owner.setTypeface(null, Typeface.BOLD);
+
 		// Falls Description leer ist, keine Leerzeile anzeigen
 		if(searchView.description.getText().equals("")) {
-			v.findViewById(R.id.itemDescription).setVisibility(View.GONE);
+			v.findViewById(R.id.itemDescription).setVisibility(View.INVISIBLE);
 		}
-		
+		/*
 		if(searchView.owner.getText().equals("")) {
 			v.findViewById(R.id.itemOwner).setVisibility(View.GONE);
 		}
+		*/
 		
 		// Date und Type in der Ergebnislist ausblenden
 		v.findViewById(R.id.itemDate).setVisibility(View.GONE);
@@ -82,23 +85,22 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 	private void joinCourse(String ref_id, String password) {
 		LocalCourseProvider courseProv = new LocalCourseProvider();
 		try {
-			try {
-				String result = courseProv.joinCourse(ref_id, password);
-				if(result != null && result.contains("PASSWORD_NEEDED")) {
-					// Passwortabfrage einblenden
-					MessageBuilder.course_password(MainTabView.instance, ref_id, this);
-				}
-			} catch (NetworkException e) {
-				// TODO Fehlermeldung anzeigen!!
-				e.printStackTrace();
+
+			String result = courseProv.joinCourse(ref_id, password);
+			if (result != null && result.contains("PASSWORD_NEEDED")) {
+				// Passwortabfrage einblenden
+				MessageBuilder.course_password(MainTabView.instance, ref_id, this);
 			}
+
 		} catch (JoinCourseException e) {
-			e.printStackTrace();
+			MessageBuilder.course_alreadysignedin(MainTabView.instance);
 		} catch (CoursePasswordException e) {
 			MessageBuilder.course_password(MainTabView.instance, ref_id, this);
 			e.printStackTrace();
+		} catch (NetworkException e) {
+			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 		}
-		
+
 	}
 
 
@@ -119,6 +121,12 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 
 
 	public void onClickLeftCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onClickMessageBox() {
 		// TODO Auto-generated method stub
 		
 	}

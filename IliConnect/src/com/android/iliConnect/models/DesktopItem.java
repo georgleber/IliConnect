@@ -22,7 +22,7 @@ public class DesktopItem extends Item {
 	public String getDate() {
 
 		if (timestamp != null) {
-			SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM hh:mm");
+			SimpleDateFormat sFormat = new SimpleDateFormat("dd.MM kk:mm");
 			return sFormat.format(timestamp);
 		} else
 			return "";

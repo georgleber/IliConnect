@@ -16,6 +16,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -34,10 +35,13 @@ import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.Exceptions.NetworkException;
+import com.android.iliConnect.message.IliOnClickListener;
 import com.android.iliConnect.ssl.HttpsClient;
 
-public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
+public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> implements IliOnClickListener {
 
+	private Object instance = this;
+	private boolean doLogout = false;
 	private List<NameValuePair> nameValuePairs;
 	private ProgressDialog pDialog;
 
@@ -140,7 +144,10 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 
 		if (e != null) {
 			String errMsg = null;
-			if (e instanceof UnknownHostException || e instanceof HttpException) {
+			String errTtl = "Synchronisation fehlgeschlagen";
+			
+			// Exceptions angepasst um DNS Fehler abzufangen.
+			if (e instanceof UnknownHostException) {
 				ConnectivityManager connManager = (ConnectivityManager) MainActivity.instance.getSystemService(CONNECTIVITY_SERVICE);
 				NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 				NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -153,13 +160,19 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 				}
 
 				if (logout) {
-					MainActivity.instance.logout();
+					doLogout = true;
 					errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
 							" die Serveradresse und versuchen Sie es erneut.";
+					errTtl = "Verbindung fehlgeschlagen";
 				}
+			} else if ( e instanceof NoHttpResponseException || e instanceof HttpException) {
+				doLogout = true;
+				errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
+						" Ihre Internetverbindung und die Serveradresse und versuchen Sie es erneut.";
+				errTtl = "Verbindung fehlgeschlagen";
 			} else if (e instanceof AuthException) {
-				MainActivity.instance.logout();
-				// falls bei der Sync. die Benutzerdaten falsch sind, alte Daten löschen
+				// Logout soll nach Bestätigung durchgeführt werden
+				doLogout = true;
 				MainActivity.instance.localDataProvider.deleteAuthentication();
 				errMsg = "Ihr Benutzername oder Kennwort ist falsch.";
 			} else {
@@ -167,8 +180,8 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 			}
 
 			if (errMsg != null) {
-				//MainActivity.instance.showToast(errMsg);
-				MessageBuilder.exception_message(MainTabView.instance, errMsg);
+				//TODO: connection_failed
+				MessageBuilder.sync_exception(MainTabView.instance, errTtl, errMsg, (IliOnClickListener) instance);
 			} 
 		}
 		else {
@@ -196,6 +209,29 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> {
 			return sb.toString();
 		} else {
 			return "";
+		}
+	}
+
+	public void onClickCoursePassword(String refID, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickJoinCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickLeftCourse(String refID, String courseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onClickMessageBox() {
+		// falls bei der Sync. die Benutzerdaten falsch sind, alte Daten löschen
+		if(doLogout) {
+			doLogout = true;
+			MainActivity.instance.logout();
 		}
 	}
 }

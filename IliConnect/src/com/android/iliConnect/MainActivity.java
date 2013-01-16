@@ -40,7 +40,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		
 	
 		currentActivity = this;
 
@@ -128,6 +127,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void sync(Context context, boolean manual) throws NetworkException {
+		
 		boolean wlanOnly = this.localDataProvider.settings.sync_wlanonly;
 
 		// wenn Context null ist, keine Sync-Meldung anzeigen

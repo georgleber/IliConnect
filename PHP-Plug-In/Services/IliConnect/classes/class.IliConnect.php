@@ -180,6 +180,21 @@ class IliConnect{
     echo $xml->asXML();
   }
 
+  function getAllCourses(&$courses, $node_id=1) {
+      global $tree;
+
+      $courses_iter = $tree->getChildsByType($node_id, "crs");
+      foreach($courses_iter as &$course) {
+          $courses[] = $course;
+      }   
+
+      $childs = $tree->getChilds($node_id);
+      foreach($childs as &$child) {
+          $this->getAllCourses($courses, $child["ref_id"]);
+      }   
+
+  }   
+
   function searchMagazin($group_by_dozent=false) {
     global $ilUser, $tree, $ilAccess;
 
@@ -191,7 +206,8 @@ class IliConnect{
     $results = array();
 
     $needle = $_REQUEST['searchfor'];
-    $courses = $tree->getChildsByType($tree->getRootId(), "crs");
+    $courses = array();
+    $this->getAllCourses($courses);
     foreach($courses as &$course) {
         $owner = ilObjectFactory::getInstanceByObjId($course["owner"]);
         if((stristr($course["title"], $needle) !== false ||
@@ -218,34 +234,6 @@ class IliConnect{
     echo $xml->asXML();
   }
 
-  /*function searchMagazin() {
-    global $ilUser, $tree, $ilAccess;
-
-    $xml = new SimpleXMLElement("<Iliconnect/>");
-
-    $current = $xml->addChild("Current");
-    
-    $results = $current->addChild("Results");
-
-    $needle = $_REQUEST['searchfor'];
-    $courses = $tree->getChildsByType($tree->getRootId(), "crs");
-    foreach($courses as &$course) {
-        $owner = ilObjectFactory::getInstanceByObjId($course["owner"]);
-        if((stristr($course["title"], $needle) !== false ||
-            stristr($owner->getFullName(), $needle) !== false) &&
-            $ilAccess->checkAccess("visible", "show", $course["ref_id"], "crs", $course["obj_id"])) {
-            $item = $results->addChild("Item");
-            foreach(array("title", "description", "ref_id", "type") as $attribute)
-                $item->addChild($attribute, $course[$attribute]);
-            $item->addChild("owner", $owner->getFullName());
-        }
-    }
-
-    ## AUSGABE DER XML STRUKTUR
-    header ("Content-Type:text/xml");
-    echo $xml->asXML();
-  }*/
-
   ## Der (un)uebersichtlichkeit halber in eine eigene funktion gepackt.
   ## erzeugt einen eintrag innerhalb des NOTIFICATIONS tag
   function notification2Xml($a,$nxml)
@@ -257,11 +245,13 @@ class IliConnect{
        include_once("./Modules/Exercise/classes/class.ilExAssignment.php");
        $exc = $factory->getInstanceByRefId($a["ref_id"]);
        $assignments = ilExAssignment::getAssignmentDataOfExercise($exc->getId());
+       $cnt=0;
        foreach($assignments as &$assignment) {
+           $cnt+=1;
            if($assignment["deadline"] > time()) { /* make sure the deadline has not been reached yet */
                $notify = $nxml->addChild("Notification");
                $notify->addChild("title", $a["title"]);
-               $notify->addChild("ref_id", $a["ref_id"]);
+               $notify->addChild("ref_id", $a["ref_id"]."-".$cnt);
                $notify->addChild("description", $assignment["title"]);
                $notify->addChild("date", $assignment["deadline"]);
            }
@@ -284,7 +274,7 @@ class IliConnect{
 
   ## FUNCTION FUER DIE REKURSIVE ABARBEITUNG DER CHILD ITEMS
   function desktopItem2Xml($array,$sxml,$notifications){
-    global $ilAccess;
+    global $ilAccess, $ilUser;
 
     if(strstr("file|fold|crs|tst|exc",$array["type"]))
     {
@@ -293,8 +283,23 @@ class IliConnect{
       $item->addChild("description", $array["description"]);
       $item->addChild("type", $array["type"]);
       $item->addChild("ref_id", $array["ref_id"]);
-      $item->addChild("last_update", $array["last_update"]);
-
+      if($array["last_update"]) {
+        $date = new DateTime($array["last_update"]);
+        $date->format("U");
+        $item->addChild("last_update", $date->getTimestamp());
+      } else {
+        $item->addChild("last_update");
+      }
+      
+      $state = ilChangeEvent::_lookupInsideChangeState($array["obj_id"], $ilUser->getId());
+      $state2 = ilChangeEvent::_lookupChangeState($array["obj_id"], $ilUser->getId());
+      
+      if(($state + $state2) > 0 && strstr("file|fold|crs|exc",$array["type"])) {
+        $item->addChild("changed", "true");
+      } else {
+        $item->addChild("changed", "false");
+      }
+      
       if($array["type"] == "exc" || $array["type"] == "tst")
       {
         $this->notification2Xml($array, $notifications);

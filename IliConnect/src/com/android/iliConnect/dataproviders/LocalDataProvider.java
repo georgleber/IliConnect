@@ -4,23 +4,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.xmlpull.v1.XmlPullParser;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.net.Uri;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.R;
+import com.android.iliConnect.SchreibtischDetailActivity;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.Current;
 import com.android.iliConnect.models.Desktop;
@@ -148,7 +148,7 @@ public class LocalDataProvider {
 
 		} catch (Exception e) {
 
-			//MainActivity.instance.showToast(e.getMessage());
+			// MainActivity.instance.showToast(e.getMessage());
 			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 			MainActivity.instance.logout();
 
@@ -160,15 +160,15 @@ public class LocalDataProvider {
 	}
 
 	public void openFileOrDownload(Item item) {
-
 		// ProgessDialog für Downlaod definieren
-		ProgressDialog progressDialog = new ProgressDialog(MainTabView.instance);
+		ProgressDialog progressDialog = new ProgressDialog(SchreibtischDetailActivity.instance);
 		progressDialog.setTitle("Download");
 		progressDialog.setMessage("Bitte warten...");
 
-		String dirPath = MainActivity.instance.getFilesDir() + "/" + MainActivity.instance.localDataProvider.auth.user_id;
+		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
-		// Prüfen, ob bereits ein Verzeichnis für den Benutzer exisitiert, falls nicht neu anlegen
+		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id;
+		// IliConnect-Ordner erstellen, falls noch nicht vorhanden
 		File f = new File(dirPath);
 		if (!f.exists() && !f.isDirectory()) {
 			f.mkdirs();
@@ -192,7 +192,7 @@ public class LocalDataProvider {
 			}
 			synchronized (MainActivity.instance.localDataProvider.syncObject) {
 				try {
-					MainActivity.instance.localDataProvider.syncObject.wait(1000);
+					MainActivity.instance.localDataProvider.syncObject.wait(5000);
 				} catch (InterruptedException e) {
 
 				}
@@ -200,21 +200,11 @@ public class LocalDataProvider {
 		}
 		if (file.exists()) {
 
-			Intent intent = new Intent();
+			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.setDataAndType(Uri.fromFile(file), "application/*");
 
-			intent.setAction(android.content.Intent.ACTION_VIEW);
-
-			intent.setData(Uri.fromFile(file));
-
-			try {
-
-				MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
-
-			} catch (ActivityNotFoundException e) {
-				// TODO andere Fehlermeldung anzeigen
-				MessageBuilder.download_error(MainTabView.instance, item.getTitle());
-			}
+			MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
 
 		} else {
 			MessageBuilder.download_error(MainTabView.instance, item.getTitle());

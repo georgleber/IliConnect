@@ -42,6 +42,7 @@
 	<string name="abmelde_menu">Abmelden</string>
 	
 	 <string-array name="array_intervall">
+	    <item>5 Minuten</item>
         <item>15 Minuten</item>
         <item>30 Minuten</item>
         <item>1 Stunde</item>
@@ -49,6 +50,7 @@
         <item>1 Tag</item>        
     </string-array>
      <string-array name="array_intervall_values">
+        <item>5</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>

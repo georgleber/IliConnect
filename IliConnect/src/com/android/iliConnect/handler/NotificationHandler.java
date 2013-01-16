@@ -33,6 +33,8 @@ public class NotificationHandler {
 						if (checkSettings) {
 							if (!handler.isNotificationMarked(notification.getRef_id())) {
 								notifications.add(notification);
+							} else {
+								cnt--;
 							}
 						} else {
 							notifications.add(notification);
@@ -64,23 +66,5 @@ public class NotificationHandler {
 		}
 
 		return true;
-	}
-
-	private class NotificationComparator implements Comparator<Notification> {
-		public int compare(Notification first, Notification second) {
-			if (first.date == null && second.date == null) {
-				return 0;
-			}
-
-			if (first.date == null) {
-				return 1;
-			}
-
-			if (second.date == null) {
-				return -1;
-			}
-
-			return first.date.compareTo(second.date);
-		}
 	}
 }

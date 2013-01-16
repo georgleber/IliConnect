@@ -16,8 +16,6 @@ import com.android.iliConnect.dataproviders.PersistableObject;
 public class RemoteData extends PersistableObject {
 	@Element
 	public Current Current;
-
-	private HashMap<String, Long> fileDates;
 	
 	@Override
 	public void load() throws Exception {

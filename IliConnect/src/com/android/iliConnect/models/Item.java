@@ -28,7 +28,6 @@ public class Item extends PersistableObject{
 	public ArrayList<Item> Item;
 	@Element (required = false)
 	public Long last_update;
-	@Element (required = false)
 	@Override
 	public void load() {
 		

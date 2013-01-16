@@ -1,6 +1,7 @@
 package com.android.iliConnect;
 
 import com.android.iliConnect.message.IliOnClickListener;
+import com.android.iliConnect.message.NotificationClickListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -407,7 +408,7 @@ public class MessageBuilder {
 		alertDialog1.show();
 	}
 
-	public static void warning_message(Activity activity, String text, final IliOnClickListener listener) {
+	public static void warning_message(Activity activity, String text, final NotificationClickListener listener) {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
@@ -419,7 +420,7 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-				listener.onClickMessageBox();
+				listener.onWarnMessageClose();
 				return;
 			}
 		});
@@ -428,7 +429,7 @@ public class MessageBuilder {
 		alertDialog1.show();
 	}
 
-	public static void critical_message(Activity activity, String text, final IliOnClickListener listener) {
+	public static void critical_message(Activity activity, String text, final NotificationClickListener listener) {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
@@ -440,7 +441,7 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-				listener.onClickMessageBox();
+				listener.onCriticalMessageClose();
 				return;
 			}
 		});

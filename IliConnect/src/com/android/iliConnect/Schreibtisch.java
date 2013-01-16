@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.models.Item;
 
 public class Schreibtisch extends ListFragment implements Redrawable {
@@ -58,10 +59,12 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 			intentMain.putExtra("CourseName", item.title);
 			intentMain.putExtra("position", position);
 			MainActivity.currentActivity.startActivity(intentMain);
+			MainActivity.instance.localDataProvider.notifyIliasAccess(item);
 		}
 		else {
 			MessageBuilder.emtpy_course(MainTabView.instance);
 		}
+		
 		
 	}
 

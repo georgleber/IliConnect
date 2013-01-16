@@ -458,7 +458,7 @@ public class MessageBuilder {
 		alertDialog.setCancelable(false);
 		alertDialog.setIcon(R.drawable.warn);
 		alertDialog.setTitle("Information");
-		alertDialog.setMessage("Ein Öffnen des Kurses ist nich möglich. Es wurden noch keine Inhalte hinzugefügt.");
+		alertDialog.setMessage("Ein Öffnen des Kurses ist nicht möglich. Es wurden noch keine Inhalte hinzugefügt.");
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {

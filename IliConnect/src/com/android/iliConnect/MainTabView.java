@@ -275,12 +275,8 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 	}
 
-	@Override
-	protected void onResume() {
-	    super.onResume();
-	    // .... other stuff in my onResume ....
-	    this.doubleBackToExitPressedOnce = false;
-	}
+	
+	
 	 private boolean hasBackCam() {
 		  PackageManager pm = MainTabView.instance.getPackageManager();
 		  return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
@@ -312,6 +308,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	protected void onResume() {
 		super.onResume();
 		MainActivity.currentActivity = this;
+		this.doubleBackToExitPressedOnce = false;
 
 	};
 

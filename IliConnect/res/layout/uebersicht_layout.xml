@@ -6,14 +6,13 @@
     android:background="#E5F7F7"
     android:orientation="vertical" >
 
-
-
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:text="TERMINE"
+        android:layout_height="25dp"
+        android:background="@color/darkmint"
+        android:paddingLeft="5dp"
+        android:text="Termine"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
@@ -25,13 +24,13 @@
         android:dividerHeight="1dp"
         />
 
-    
-    
     <TextView
         android:id="@+id/textNewFiles"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:text="GEÄNDERTE DATEIEN"
+        android:layout_height="25dp"
+        android:background="@color/darkmint"
+        android:paddingLeft="5dp"
+        android:text="Geänderte Dateien"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView

@@ -15,15 +15,20 @@ import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.handler.AndroidNotificationBuilder;
 import com.android.iliConnect.handler.ModificationHandler;
 import com.android.iliConnect.handler.NotificationComparator;
+import com.android.iliConnect.message.NotificationClickListener;
 import com.android.iliConnect.models.Notification;
 import com.android.iliConnect.models.Notifications;
 
-public class NotificationWatchThread {
+public class NotificationWatchThread implements NotificationClickListener {
 	public TimerTask doAsynchronousTask;
 	private Timer timer = new Timer();
+	public static NotificationWatchThread instance;
+	private static boolean warnMessageVisible;
+	private static boolean criticalMessageVisible;
 
 	public void startTimer() {
 		final Handler handler = new Handler();
+		instance = this;
 
 		doAsynchronousTask = new TimerTask() {
 
@@ -59,15 +64,21 @@ public class NotificationWatchThread {
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
 										notiBuilder.showNotification();
 
-										String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
-										MessageBuilder.critical_message(MainTabView.instance, messageText);
+										if (!criticalMessageVisible) {
+											String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
+											MessageBuilder.critical_message(MainTabView.instance, messageText, NotificationWatchThread.instance);
+											criticalMessageVisible = true;
+										}
 									} else if (daysBetween <= warning) {
 										String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 										AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
 										notiBuilder.showNotification();
 
-										String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
-										MessageBuilder.warning_message(MainTabView.instance, messageText);
+										if (!warnMessageVisible) {
+											String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
+											MessageBuilder.warning_message(MainTabView.instance, messageText, NotificationWatchThread.instance);
+											warnMessageVisible = true;
+										}
 									}
 								}
 							}
@@ -84,4 +95,13 @@ public class NotificationWatchThread {
 	public void start() {
 		timer.schedule(doAsynchronousTask, 0, MainActivity.instance.localDataProvider.settings.interval * 60 * 1000);
 	}
+
+	public void onWarnMessageClose() {
+		warnMessageVisible = false;
+	}
+	
+	public void onCriticalMessageClose() {
+		criticalMessageVisible = false;
+	}
+		
 }

@@ -43,6 +43,7 @@ public class LocalDataProvider {
 	public LocalData localdata = new LocalData();
 	public RemoteData remoteData = new RemoteData();
 	public AppData appData = new AppData();
+
 	public Desktop desktopItems = new Desktop();
 	public Authentification auth = new Authentification();;
 	public Results results = new Results();
@@ -157,13 +158,9 @@ public class LocalDataProvider {
 
 	}
 
-	public void openFileOrDownload(Item item) {
-		// ProgessDialog für Downlaod definieren
-		ProgressDialog progressDialog = new ProgressDialog(SchreibtischDetailActivity.instance);
-		progressDialog.setTitle("Download");
-		progressDialog.setMessage("Bitte warten...");
-		
-
+	
+	
+	public void notifyIliasAccess(Item item) {
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
 		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id;
@@ -173,44 +170,33 @@ public class LocalDataProvider {
 			f.mkdirs();
 		}
 
-		String filePath = dirPath + "/" + item.getTitle();
+		String filePath = path + "/IliConnect/" + "/.tmp";
 		File file = new File(filePath);
 
-		if (!file.exists()) {
-			FileDownloadProvider download = new FileDownloadProvider(progressDialog);
-			download.execute(new String[] { auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=sendfile", filePath });
 
-			try {
-				download.get();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ExecutionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			synchronized (MainActivity.instance.localDataProvider.syncObject) {
-				try {
-					MainActivity.instance.localDataProvider.syncObject.wait(5000);
-				} catch (InterruptedException e) {
-
-				}
-			}
+		IliasNotifier download = new IliasNotifier();
+		download.execute(new String[] { auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=view", filePath });
+		file.delete();
+		try {
+			download.get();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		if (file.exists()) {
-
-			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.setDataAndType(Uri.fromFile(file), "application/*");
-
-			MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
-
-		} else {
-			MessageBuilder.download_error(SchreibtischDetailActivity.instance, item.getTitle());
-		}
+//		synchronized (MainActivity.instance.localDataProvider.syncObject) {
+//			try {
+//				MainActivity.instance.localDataProvider.syncObject.wait(500);
+//			} catch (InterruptedException e) {
+//
+//			}
+//		}
 
 	}
 
+	
 	public void deleteAuthentication() {
 
 		MainActivity.instance.localDataProvider.auth.setLogin(false, "", "", "http://swe.k3mp.de/ilias/");

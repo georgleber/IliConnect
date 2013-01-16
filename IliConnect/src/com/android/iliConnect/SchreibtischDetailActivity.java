@@ -98,5 +98,11 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 		// TODO Auto-generated method stub
 
 	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MainActivity.currentActivity = this;
+		
+	}
 
 }

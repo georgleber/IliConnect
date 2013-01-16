@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 			desktopViews = new DesktopViews();
 			desktopViews.title = (TextView) v.findViewById(R.id.itemTitle);
 			desktopViews.description = (TextView) v.findViewById(R.id.itemDescription);
+			
 			desktopViews.type = (TextView) v.findViewById(R.id.itemType);
 			desktopViews.date = (TextView) v.findViewById(R.id.itemDate);
 			desktopViews.owner = (TextView) v.findViewById(R.id.itemOwner);
@@ -52,20 +54,26 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 
 		Item item = items.get(position);
 		if (item != null) {
+
+			desktopViews.title.setText(item.getTitle());
+			desktopViews.title.setLines(1);
+			
 			if (item.changed == true) {
-				desktopViews.title.setText(item.getTitle() + " 'Inhalt geändert'");
-			} else {
-				desktopViews.title.setText(item.getTitle());
+				desktopViews.description.setText("'Inhalt geändert'");
+				desktopViews.description.setTypeface(null, Typeface.BOLD);
+			} 
+			else {
+				desktopViews.description.setVisibility(View.INVISIBLE);
 			}
 			
-			desktopViews.description.setText(item.getDescription());
-			// falls keine Beschreibung vorhanden, Zeile ausblenden
-			if(desktopViews.description.getText().equals("")) {
-				desktopViews.description.setVisibility(View.GONE);
-			}
+			//desktopViews.description.setText(item.getDescription());
+
+			// restlichen Felder ausblenden
 			desktopViews.type.setVisibility(View.GONE);
 			desktopViews.date.setVisibility(View.GONE);
 			desktopViews.owner.setVisibility(View.GONE);
+			
+			
 		}
 
 		return v;

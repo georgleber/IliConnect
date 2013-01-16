@@ -1,5 +1,7 @@
 package com.android.iliConnect;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.models.Item;
 
 public class Schreibtisch extends ListFragment implements Redrawable {
@@ -49,11 +52,18 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Item item = MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position);
 
-		// doStuff
-		Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
-		intentMain.putExtra("CourseName", item.title);
-		intentMain.putExtra("position", position);
-		MainActivity.currentActivity.startActivity(intentMain);
+		List<Item> items = item.getItems();
+		if (items!=null && items.size() > 0) {
+			// doStuff
+			Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
+			intentMain.putExtra("CourseName", item.title);
+			intentMain.putExtra("position", position);
+			MainActivity.currentActivity.startActivity(intentMain);
+
+			MainActivity.instance.localDataProvider.notifyIliasAccess(item);
+		} else {
+			MessageBuilder.emtpy_course(MainTabView.instance);
+		}
 	}
 
 }

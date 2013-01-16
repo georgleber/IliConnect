@@ -13,6 +13,9 @@ public class Desktop extends PersistableObject {
 	@ElementList( name="Items", required = true)
 	public ArrayList<Item> DesktopItem = new ArrayList<Item>();
 	
+	public ArrayList<Item> ChangedFiles = new ArrayList<Item>();
+	
+	
 	@Override
 	public void load() {
 		try {

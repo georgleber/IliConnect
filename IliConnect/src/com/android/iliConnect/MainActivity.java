@@ -11,16 +11,19 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.DataDownloadThread;
+import com.android.iliConnect.dataproviders.FileDownloadProvider;
 import com.android.iliConnect.dataproviders.LocalDataProvider;
 import com.android.iliConnect.dataproviders.NotificationWatchThread;
 import com.android.iliConnect.dataproviders.RemoteDataProvider;
 import com.android.iliConnect.handler.AndroidNotificationBuilder;
+import com.android.iliConnect.models.Item;
 
 public class MainActivity extends Activity {
 
@@ -30,7 +33,7 @@ public class MainActivity extends Activity {
 	public ProgressDialog progressDialog;
 	public static Object syncObject = new Object();
 	public LocalDataProvider localDataProvider;
-
+	public FileDownloadProvider download;
 	public DataDownloadThread watchThread = new DataDownloadThread();
 	public NotificationWatchThread notificationThread = new NotificationWatchThread();
 	private EditText etUrl;
@@ -228,10 +231,6 @@ public class MainActivity extends Activity {
 								if (watchThread.doAsynchronousTask == null) {
 									watchThread.startTimer();
 								}
-
-								if (notificationThread.doAsynchronousTask == null) {
-									notificationThread.startTimer();
-								}
 							}
 						});
 					}
@@ -250,10 +249,6 @@ public class MainActivity extends Activity {
 			public void run() {
 				if (watchThread.doAsynchronousTask == null) {
 					watchThread.startTimer();
-				}
-
-				if (notificationThread.doAsynchronousTask == null) {
-					notificationThread.startTimer();
 				}
 			}
 		});
@@ -274,4 +269,75 @@ public class MainActivity extends Activity {
 		MainTabView.instance = null;
 		super.onRestart();
 	}
+
+	public void openFileOrDownload(final Activity instance, final Item item) {
+		// ProgessDialog für Downlaod definieren
+		// TODO Auto-generated method stub
+		// progressDialog = new ProgressDialog(MainTabView.instance);
+		// progressDialog.setTitle("SDownload");
+		// progressDialog.setMessage("Bitte warten...");
+
+		progressDialog = ProgressDialog.show(instance, "Download", "Bitte warten");
+
+		download = new FileDownloadProvider(progressDialog);
+
+		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id;
+		// IliConnect-Ordner erstellen, falls noch nicht vorhanden
+		File f = new File(dirPath);
+		if (!f.exists() && !f.isDirectory()) {
+			f.mkdirs();
+		}
+
+		final String filePath = dirPath + "/" + item.getTitle();
+		final File file = new File(filePath);
+
+		if (!file.exists()) {
+			download.execute(new String[] { localDataProvider.auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=sendfile", filePath });
+		}
+		new Thread(new Runnable() {
+
+			public void run() {
+
+				// synchronized (syncObject) {
+
+				Date start = new Date();
+				long timeout = 5000;
+
+				while (!file.exists()) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+
+					}
+					if (new Date().getTime() - start.getTime() > timeout)
+						break;
+				}
+
+				if (file.exists()) {
+
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.setDataAndType(Uri.fromFile(file), "application/*");
+
+					MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
+
+				} else {
+					MessageBuilder.download_error(instance, item.getTitle());
+				}
+
+				progressDialog.dismiss();
+
+				MainActivity.instance.runOnUiThread(new Runnable() {
+					public void run() {
+						if (MainTabView.getInstance() != null)
+							MainTabView.getInstance().update();
+					}
+				});
+			}
+			// }
+		}).start();
+	}
+
 }

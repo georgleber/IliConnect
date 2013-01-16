@@ -51,7 +51,10 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 		searchView.owner = (TextView) v.findViewById(R.id.itemOwner);
 		
 		searchView.title.setText(item.getTitle());
+		searchView.title.setLines(1);
+		
 		searchView.description.setText(item.getDescription());
+		searchView.description.setLines(1);
 		searchView.owner.setText(item.getOwner());
 		searchView.owner.setTypeface(null, Typeface.BOLD);
 

@@ -1,6 +1,7 @@
 package com.android.iliConnect;
 
 import com.android.iliConnect.message.IliOnClickListener;
+import com.android.iliConnect.message.NotificationClickListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -407,7 +408,7 @@ public class MessageBuilder {
 		alertDialog1.show();
 	}
 
-	public static void warning_message(Activity activity, String text) {
+	public static void warning_message(Activity activity, String text, final NotificationClickListener listener) {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
@@ -419,6 +420,7 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
+				listener.onWarnMessageClose();
 				return;
 			}
 		});
@@ -427,7 +429,7 @@ public class MessageBuilder {
 		alertDialog1.show();
 	}
 
-	public static void critical_message(Activity activity, String text) {
+	public static void critical_message(Activity activity, String text, final NotificationClickListener listener) {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
@@ -436,6 +438,28 @@ public class MessageBuilder {
 		alertDialog.setIcon(R.drawable.error);
 		alertDialog.setTitle("Kritisch");
 		alertDialog.setMessage(text);
+		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				listener.onCriticalMessageClose();
+				return;
+			}
+		});
+
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+	}
+	
+	
+	public static void emtpy_course(Activity activity) {
+		if (activity == null) {
+			activity = MainActivity.instance;
+		}
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setCancelable(false);
+		alertDialog.setIcon(R.drawable.warn);
+		alertDialog.setTitle("Information");
+		alertDialog.setMessage("Ein Öffnen des Kurses ist nicht möglich. Es wurden noch keine Inhalte hinzugefügt.");
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {

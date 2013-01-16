@@ -22,18 +22,11 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.ssl.HttpsClient;
 
-public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
+public class IliasNotifier extends AsyncTask<String, Integer, String> {
 
-	ProgressDialog progressDialog;
-	public boolean isRunning = false;
-	
-
-	public FileDownloadProvider(ProgressDialog progressDialog) {
-		this.progressDialog = progressDialog;
-		
-	}
 
 	@Override
 	protected String doInBackground(String... sUrl) {
@@ -92,37 +85,18 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 			fos.flush();
 			fos.close();
 			in.close();
+			try {
+				MainActivity.instance.sync(null);
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	@Override
-	protected void onPostExecute(String result) {
-		super.onPostExecute(result);
-		progressDialog.dismiss();
-		isRunning = false;
-		synchronized (MainActivity.syncObject) {
-			MainActivity.syncObject.notifyAll();
-		}
-
-	}
-
-	@Override
-	protected void onPreExecute() {
-		isRunning = true;
-		progressDialog.show();
-		super.onPreExecute();
-
-	}
-
-	@Override
-	protected void onProgressUpdate(Integer... progress) {
-		super.onProgressUpdate(progress);
-		progressDialog.setProgress(progress[0]);
 	}
 
 }

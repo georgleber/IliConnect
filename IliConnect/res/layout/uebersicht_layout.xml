@@ -6,43 +6,38 @@
     android:background="#E5F7F7"
     android:orientation="vertical" >
 
-
-
-
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:text="TERMINE"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:background="@color/darkmint"
+        android:paddingLeft="5dp"
+        android:text="Termine"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
-        android:id="@id/android:list"
-        android:layout_width="match_parent"
+        android:id="@+id/listNotifications"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:divider="@color/darkmint"
-        android:dividerHeight="1dp"
-        />
+        android:dividerHeight="1dp" />
 
-    
-    
     <TextView
         android:id="@+id/textNewFiles"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:text="GEÄNDERTE DATEIEN"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:background="@color/darkmint"
+        android:paddingLeft="5dp"
+        android:text="Geänderte Dateien"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
         android:id="@+id/listViewNewFiles"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:divider="@color/darkmint"
-        android:dividerHeight="1dp"
-        />
-
-    
+        android:dividerHeight="1dp" />
 
 </LinearLayout>

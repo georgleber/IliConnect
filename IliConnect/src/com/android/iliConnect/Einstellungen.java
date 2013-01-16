@@ -1,5 +1,7 @@
 package com.android.iliConnect;
 
+import com.android.iliConnect.models.Settings;
+
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -11,8 +13,11 @@ import android.preference.PreferenceActivity;
 public class Einstellungen extends PreferenceActivity {
 	
 	private static boolean syncIntervChanged = false;
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {	
+		Settings settings = MainActivity.instance.localDataProvider.settings;
+		
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.settings_layout);
 		
@@ -50,7 +55,30 @@ public class Einstellungen extends PreferenceActivity {
 		*/
 		
 		ListPreference lP = (ListPreference) findPreference("listPrefInterv");
-		lP.setDefaultValue(MainActivity.instance.localDataProvider.settings.interval);
+		//lP.setDefaultValue(MainActivity.instance.localDataProvider.settings.interval);
+		int index = 0;
+		switch(settings.interval) {
+		case 5:
+			index = 0;
+			break;
+		case 15:
+			index = 1;
+			break;
+		case 30:
+			index = 2;
+			break;
+		case 60:
+			index = 3;
+			break;
+		case 120:
+			index = 4;
+			break;
+		case 1440:
+			index = 5;
+			break;
+		}
+		lP.setValueIndex(index);		
+
 		lP.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -61,7 +89,8 @@ public class Einstellungen extends PreferenceActivity {
 		});
 		
 		ListPreference lPNot = (ListPreference) findPreference("listPrefNumNoti");
-		lPNot.setDefaultValue(MainActivity.instance.localDataProvider.settings.num_notifications);
+		lPNot.setDefaultValue(MainActivity.instance.localDataProvider.settings.num_notifications);		
+		lPNot.setValueIndex(settings.num_notifications-1);
 		lPNot.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -72,6 +101,7 @@ public class Einstellungen extends PreferenceActivity {
 		
 		ListPreference lPWarn = (ListPreference) findPreference("listPrefWarning");
 		lPWarn.setDefaultValue(MainActivity.instance.localDataProvider.settings.level_warning);
+		lPWarn.setValueIndex(settings.level_warning-3);
 		lPWarn.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -81,7 +111,8 @@ public class Einstellungen extends PreferenceActivity {
 		});
 		
 		ListPreference lPCrit = (ListPreference) findPreference("listPrefCritical");
-		lPCrit.setDefaultValue(MainActivity.instance.localDataProvider.settings.level_critical);
+		//lPCrit.setDefaultValue(MainActivity.instance.localDataProvider.settings.level_critical);
+		lPCrit.setValueIndex(settings.level_critical-1);
 		lPCrit.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {

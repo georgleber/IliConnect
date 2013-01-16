@@ -13,14 +13,17 @@
         android:textSize="25sp" />
         
         <ListView
-        android:id="@+id/desktop_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        style="@style/ListView"
-        android:divider="@color/darkmint"
-        android:dividerHeight="1dp"
-        android:layout_below="@+id/courseName1" >
+            android:id="@+id/desktop_content"
+            style="@style/ListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/courseName1"
+            android:divider="@color/darkmint"
+            android:dividerHeight="1dp" >
 
     </ListView>
         

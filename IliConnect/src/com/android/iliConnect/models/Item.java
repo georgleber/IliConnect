@@ -22,12 +22,13 @@ public class Item extends PersistableObject{
 	public String ref_id = "";
 	@Element (required = false)
 	public String owner = "";
+	@Element (required = false)
+	public boolean changed;
 	@ElementList (required = false, name="Items")
 	public ArrayList<Item> Item;
 	@Element (required = false)
 	public Long last_update;
 	@Element (required = false)
-	public boolean changed;
 	@Override
 	public void load() {
 		

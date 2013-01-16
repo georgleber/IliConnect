@@ -21,11 +21,9 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.accounts.NetworkErrorException;
 import android.app.ProgressDialog;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -34,7 +32,6 @@ import android.os.AsyncTask;
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
-import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.message.IliOnClickListener;
 import com.android.iliConnect.ssl.HttpsClient;
 
@@ -175,6 +172,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 				doLogout = true;
 				MainActivity.instance.localDataProvider.deleteAuthentication();
 				errMsg = "Ihr Benutzername oder Kennwort ist falsch.";
+				errTtl = "Logindaten falsch";
 			} else {
 				errMsg = "Es ist ein Fehler während der Synchronisation aufgetreten.";
 			}

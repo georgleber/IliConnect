@@ -175,6 +175,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 				doLogout = true;
 				MainActivity.instance.localDataProvider.deleteAuthentication();
 				errMsg = "Ihr Benutzername oder Kennwort ist falsch.";
+				errTtl = "Logindaten falsch";
 			} else {
 				errMsg = "Es ist ein Fehler während der Synchronisation aufgetreten.";
 			}

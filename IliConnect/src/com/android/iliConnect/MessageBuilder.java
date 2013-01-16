@@ -34,7 +34,7 @@ public class MessageBuilder {
 		   alertDialog.setIcon(R.drawable.warn);
 		   alertDialog.setTitle("Kursabmeldung!");
 		   if(!course_name.equals("") || course_name != null) {
-		    message = "Wollen Sie sich vom Kurs: " + "\"" + course_name + "\"" + " abmelden?";
+		    message = "Wollen Sie sich vom Kurs " + "\"" + course_name + "\"" + " abmelden?";
 		   }
 			alertDialog.setMessage(message);
 			alertDialog.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
@@ -213,7 +213,7 @@ public class MessageBuilder {
 			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.warn);
 			alertDialog.setTitle("Anmeldung");
-			alertDialog.setMessage("Sie wurden Erfolgreich angemeldet!");			
+			alertDialog.setMessage("Sie wurden erfolgreich angemeldet!");			
 			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {					
@@ -283,7 +283,7 @@ public class MessageBuilder {
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 			alertDialog.setCancelable(false);
 			alertDialog.setIcon(R.drawable.error);
-			alertDialog.setTitle("Passwort Falsch!");
+			alertDialog.setTitle("Passwort falsch!");
 			alertDialog.setMessage("Das eingegebene Passwort ist falsch!");	
 //			final EditText input = new EditText(activity);
 //			input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);

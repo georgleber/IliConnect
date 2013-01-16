@@ -337,6 +337,24 @@ public class MessageBuilder {
 			alertDialog1.show();			
 		}
 	 
+	 public static void course_nocontent(Activity activity, String courseName) {		
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+			alertDialog.setCancelable(false);
+			alertDialog.setIcon(R.drawable.warn);
+			alertDialog.setTitle("Öffnen nicht möglich!");
+			alertDialog.setMessage("Ein Öffnen des Kurses \"" + courseName + "\" ist nich möglich. Es wurden noch keine Inhalte hinzugefügt.");			
+			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {					
+					
+					return;
+				}
+			});
+			
+			AlertDialog alertDialog1 = alertDialog.create();
+			alertDialog1.show();			
+		}
+	 
 	public static void exception_message(Activity activity, String errMsg) {
 		if (activity == null) {
 			activity = MainActivity.instance;

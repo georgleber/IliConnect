@@ -49,14 +49,18 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Item item = MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position);
-		// doStuff
-		Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
-		intentMain.putExtra("CourseName", item.title);
-		intentMain.putExtra("position", position);
-		MainActivity.currentActivity.startActivity(intentMain);
-		
-		
-		MainActivity.instance.localDataProvider.notifyIliasAccess(item);
+
+		if (item.getItems() != null && !item.getItems().isEmpty()) {
+			// doStuff
+			Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
+			intentMain.putExtra("CourseName", item.title);
+			intentMain.putExtra("position", position);
+			MainActivity.currentActivity.startActivity(intentMain);
+
+			MainActivity.instance.localDataProvider.notifyIliasAccess(item);
+		} else {
+			MessageBuilder.course_nocontent(MainTabView.instance, item.title);
+		}
 
 	}
 

@@ -43,6 +43,7 @@ public class LocalDataProvider {
 	public LocalData localdata = new LocalData();
 	public RemoteData remoteData = new RemoteData();
 	public AppData appData = new AppData();
+
 	public Desktop desktopItems = new Desktop();
 	public Authentification auth = new Authentification();;
 	public Results results = new Results();
@@ -157,9 +158,11 @@ public class LocalDataProvider {
 
 	}
 
-	public void openFileOrDownload(Item item) {
+	public void openFileOrDownload(final Item item) {
 		// ProgessDialog für Downlaod definieren
-		ProgressDialog progressDialog = new ProgressDialog(SchreibtischDetailActivity.instance);
+
+		ProgressDialog progressDialog = new ProgressDialog(MainActivity.currentActivity);
+
 		progressDialog.setTitle("Download");
 		progressDialog.setMessage("Bitte warten...");
 

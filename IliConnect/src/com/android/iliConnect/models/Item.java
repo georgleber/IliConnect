@@ -1,6 +1,8 @@
 package com.android.iliConnect.models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -14,8 +16,6 @@ public class Item extends PersistableObject{
 	public String title = "";
 	@Element (required = false)
 	public String description = "";
-	//@Element (required = false)
-	//public Date timestamp;
 	@Element (required = false)
 	public String type = "";
 	@Element (required = false)
@@ -26,8 +26,8 @@ public class Item extends PersistableObject{
 	public boolean changed;
 	@ElementList (required = false, name="Items")
 	public ArrayList<Item> Item;
-	
-	//public Date timestamp = new Date();
+	@Element (required = false)
+	public Long last_update;
 	@Override
 	public void load() {
 		
@@ -68,7 +68,7 @@ public class Item extends PersistableObject{
 	}
 	
 	
-	
+
 	
 
 

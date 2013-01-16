@@ -228,10 +228,6 @@ public class MainActivity extends Activity {
 								if (watchThread.doAsynchronousTask == null) {
 									watchThread.startTimer();
 								}
-
-								if (notificationThread.doAsynchronousTask == null) {
-									notificationThread.startTimer();
-								}
 							}
 						});
 					}
@@ -250,10 +246,6 @@ public class MainActivity extends Activity {
 			public void run() {
 				if (watchThread.doAsynchronousTask == null) {
 					watchThread.startTimer();
-				}
-
-				if (notificationThread.doAsynchronousTask == null) {
-					notificationThread.startTimer();
 				}
 			}
 		});

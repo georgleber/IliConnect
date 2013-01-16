@@ -182,9 +182,11 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	}
 
 	public void update() {
-		((Redrawable) this.mPagerAdapter.getItem(this.mTabHost.getCurrentTab())).refreshViews();
+		for(int i =  0; i< mPagerAdapter.getCount();i++)
+			if(((Fragment)this.mPagerAdapter.getItem(i)).isVisible())
+			((Redrawable) this.mPagerAdapter.getItem(i)).refreshViews();
 	}
-
+	
 	/* 
 	 * @see android.support.v4.view.ViewPager.OnPageChangeListener#onPageScrolled(int, float, int)
 	 */

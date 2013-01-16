@@ -73,6 +73,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 			items.add(empty);
 		}
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
+		fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
 		lv1.setAdapter(noteAdapter);
 		lv2.setAdapter(fileAdapter);
 		

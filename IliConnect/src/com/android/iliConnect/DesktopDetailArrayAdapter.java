@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -137,7 +138,13 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 			desktopViews = (DesktopViews) v.getTag();
 
 		desktopViews.title.setText(item.getTitle());
+		desktopViews.title.setLines(1);
+		
 		desktopViews.description.setText(item.getDescription());
+		desktopViews.description.setLines(1);
+		if(desktopViews.description.equals("")) {
+			desktopViews.description.setVisibility(View.INVISIBLE);
+		}
 
 		if (item.getType().equalsIgnoreCase("TST")) {
 			desktopViews.type.setText("Test");
@@ -148,13 +155,17 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		if (item.getType().equalsIgnoreCase("FILE")) {
 			desktopViews.type.setText("Datei");
 		}
-
-		if (desktopViews.description.getText().equals("")) {
-			desktopViews.description.setVisibility(View.GONE);
+		if (item.getType().equalsIgnoreCase("FOLD")) {
+			desktopViews.type.setText("Ordner");
 		}
+		
+		desktopViews.type.setTypeface(null, Typeface.BOLD);
+
+		
+		/*
 		if (item.getType().equalsIgnoreCase("CRS") || item.getType().equalsIgnoreCase("FOLD")) {
 			desktopViews.type.setVisibility(View.GONE);
-		}
+		}*/
 
 		if (item.getClass().equals(DesktopItem.class) && !((DesktopItem) item).getDate().equals("")) {
 			desktopViews.date.setText(((DesktopItem) item).getDate());

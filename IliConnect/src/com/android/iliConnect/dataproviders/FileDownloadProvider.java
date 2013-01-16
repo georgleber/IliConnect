@@ -107,6 +107,7 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		progressDialog.show();
+		
 	}
 
 	@Override

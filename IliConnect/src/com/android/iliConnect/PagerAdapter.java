@@ -19,7 +19,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 		super(fm);
 		this.fragments = fragments;
 	}
-	/* 
+	/*c c
 	 * @see android.support.v4.app.FragmentPagerAdapter#getItem(int)
 	 */
 	@Override

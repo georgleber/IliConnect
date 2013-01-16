@@ -7,13 +7,19 @@ import com.android.iliConnect.handler.NotificationHandler;
 import com.android.iliConnect.models.Notification;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
-public class Uebersicht extends ListFragment implements Redrawable {
-
+public class Uebersicht extends Fragment implements Redrawable {
+	
+	ListView lv1;
+	ListView lv2;
+	DesktopDetailArrayAdapter fileAdapter;
+	
 	private NotificationHandler handler;
 
 	@Override
@@ -21,9 +27,15 @@ public class Uebersicht extends ListFragment implements Redrawable {
 		View v = inflater.inflate(R.layout.uebersicht_layout, container, false);
 		
 		List<Notification> items = handler.loadNotifications(true);
+		lv1 = (ListView) v.findViewById(R.id.listNotifications);
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-		setListAdapter(noteAdapter);
-
+		lv1.setAdapter(noteAdapter);
+		
+		lv2 =(ListView) v.findViewById(R.id.listViewNewFiles);
+		fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
+		lv2.setAdapter(fileAdapter);
+		
+		
 		if (container == null) {
 			// We have different layouts, and in one of them this
 			// fragment's containing frame doesn't exist. The fragment
@@ -45,11 +57,13 @@ public class Uebersicht extends ListFragment implements Redrawable {
 	}
 
 	public void refreshViews() {
-		getListView().invalidateViews();
+		getView().invalidate();
 		
 		// Notifications in Abhängigkeit der in den Einstellungen angegeben Anzahl auslesen
 		List<Notification> items = handler.loadNotifications(true);
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-		setListAdapter(noteAdapter);
+		lv1.setAdapter(noteAdapter);
+		lv2.setAdapter(fileAdapter);
+		
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.android.iliConnect.Exceptions.JoinCourseException;
 import com.android.iliConnect.Exceptions.NetworkException;
 import com.android.iliConnect.dataproviders.LocalCourseProvider;
+import com.android.iliConnect.dataproviders.RemoteDataProvider;
 import com.android.iliConnect.models.DesktopItem;
 import com.android.iliConnect.models.Item;
 
@@ -194,7 +196,15 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 					selectedCourse = parentItem.getRef_id();
 					toggleVisibility(parentItem, v);
 				} else if (parentItem.getType().equalsIgnoreCase("FOLD")) {
+					//TODO:
+					//repository.php callen... mit ref_id und cmd=view
 					toggleVisibility(parentItem, v);
+					
+
+					MainActivity.instance.localDataProvider.notifyIliasAccess(item);
+
+					
+					  
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
 					MainActivity.instance.localDataProvider.openFileOrDownload(item);
 				} else if (parentItem.getType().equalsIgnoreCase("TST") || parentItem.getType().equalsIgnoreCase("EXC")) {

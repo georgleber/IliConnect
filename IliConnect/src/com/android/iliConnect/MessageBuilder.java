@@ -407,7 +407,7 @@ public class MessageBuilder {
 		alertDialog1.show();
 	}
 
-	public static void warning_message(Activity activity, String text) {
+	public static void warning_message(Activity activity, String text, final IliOnClickListener listener) {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
@@ -419,6 +419,7 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
+				listener.onClickMessageBox();
 				return;
 			}
 		});
@@ -427,7 +428,7 @@ public class MessageBuilder {
 		alertDialog1.show();
 	}
 
-	public static void critical_message(Activity activity, String text) {
+	public static void critical_message(Activity activity, String text, final IliOnClickListener listener) {
 		if (activity == null) {
 			activity = MainActivity.instance;
 		}
@@ -439,6 +440,7 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
+				listener.onClickMessageBox();
 				return;
 			}
 		});

@@ -14,6 +14,7 @@ public class DataDownloadThread {
 
 	public TimerTask doAsynchronousTask;
 	private Timer timer = new Timer();
+	private static int notificationThreadStartCount = 0;
 
 	public void startTimer() {
 		final Handler handler = new Handler();
@@ -31,8 +32,17 @@ public class DataDownloadThread {
 								ConnectivityManager cM = (ConnectivityManager) MainActivity.instance.getSystemService(Context.CONNECTIVITY_SERVICE);
 								NetworkInfo nInfo = cM.getActiveNetworkInfo();
 								// WIFI-only sync ?
-								if (!MainActivity.instance.localDataProvider.settings.sync_wlanonly || nInfo.getType() == ConnectivityManager.TYPE_WIFI){
-									MainActivity.instance.remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl()+"?action=sync");
+								if (!MainActivity.instance.localDataProvider.settings.sync_wlanonly || nInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+									MainActivity.instance.remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
+								}
+
+								// Notification-Thread erst beim zweiten Sync-Lauf starten
+								if (notificationThreadStartCount == 1) {
+									if (MainActivity.instance.notificationThread.doAsynchronousTask == null) {
+										MainActivity.instance.notificationThread.startTimer();
+									}
+								} else {
+									notificationThreadStartCount++;
 								}
 
 							}
@@ -50,5 +60,4 @@ public class DataDownloadThread {
 		timer.schedule(doAsynchronousTask, 0, MainActivity.instance.localDataProvider.settings.interval * 60 * 1000);
 	}
 
-	
 }

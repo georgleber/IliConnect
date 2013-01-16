@@ -158,60 +158,7 @@ public class LocalDataProvider {
 
 	}
 
-	public void openFileOrDownload(final Item item) {
-		// ProgessDialog für Downlaod definieren
-
-		ProgressDialog progressDialog = new ProgressDialog(MainActivity.currentActivity);
-
-		progressDialog.setTitle("Download");
-		progressDialog.setMessage("Bitte warten...");
-
-		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id;
-		// IliConnect-Ordner erstellen, falls noch nicht vorhanden
-		File f = new File(dirPath);
-		if (!f.exists() && !f.isDirectory()) {
-			f.mkdirs();
-		}
-
-		String filePath = dirPath + "/" + item.getTitle();
-		File file = new File(filePath);
-
-		if (!file.exists()) {
-			FileDownloadProvider download = new FileDownloadProvider(progressDialog);
-			download.execute(new String[] { auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=sendfile", filePath });
-
-			try {
-				download.get();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ExecutionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			synchronized (MainActivity.instance.localDataProvider.syncObject) {
-				try {
-					MainActivity.instance.localDataProvider.syncObject.wait(5000);
-				} catch (InterruptedException e) {
-
-				}
-			}
-		}
-		if (file.exists()) {
-
-			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.setDataAndType(Uri.fromFile(file), "application/*");
-
-			MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
-
-		} else {
-			MessageBuilder.download_error(MainTabView.instance, item.getTitle());
-		}
-
-	}
+	
 	
 	public void notifyIliasAccess(Item item) {
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);

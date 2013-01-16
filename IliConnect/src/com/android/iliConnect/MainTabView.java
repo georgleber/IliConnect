@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import com.android.iliConnect.PagerAdapter;
@@ -177,16 +176,14 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 		instance = this;
 
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(mTabHost.getApplicationWindowToken(), 0);
 	}
 
 	public void update() {
-		for(int i =  0; i< mPagerAdapter.getCount();i++)
-			if(((Fragment)this.mPagerAdapter.getItem(i)).isVisible())
-			((Redrawable) this.mPagerAdapter.getItem(i)).refreshViews();
+		for (int i = 0; i < mPagerAdapter.getCount(); i++)
+			if (((Fragment) this.mPagerAdapter.getItem(i)).isVisible())
+				((Redrawable) this.mPagerAdapter.getItem(i)).refreshViews();
 	}
-	
+
 	/* 
 	 * @see android.support.v4.view.ViewPager.OnPageChangeListener#onPageScrolled(int, float, int)
 	 */
@@ -278,7 +275,15 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		MainActivity.currentActivity = this;
+
+	};
+
+	@Override
 	protected void onRestart() {
+		MainActivity.currentActivity = this;
 		update();
 
 		super.onRestart();

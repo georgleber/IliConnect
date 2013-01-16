@@ -27,9 +27,12 @@ import com.android.iliConnect.ssl.HttpsClient;
 public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 
 	ProgressDialog progressDialog;
+	public boolean isRunning = false;
+	
 
 	public FileDownloadProvider(ProgressDialog progressDialog) {
 		this.progressDialog = progressDialog;
+		
 	}
 
 	@Override
@@ -101,13 +104,19 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		progressDialog.dismiss();
+		isRunning = false;
+		synchronized (MainActivity.syncObject) {
+			MainActivity.syncObject.notifyAll();
+		}
+
 	}
 
 	@Override
 	protected void onPreExecute() {
-		super.onPreExecute();
+		isRunning = true;
 		progressDialog.show();
-		
+		super.onPreExecute();
+
 	}
 
 	@Override

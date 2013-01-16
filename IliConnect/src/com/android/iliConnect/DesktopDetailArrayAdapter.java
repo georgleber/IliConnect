@@ -221,7 +221,7 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 					MainActivity.instance.localDataProvider.notifyIliasAccess(item);
 
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
-					MainActivity.instance.localDataProvider.openFileOrDownload(item);
+					MainActivity.instance.openFileOrDownload(MainActivity.currentActivity, item);
 				} else if (parentItem.getType().equalsIgnoreCase("TST") || parentItem.getType().equalsIgnoreCase("EXC")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
 					String iliasUrl = url_src + "login.php";

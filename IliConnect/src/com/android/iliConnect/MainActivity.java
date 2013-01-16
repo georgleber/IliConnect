@@ -293,6 +293,9 @@ public class MainActivity extends Activity {
 		final String filePath = dirPath + "/" + item.getTitle();
 		final File file = new File(filePath);
 
+		if(item.changed && file.exists())
+			file.delete();
+		
 		if (!file.exists()) {
 			download.execute(new String[] { localDataProvider.auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=sendfile", filePath });
 		}

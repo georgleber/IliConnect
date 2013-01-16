@@ -52,7 +52,12 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 
 		Item item = items.get(position);
 		if (item != null) {
-			desktopViews.title.setText(item.getTitle());
+			if (item.changed == true) {
+				desktopViews.title.setText(item.getTitle() + " 'Inhalt geändert'");
+			} else {
+				desktopViews.title.setText(item.getTitle());
+			}
+			
 			desktopViews.description.setText(item.getDescription());
 			// falls keine Beschreibung vorhanden, Zeile ausblenden
 			if(desktopViews.description.getText().equals("")) {

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import com.android.iliConnect.PagerAdapter;
@@ -176,6 +177,8 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 		instance = this;
 
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(mTabHost.getApplicationWindowToken(), 0);
 	}
 
 	public void update() {
@@ -247,7 +250,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 			try {
 				MainActivity.instance.sync(instance, true);
 			} catch (NetworkException e) {
-				//MainActivity.instance.showToast(e.getMessage());
+				// MainActivity.instance.showToast(e.getMessage());
 				MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 				e.printStackTrace();
 			}
@@ -271,11 +274,11 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mViewPager.setCurrentItem(2);
 		// super.onBackPressed();
 	}
-	
+
 	@Override
 	protected void onRestart() {
 		update();
-		
+
 		super.onRestart();
 	}
 

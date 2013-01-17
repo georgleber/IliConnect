@@ -170,6 +170,8 @@ public class MainActivity extends Activity {
 			} else {
 				remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 			}
+			NotificationWatchThread wt = new NotificationWatchThread();
+			wt.showNotificationPopups(false, false);
 		}
 	}
 

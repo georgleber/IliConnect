@@ -13,7 +13,6 @@
         android:layout_weight="1"
         android:divider="@color/darkmint"
         android:dividerHeight="1dp"
-         style="@style/ListView"
         android:focusable="true" />
 
 </LinearLayout>

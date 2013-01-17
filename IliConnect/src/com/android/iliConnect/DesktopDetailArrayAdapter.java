@@ -163,8 +163,8 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		if (item.getType().equalsIgnoreCase("FOLD")) {
 			desktopViews.type.setText("Ordner");
 		}
-		
-		if(item.changed) {
+
+		if (item.changed) {
 			String text = (String) desktopViews.type.getText();
 			desktopViews.type.setText(text + " 'Inhalt geändert'");
 		}
@@ -218,7 +218,7 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 					// repository.php callen... mit ref_id und cmd=view
 					toggleVisibility(parentItem, v);
 
-					MainActivity.instance.localDataProvider.notifyIliasAccess(item);
+					MainActivity.instance.iliasNotifier(MainActivity.currentActivity, item);
 
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
 					MainActivity.instance.openFileOrDownload(MainActivity.currentActivity, item);

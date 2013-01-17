@@ -327,7 +327,7 @@ public class MainActivity extends Activity {
 					MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
 
 				} else {
-					MessageBuilder.download_error(instance, item.getTitle());
+					MessageBuilder.download_error(MainActivity.instance, item.getTitle());
 				}
 
 				progressDialog.dismiss();
@@ -341,6 +341,63 @@ public class MainActivity extends Activity {
 			}
 			// }
 		}).start();
+	}
+	
+	public void iliasNotifier(final Activity instance, final Item item) {
+		// ProgessDialog für Downlaod definieren
+		// TODO Auto-generated method stub
+		// progressDialog = new ProgressDialog(MainTabView.instance);
+		// progressDialog.setTitle("SDownload");
+		// progressDialog.setMessage("Bitte warten...");
+
+		//progressDialog = ProgressDialog.show(instance, "Download", "Bitte warten");
+
+		download = new FileDownloadProvider(null);
+
+		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id;
+		// IliConnect-Ordner erstellen, falls noch nicht vorhanden
+		File f = new File(dirPath);
+		if (!f.exists() && !f.isDirectory()) {
+			f.mkdirs();
+		}
+
+		final String filePath = dirPath + "/.tmp";
+		final File file = new File(filePath);
+
+		if (!file.exists()) {
+			download.execute(new String[] { localDataProvider.auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=view", filePath });
+		}
+		new Thread(new Runnable() {
+
+			public void run() {
+
+				// synchronized (syncObject) {
+
+				Date start = new Date();
+				long timeout = 5000;
+
+				while (!file.exists()) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+
+					}
+					if (new Date().getTime() - start.getTime() > timeout)
+						break;
+				}
+
+				MainActivity.instance.runOnUiThread(new Runnable() {
+					public void run() {
+						if (MainTabView.getInstance() != null)
+							MainTabView.getInstance().update();
+					}
+				});
+			}
+			// }
+		}).start();
+		file.delete();
 	}
 
 }

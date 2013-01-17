@@ -30,7 +30,7 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		DesktopViews desktopViews = new DesktopViews();
-
+		
 		View v = convertView;
 		if (v == null) {
 			LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

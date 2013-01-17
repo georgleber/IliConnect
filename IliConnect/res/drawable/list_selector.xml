@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#E5F7F7">
     <!-- touch down -->
     <item
         android:drawable="@drawable/list_selector_pressed"

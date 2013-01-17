@@ -24,8 +24,10 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.schreibtisch_layout, container, false);
+		
 
 		DesktopItemAdapter desktopAdapter = new DesktopItemAdapter(MainActivity.currentActivity, R.layout.item, MainActivity.instance.localDataProvider.desktopItems.DesktopItem);
+		
 		setListAdapter(desktopAdapter);
 
 		if (container == null) {
@@ -45,9 +47,14 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 	}
 
+	@Override
+	public void onActivityCreated (Bundle savedInstanceState){
+		super.onActivityCreated(savedInstanceState);
+		this.getListView().setSelector(R.drawable.list_selector);
+	}
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Item item = MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position);

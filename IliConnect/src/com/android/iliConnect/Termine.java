@@ -46,7 +46,7 @@ public class Termine extends ListFragment implements Redrawable, OnCheckedChange
 
 		handler = new NotificationHandler();
 	}
-
+	
 	public void refreshViews() {
 		getListView().invalidateViews();
 

@@ -226,7 +226,9 @@ public class MainActivity extends Activity {
 					}
 					if (remoteDataFile.exists()) {
 						Intent i = new Intent(MainActivity.this, MainTabView.class);
+						
 						startActivity(i);
+						
 
 						MainActivity.instance.runOnUiThread(new Runnable() {
 							public void run() {

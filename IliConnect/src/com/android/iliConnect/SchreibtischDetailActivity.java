@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,18 +35,29 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 
 		final String Kurs = intent.getStringExtra("CourseName");
 		((TextView) (findViewById(R.id.courseName1))).setText(Kurs);
+		
 
 		Item item = null;
 		final int position = intent.getIntExtra("position", -1);
 		if (position > -1) {
 			item = MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position);
 		}
-
+		
 		selectedCourse = item.ref_id;
 		selectedCourseName = item.title;
-		ListAdapter adapter = new DesktopDetailArrayAdapter(getApplicationContext(), R.id.desktop_content, item.getItems());
+		
 		final ListView lv = (ListView) findViewById(R.id.desktop_content);
-		lv.setAdapter(adapter);
+		
+		if(item.getItems().size() > 0) {
+			ListAdapter adapter = new DesktopDetailArrayAdapter(getApplicationContext(), R.id.desktop_content, item.getItems());
+			lv.setAdapter(adapter);
+			((TextView) (findViewById(R.id.courseDesc1))).setVisibility(View.GONE);
+		}
+		else {
+			// falls Kurs keine Inhalte hat, Meldung anzeigen.
+			((TextView) (findViewById(R.id.courseDesc1))).setText("Dem Kurs wurden noch keine Inhalte hinzugefügt.");
+			lv.setVisibility(View.GONE);
+		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

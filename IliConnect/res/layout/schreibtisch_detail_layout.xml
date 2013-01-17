@@ -13,6 +13,14 @@
         android:text="@string/courseName"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="25sp" />
+    
+  <!--  soll nur als Info angezeigt werden, wenn Kurs keine Inhalte hat -->
+  <TextView
+        android:id="@+id/courseDesc1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/courseName"
+        android:textSize="20sp" />
 
     <ListView
         android:id="@+id/desktop_content"

@@ -351,7 +351,9 @@ public class MainActivity extends Activity {
 		// progressDialog.setMessage("Bitte warten...");
 
 		//progressDialog = ProgressDialog.show(instance, "Download", "Bitte warten");
-
+		if(!localDataProvider.settings.sync)
+		return;
+			
 		download = new FileDownloadProvider(null);
 
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);

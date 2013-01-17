@@ -4,23 +4,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.res.XmlResourceParser;
-import android.net.Uri;
-import android.os.Environment;
 import android.widget.Toast;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.R;
-import com.android.iliConnect.SchreibtischDetailActivity;
 import com.android.iliConnect.models.Authentification;
 import com.android.iliConnect.models.Current;
 import com.android.iliConnect.models.Desktop;

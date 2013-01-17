@@ -7,12 +7,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -311,28 +313,41 @@ public class MainActivity extends Activity {
 
 				Date start = new Date();
 				long timeout = 5000;
+				
+				boolean fileError;
 
 				while (!file.exists()) {
 					try {
-						Thread.sleep(100);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 
 					}
 					if (new Date().getTime() - start.getTime() > timeout)
 						break;
 				}
-
+				
+				fileError = false;
 				if (file.exists()) {
 
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.setDataAndType(Uri.fromFile(file), "application/*");
-
+					
+					MimeTypeMap mime = MimeTypeMap.getSingleton();
+					String ext = MimeTypeMap.getFileExtensionFromUrl(filePath);
+					String mimeType = mime.getMimeTypeFromExtension(ext);
+					if(mimeType != null && mimeType.equals("")) {
+						mimeType = "application/*";
+					}
+					intent.setDataAndType(Uri.fromFile(file), mimeType);					
+	
 					MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
 
 				} else {
-					MessageBuilder.download_error(MainActivity.instance, item.getTitle());
+					fileError = true;
 				}
+				
+				final boolean errorOccured = fileError;
+				
 
 				progressDialog.dismiss();
 
@@ -340,6 +355,11 @@ public class MainActivity extends Activity {
 					public void run() {
 						if (MainTabView.getInstance() != null)
 							MainTabView.getInstance().update();
+						if(errorOccured) {
+							// TODO: Error-Message wird nicht mehr angezeigt!! Kann nicht mehr in dem 
+							// oberen Thread aufgerufen werden, da RuntimeException geworfen wird.
+							MessageBuilder.download_error(MainActivity.instance, item.getTitle());
+						}
 					}
 				});
 			}

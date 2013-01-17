@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Vector;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -15,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
+import android.widget.Toast;
+
 import com.android.iliConnect.PagerAdapter;
 import com.android.iliConnect.Exceptions.NetworkException;
 
@@ -28,6 +32,7 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 	private ViewPager mViewPager;
 	private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, MainTabView.TabInfo>();
 	private PagerAdapter mPagerAdapter;
+	private boolean doubleBackToExitPressedOnce = false;
 
 	/*
 	 *	 
@@ -113,7 +118,9 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 		List<Fragment> fragments = new Vector<Fragment>();
 		fragments.add(Fragment.instantiate(this, Suche.class.getName()));
+		if (hasBackCam()==true){
 		fragments.add(Fragment.instantiate(this, QR.class.getName()));
+		}
 		fragments.add(Fragment.instantiate(this, Uebersicht.class.getName()));
 		fragments.add(Fragment.instantiate(this, Schreibtisch.class.getName()));
 		fragments.add(Fragment.instantiate(this, Termine.class.getName()));
@@ -139,8 +146,10 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		// to insert Picture: setIndicator(name, getResources().getDrawable(R.drawable.qr_code_defaul)) ....
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Suche"), (tabInfo = new TabInfo("Tab1", Suche.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
+		if (hasBackCam()==true){
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("QR"), (tabInfo = new TabInfo("Tab2", QR.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
+		}
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Übersicht"), (tabInfo = new TabInfo("Tab3", Uebersicht.class, args)));
 		this.mapTabInfo.put(tabInfo.tag, tabInfo);
 		MainTabView.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab4").setIndicator("Schreibtisch"), (tabInfo = new TabInfo("Tab4", Schreibtisch.class, args)));
@@ -264,16 +273,45 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 
 	}
 
+
+	 private boolean hasBackCam() {
+		  PackageManager pm = MainTabView.instance.getPackageManager();
+		  return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+		 }
 	@Override
 	public void onBackPressed() {
 		// Immer auf Überischt zurückgehen
 		mTabHost.setCurrentTab(2);
 		this.mViewPager.setCurrentItem(2);
+		if (doubleBackToExitPressedOnce) {
+	        super.onBackPressed();	  
+	        MainActivity.instance.finish();
+	        finish();
+	        return;
+	    }
+	    this.doubleBackToExitPressedOnce = true;
+	    Toast.makeText(this, "Erneut drücken, um das Programm zu beenden.", Toast.LENGTH_SHORT).show();
+	    //reset der DoubleBackToExitPressedOnce nach 2s
+	    new Handler().postDelayed(new Runnable() {
+
+            public void run() {
+             doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
 		// super.onBackPressed();
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		MainActivity.currentActivity = this;
+		this.doubleBackToExitPressedOnce = false;
+
+	};
+
+	@Override
 	protected void onRestart() {
+		MainActivity.currentActivity = this;
 		update();
 		
 		super.onRestart();

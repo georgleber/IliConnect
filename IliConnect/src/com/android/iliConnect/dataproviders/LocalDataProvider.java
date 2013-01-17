@@ -158,45 +158,6 @@ public class LocalDataProvider {
 
 	}
 
-	
-	
-	public void notifyIliasAccess(Item item) {
-		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-		String dirPath = path + "/IliConnect/" + MainActivity.instance.localDataProvider.auth.user_id;
-		// IliConnect-Ordner erstellen, falls noch nicht vorhanden
-		File f = new File(dirPath);
-		if (!f.exists() && !f.isDirectory()) {
-			f.mkdirs();
-		}
-
-		String filePath = path + "/IliConnect/" + "/.tmp";
-		File file = new File(filePath);
-
-
-		IliasNotifier download = new IliasNotifier();
-		download.execute(new String[] { auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=view", filePath });
-		file.delete();
-		try {
-			download.get();
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-//		synchronized (MainActivity.instance.localDataProvider.syncObject) {
-//			try {
-//				MainActivity.instance.localDataProvider.syncObject.wait(500);
-//			} catch (InterruptedException e) {
-//
-//			}
-//		}
-
-	}
-
-	
 	public void deleteAuthentication() {
 
 		MainActivity.instance.localDataProvider.auth.setLogin(false, "", "", "http://swe.k3mp.de/ilias/");

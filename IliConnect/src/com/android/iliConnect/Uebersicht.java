@@ -18,7 +18,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 	
 	ListView lv1;
 	ListView lv2;
-	DesktopDetailArrayAdapter fileAdapter;
+	
 	
 	private NotificationHandler handler;
 
@@ -39,7 +39,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 		
 		lv2 =(ListView) v.findViewById(R.id.listViewNewFiles);
 		lv2.setSelector( R.drawable.list_selector);
-		fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
+		DesktopDetailArrayAdapter fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
 		lv2.setAdapter(fileAdapter);
 	
 		
@@ -75,7 +75,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 			items.add(empty);
 		}
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-		fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
+		DesktopDetailArrayAdapter fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
 		lv1.setAdapter(noteAdapter);
 		lv1.setSelector( R.drawable.list_selector);
 		lv2.setSelector( R.drawable.list_selector);

@@ -70,38 +70,39 @@ public class NotificationWatchThread implements NotificationClickListener {
 		ModificationHandler handler = new ModificationHandler();
 
 		ArrayList<Notification> nextNotifications = notifications.Notifications;
-		Collections.sort(nextNotifications, new NotificationComparator(false));
+		if (nextNotifications != null) {
+			Collections.sort(nextNotifications, new NotificationComparator(false));
+			for (Notification notification : nextNotifications) {
+				if (!handler.isNotificationMarked(notification.getRef_id())) {
+					Date currentDate = new Date(System.currentTimeMillis());
 
-		for (Notification notification : nextNotifications) {
-			if (!handler.isNotificationMarked(notification.getRef_id())) {
-				Date currentDate = new Date(System.currentTimeMillis());
+					// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
+					Long date = Long.valueOf(notification.date) * 1000;
+					Date notiDate = new Date(date);
 
-				// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
-				Long date = Long.valueOf(notification.date) * 1000;
-				Date notiDate = new Date(date);
+					String title = "IliConnect: " + notification.getTitle();
+					long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
+					if (daysBetween <= critical) {
+						String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 
-				String title = "IliConnect: " + notification.getTitle();
-				long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
-				if (daysBetween <= critical) {
-					String notificationText = "Frist endet " + notification.getDate() + "Uhr";
+						AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
+						notiBuilder.showNotification();
 
-					AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
-					notiBuilder.showNotification();
+						if (!criticalMessageVisible) {
+							String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
+							MessageBuilder.critical_message(MainTabView.instance, messageText, this);
+							criticalMessageVisible = true;
+						}
+					} else if (daysBetween <= warning) {
+						String notificationText = "Frist endet " + notification.getDate() + "Uhr";
+						AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
+						notiBuilder.showNotification();
 
-					if (!criticalMessageVisible) {
-						String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
-						MessageBuilder.critical_message(MainTabView.instance, messageText, this);
-						criticalMessageVisible = true;
-					}
-				} else if (daysBetween <= warning) {
-					String notificationText = "Frist endet " + notification.getDate() + "Uhr";
-					AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
-					notiBuilder.showNotification();
-
-					if (!warnMessageVisible) {
-						String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
-						MessageBuilder.warning_message(MainTabView.instance, messageText, this);
-						warnMessageVisible = true;
+						if (!warnMessageVisible) {
+							String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
+							MessageBuilder.warning_message(MainTabView.instance, messageText, this);
+							warnMessageVisible = true;
+						}
 					}
 				}
 			}

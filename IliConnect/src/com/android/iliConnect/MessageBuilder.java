@@ -320,23 +320,39 @@ public class MessageBuilder {
 		}
 	
 	 
-	 public static void download_error(Activity activity, String fileName) {		
-			AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-			alertDialog.setCancelable(false);
-			alertDialog.setIcon(R.drawable.warn);
-			alertDialog.setTitle("Download fehlgeschlagen");
-			alertDialog.setMessage("Die Datei " + fileName + " konnte nicht heruntergeladen werden");			
-			alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	public static void download_error(Activity activity, String fileName) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setCancelable(false);
+		alertDialog.setIcon(R.drawable.warn);
+		alertDialog.setTitle("Download fehlgeschlagen");
+		alertDialog.setMessage("Die Datei " + fileName + " konnte nicht heruntergeladen werden.");
+		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-				public void onClick(DialogInterface dialog, int which) {					
-					
-					return;
-				}
-			});
-			
-			AlertDialog alertDialog1 = alertDialog.create();
-			alertDialog1.show();			
-		}
+			public void onClick(DialogInterface dialog, int which) {
+				return;
+			}
+		});
+
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+	} 
+		
+	public static void application_error(Activity activity, String fileName) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+		alertDialog.setCancelable(false);
+		alertDialog.setIcon(R.drawable.warn);
+		alertDialog.setTitle("Öffnen fehlgeschlagen");
+		alertDialog.setMessage("Die Datei " + fileName + " konnte nicht geöffnert werden.");
+		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				return;
+			}
+		});
+
+		AlertDialog alertDialog1 = alertDialog.create();
+		alertDialog1.show();
+	}
 	 
 	public static void exception_message(Activity activity, String errMsg) {
 		if (activity == null) {

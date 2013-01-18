@@ -48,7 +48,7 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 		
 		final ListView lv = (ListView) findViewById(R.id.desktop_content);
 		
-		if(item.getItems().size() > 0) {
+		if(item.Item!=null && item.getItems().size() > 0) {
 			ListAdapter adapter = new DesktopDetailArrayAdapter(getApplicationContext(), R.id.desktop_content, item.getItems());
 			lv.setAdapter(adapter);
 			((TextView) (findViewById(R.id.courseDesc1))).setVisibility(View.GONE);

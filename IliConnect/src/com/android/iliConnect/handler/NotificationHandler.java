@@ -3,7 +3,6 @@ package com.android.iliConnect.handler;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -13,8 +12,11 @@ import com.android.iliConnect.models.Notification;
 
 public class NotificationHandler {
 	public List<Notification> loadNotifications(boolean checkSettings) {
-		List<Notification> loadedNotifications = MainActivity.instance.localDataProvider.notifications.Notifications;
 		List<Notification> notifications = new ArrayList<Notification>();
+		List<Notification> loadedNotifications = null;
+		if (MainActivity.instance.localDataProvider != null && MainActivity.instance.localDataProvider.notifications.Notifications != null) {
+			loadedNotifications = MainActivity.instance.localDataProvider.notifications.Notifications;
+		}
 
 		if (loadedNotifications != null) {
 			Collections.sort(loadedNotifications, new NotificationComparator());
@@ -53,7 +55,7 @@ public class NotificationHandler {
 		// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
 		Long date = Long.valueOf(notification.date) * 1000;
 		Date notiDate = new Date(date);
-		
+
 		Calendar notiCal = new GregorianCalendar();
 		notiCal.set(notiDate.getYear(), notiDate.getMonth(), notiDate.getDay());
 

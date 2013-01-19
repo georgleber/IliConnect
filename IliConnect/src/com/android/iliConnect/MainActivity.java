@@ -287,7 +287,7 @@ public class MainActivity extends Activity {
 
 		
 
-		download = new FileDownloadProvider();
+		download = new FileDownloadProvider(progressDialog);
 
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
@@ -372,13 +372,17 @@ public class MainActivity extends Activity {
 				final Intent appIntent = intent;
 				final String extension = ext;
 				
+
+				
 				MainActivity.instance.runOnUiThread(new Runnable() {
 					public void run() {
 						if (MainTabView.getInstance() != null)
 							MainTabView.getInstance().update();
+	
 						if(progressDialog != null) {
 							progressDialog.dismiss();	
 						}
+						
 						if(downloadError) {
 							MessageBuilder.download_error(instance, item.getTitle());
 						}
@@ -397,7 +401,6 @@ public class MainActivity extends Activity {
 						
 					}
 				});
-				
 			}
 			// }
 		}).start();

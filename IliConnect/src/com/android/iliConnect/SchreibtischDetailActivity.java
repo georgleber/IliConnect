@@ -24,6 +24,7 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 	private String selectedCourseName = "";
 	public static SchreibtischDetailActivity instance;
 
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,9 +44,13 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 			item = MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position);
 		}
 		
+		if(intent.getSerializableExtra("Item") != null) {
+			item = (Item) intent.getSerializableExtra("Item");
+		}
+		
 		selectedCourse = item.ref_id;
 		selectedCourseName = item.title;
-		
+				
 		final ListView lv = (ListView) findViewById(R.id.desktop_content);
 		
 		if(item.Item!=null && item.getItems().size() > 0) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 
 import android.os.AsyncTask;
@@ -216,9 +217,24 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 				} else if (parentItem.getType().equalsIgnoreCase("FOLD")) {
 					// TODO:
 					// repository.php callen... mit ref_id und cmd=view
-					toggleVisibility(parentItem, v);
+					//toggleVisibility(parentItem, v);
+					
+					
+					// doStuff
+					final Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
+					intentMain.putExtra("CourseName", item.title);
+					// -1 hat keine Auswrikung auf die SchreibtischDetailActivity
+					intentMain.putExtra("position", -1);
+					intentMain.putExtra("Item", parentItem);
+					
 
-					MainActivity.instance.iliasNotifier(MainActivity.currentActivity, item);
+					MainActivity.instance.runOnUiThread(new Runnable() {
+						public void run() {
+							MainActivity.currentActivity.startActivity(intentMain);
+
+							MainActivity.instance.iliasNotifier(MainActivity.currentActivity, item);		
+						}
+					});
 
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
 					MainActivity.instance.openFileOrDownload(MainActivity.currentActivity, item);
@@ -254,6 +270,8 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		return v;
 
 	}
+	
+	
 
 	private void toggleVisibility(Item childItem, View v) {
 		View vSub;

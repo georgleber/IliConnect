@@ -70,7 +70,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 			// Creating HTTP client
 			HttpParams params = new BasicHttpParams();
 			// Timeout für Verbindungsaufbau definieren
-			HttpConnectionParams.setConnectionTimeout(params, 10000);
+			HttpConnectionParams.setConnectionTimeout(params, 5000);
 			HttpClient httpClient = new DefaultHttpClient(params);
 
 			HttpClient httpsClient = HttpsClient.createHttpsClient(httpClient);

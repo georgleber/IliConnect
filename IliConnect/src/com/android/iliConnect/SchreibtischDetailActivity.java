@@ -22,6 +22,7 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 	private Object listener = this;
 	private String selectedCourse = "";
 	private String selectedCourseName = "";
+	private String itemType = "";
 	public static SchreibtischDetailActivity instance;
 
 
@@ -34,8 +35,9 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 		MainActivity.currentActivity = this;
 		instance = this;
 
-		final String Kurs = intent.getStringExtra("CourseName");
-		((TextView) (findViewById(R.id.courseName1))).setText(Kurs);
+		final String kurs = intent.getStringExtra("CourseName");
+
+		((TextView) (findViewById(R.id.courseName1))).setText(kurs);
 		
 
 		Item item = null;
@@ -50,7 +52,9 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 		
 		selectedCourse = item.ref_id;
 		selectedCourseName = item.title;
-				
+		itemType = item.type;
+		
+		
 		final ListView lv = (ListView) findViewById(R.id.desktop_content);
 		
 		if(item.Item!=null && item.getItems().size() > 0) {
@@ -66,8 +70,11 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.kurs_menu, menu);
+		if(itemType.equalsIgnoreCase("CRS")) {
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.kurs_menu, menu);
+		}
+		
 		return true;
 	}
 

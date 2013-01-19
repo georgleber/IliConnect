@@ -60,6 +60,9 @@ public class Schreibtisch extends ListFragment implements Redrawable {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Item item = MainActivity.instance.localDataProvider.desktopItems.DesktopItem.get(position);
 
+		// Item als gelesen markieren
+		item.changed = false;
+		
 		// doStuff
 		Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
 		intentMain.putExtra("CourseName", item.title);

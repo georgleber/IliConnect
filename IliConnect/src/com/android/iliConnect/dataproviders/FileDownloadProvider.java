@@ -60,7 +60,7 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, Exception> 
 			// Creating HTTP client
 			HttpParams params = new BasicHttpParams();
 			// Timeout für Verbindungsaufbau definieren
-			HttpConnectionParams.setConnectionTimeout(params, 10000);
+			HttpConnectionParams.setConnectionTimeout(params, 5000);
 			HttpClient httpClient = new DefaultHttpClient(params);
 
 			// mache aus http einen httpsClient

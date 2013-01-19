@@ -300,6 +300,7 @@ public class MainActivity extends Activity {
 
 		final String filePath = dirPath + "/" + item.getTitle();
 		final File file = new File(filePath);
+		
 
 		if(item.changed && file.exists())
 			file.delete();
@@ -320,6 +321,7 @@ public class MainActivity extends Activity {
 				Intent intent = null;
 				boolean fileError;
 				boolean openFileError;
+				String ext="";
 
 				while (!file.exists()) {
 					try {
@@ -344,8 +346,7 @@ public class MainActivity extends Activity {
 					//String ext = MimeTypeMap.getFileExtensionFromUrl(filePath);
 					
 					int dot = filePath.lastIndexOf(".");
-					String ext = filePath.substring(dot+1, filePath.length());
-					
+					ext = filePath.substring(dot+1, filePath.length());					
 					String mimeType = mime.getMimeTypeFromExtension(ext);
 					if (mimeType == null || mimeType.equals("")) {
 						// falls Dateiendung unbekannt
@@ -369,9 +370,10 @@ public class MainActivity extends Activity {
 				final boolean downloadError = fileError;
 				final boolean appError = openFileError;
 				final Intent appIntent = intent;
+				final String extension = ext;
 				
 
-				
+				progressDialog.dismiss();
 				MainActivity.instance.runOnUiThread(new Runnable() {
 					public void run() {
 						if (MainTabView.getInstance() != null)
@@ -382,10 +384,15 @@ public class MainActivity extends Activity {
 						}
 						
 						if(downloadError) {
-							MessageBuilder.download_error(instance, item.getTitle());
+							MessageBuilder.download_error(MainActivity.instance, item.getTitle());
 						}
 						if(appError) {
-							MessageBuilder.application_error(instance, item.getTitle());
+							try {
+							    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q="+extension)));
+							} catch (android.content.ActivityNotFoundException anfe) {
+							    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://market.android.com/search?q="+extension)));
+							}							
+							
 						}
 						
 						if(appIntent != null && appError == false) {

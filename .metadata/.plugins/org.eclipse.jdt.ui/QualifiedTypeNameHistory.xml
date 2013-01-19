@@ -18,8 +18,9 @@
 <fullyQualifiedTypeName name="android.content.pm.PackageManager"/>
 <fullyQualifiedTypeName name="android.widget.Toast"/>
 <fullyQualifiedTypeName name="android.os.Handler"/>
-<fullyQualifiedTypeName name="com.android.iliConnect.R.drawable"/>
-<fullyQualifiedTypeName name="android.R"/>
 <fullyQualifiedTypeName name="android.R.id"/>
+<fullyQualifiedTypeName name="android.R"/>
 <fullyQualifiedTypeName name="android.R.drawable"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.R"/>
+<fullyQualifiedTypeName name="com.android.iliConnect.R.drawable"/>
 </qualifiedTypeNameHistroy>

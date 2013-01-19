@@ -23,6 +23,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.app.ProgressDialog;
 import android.net.ConnectivityManager;
@@ -64,9 +67,13 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 
 		try {
 
-			HttpClient httpclient = new DefaultHttpClient();
+			// Creating HTTP client
+			HttpParams params = new BasicHttpParams();
+			// Timeout für Verbindungsaufbau definieren
+			HttpConnectionParams.setConnectionTimeout(params, 10000);
+			HttpClient httpClient = new DefaultHttpClient(params);
 
-			HttpClient httpsClient = HttpsClient.createHttpsClient(httpclient);
+			HttpClient httpsClient = HttpsClient.createHttpsClient(httpClient);
 			HttpPost httppost = new HttpPost(sUrl[0]);
 
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -82,7 +89,12 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 			HttpResponse response = httpsClient.execute(httppost);
 			StatusLine status = response.getStatusLine();
 			
-			if(status.getStatusCode() == 404 || status.getStatusCode() == 401) {
+			/*
+			if(status.getStatusCode() < 404 || status.getStatusCode() == 401) {
+				throw new HttpException(status.getReasonPhrase());
+			}*/
+			
+			if(status.getStatusCode() < 200 || status.getStatusCode() > 207) {
 				throw new HttpException(status.getReasonPhrase());
 			}
 
@@ -138,7 +150,6 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 	@Override
 	protected void onPostExecute(Exception e) {
 		// super.onPostExecute(result);
-
 		if (e != null) {
 			String errMsg = null;
 			String errTtl = "Synchronisation fehlgeschlagen";

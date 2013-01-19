@@ -8,45 +8,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.android.iliConnect.MainActivity;
+import com.android.iliConnect.MainTabView;
+import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.ssl.HttpsClient;
 
-public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
+public class FileDownloadProvider extends AsyncTask<String, Integer, Exception> {
 
 	ProgressDialog progressDialog;
+	private Activity instance; 
 	public boolean isRunning = false;
 	
 
-	public FileDownloadProvider(ProgressDialog progressDialog) {
+	public FileDownloadProvider(ProgressDialog progressDialog, Activity instance) {
 		this.progressDialog = progressDialog;
+		this.instance = instance;
 		
 	}
 	
 	public FileDownloadProvider() {
-		
+
 	}
 
 	@Override
-	protected String doInBackground(String... sUrl) {
+	protected Exception doInBackground(String... sUrl) {
 
 		try {
 			String url = sUrl[0];
 			String filePath = sUrl[1];
+			
 			// Creating HTTP client
-			HttpClient httpClient = new DefaultHttpClient();
+			HttpParams params = new BasicHttpParams();
+			// Timeout für Verbindungsaufbau definieren
+			HttpConnectionParams.setConnectionTimeout(params, 10000);
+			HttpClient httpClient = new DefaultHttpClient(params);
 
 			// mache aus http einen httpsClient
 			HttpClient httpsClient = HttpsClient.createHttpsClient(httpClient);
@@ -63,20 +78,25 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 
 			HttpResponse response = null;
 			response = httpsClient.execute(post);
+			
+			StatusLine status = response.getStatusLine();
+			
+			if(status.getStatusCode() < 200 || status.getStatusCode() > 207) {
+				throw new HttpException(status.getReasonPhrase());
+			}
 
 			// als zweites Datei per Get laden
 			HttpGet get = new HttpGet(url);
 			response = httpsClient.execute(get);
-
+			
 			HttpEntity entity = response.getEntity();
+			
+			if(status.getStatusCode() < 200 || status.getStatusCode() > 207) {
+				throw new HttpException(status.getReasonPhrase());
+			}
+
 			InputStream in = entity.getContent();
 
-			// Save the file to SD
-			/*
-			File path = Environment.getExternalStoragePublicDirectory(filePath);
-			path.mkdirs();
-			
-			*/
 			File file = new File(filePath);
 			if (!file.exists()) {
 				file.createNewFile();
@@ -88,8 +108,6 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 			int count;
 			while ((count = in.read(data)) != -1) {
 				total += count;
-				// publishing the progress....
-				// publishProgress((int) (total * 100 / fileLength));
 				fos.write(data, 0, count);
 			}
 
@@ -98,17 +116,32 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, String> {
 			in.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return e;
+		} catch (HttpException e) {
+			return e;
 		}
 		return null;
 	}
 
 	@Override
-	protected void onPostExecute(String result) {
-		super.onPostExecute(result);
+	protected void onPostExecute(Exception e) {
+		//super.onPostExecute(e);
 		if (progressDialog != null) {
 			progressDialog.dismiss();
+		}
+		
+		if(e != null) {
+			String errMsg = null;
+			if(e instanceof HttpHostConnectException) {
+				errMsg = "Es konnte keine Verbindung hergestellt werden.";
+			}
+			else {
+				errMsg = "Es ist ein Fehler während des Downloads aufgetreten.";
+			}
+			
+			if(instance != null) {
+				MessageBuilder.exception_message(instance, errMsg);
+			}
 		}
 		isRunning = false;
 		synchronized (MainActivity.syncObject) {

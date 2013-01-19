@@ -169,7 +169,7 @@ public class MainActivity extends Activity {
 			if (showSyncError) {
 				// Fehlermeldung nur ausgeben, wenn manuelle Synchronisation
 				if (manual) {
-					throw new NetworkException("Benötigte Datenverbindung nicht vorhanden");
+					throw new NetworkException("Benötigte Datenverbindung nicht vorhanden.");
 				}
 			} else {
 				remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
@@ -284,10 +284,14 @@ public class MainActivity extends Activity {
 		// progressDialog = new ProgressDialog(MainTabView.instance);
 		// progressDialog.setTitle("SDownload");
 		// progressDialog.setMessage("Bitte warten...");
-
 		
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
-		download = new FileDownloadProvider(progressDialog);
+		NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		
+		
+		download = new FileDownloadProvider(progressDialog, instance);
 
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
@@ -306,6 +310,16 @@ public class MainActivity extends Activity {
 			file.delete();
 		
 		if (!file.exists()) {
+			// Prüfen, ob Datenverbindung vorhanden
+			if(MainActivity.instance.localDataProvider.settings.sync_wlanonly && (wifi == null || !wifi.isConnected())) {
+				MessageBuilder.exception_message(instance, "Benötigte WLAN-Verbindung nicht vorhanden.");
+				return;
+			}
+			if((mobile == null || !mobile.isConnected()) && (wifi == null || !wifi.isConnected())) {
+				MessageBuilder.exception_message(instance, "Benötigte Datenverbindung nicht vorhanden.");
+				return;
+			}
+			
 			// Download Dialog erst anzeigen, wenn Datei auch heruntergeladen werden muss.
 			progressDialog = ProgressDialog.show(instance, "Download", "Bitte warten");
 			download.execute(new String[] { localDataProvider.auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=sendfile", filePath });
@@ -373,7 +387,10 @@ public class MainActivity extends Activity {
 				final String extension = ext;
 				
 
-				progressDialog.dismiss();
+				if(progressDialog != null) {
+					progressDialog.dismiss();
+				}
+				
 				MainActivity.instance.runOnUiThread(new Runnable() {
 					public void run() {
 						if (MainTabView.getInstance() != null)
@@ -417,7 +434,7 @@ public class MainActivity extends Activity {
 		if(!localDataProvider.settings.sync)
 		return;
 			
-		download = new FileDownloadProvider(null);
+		download = new FileDownloadProvider();
 
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 

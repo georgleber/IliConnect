@@ -2,6 +2,8 @@ package com.android.iliConnect.dataproviders;
 
 import java.util.concurrent.ExecutionException;
 
+import org.apache.http.conn.HttpHostConnectException;
+
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
@@ -30,36 +32,44 @@ public class LocalCourseProvider {
 		try {
 			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des
 			// asnyc. Aufrufs gewartet.
-			String result = courseProv.get();
+			Object response = courseProv.get();
 			
-			if(result == null) {
-				throw new NetworkException("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.");
-			}
-
-			if (result.contains("JOINED")) {
-				if (MainActivity.instance.localDataProvider.settings.sync) {
-					// Nach Anmeldung, neu syncen. Durch null wird keine Sync-Meldung angezeigt
-					MainActivity.instance.sync(null);
+			if(!(response instanceof String)) {
+				if(response instanceof HttpHostConnectException) {
+					throw new NetworkException("Es konnte keine Verbindung zum Server hergestellt werden");
 				}
+				else {
+					throw new NetworkException("Es ist ein Fehler bei der Anmeldung aufgetreten. Bitte versuchen Sie es erneut.");
+				}
+			}
+			else {
+				String result = (String) response;
 
-				// Bei erfolgreicher Anmeldung Schreibtisch anzeigen.
-				MainTabView.instance.changeViewTo(3);
-			} else if (result.contains("PASSWORD_NEEDED")) {
-				return result;
-			} else if (result.contains("JOIN_REQUEST_SENT")) {
-				MessageBuilder.course_join_request_send(MainTabView.instance);
-			} else if (result.contains("WAITING_FOR_CONFIRMATION")) {
-				MessageBuilder.course_waiting_for_confirm(MainTabView.instance);
-			} else if (result.contains("ALREADY_SUBSCRIBED")) {
-				MessageBuilder.course_alreadysignedin(MainTabView.instance);
-			} else if (result.contains("not a course object")) {
-				MessageBuilder.course_notexist(MainTabView.instance, ref_id);
-			} else if (result.contains("WRONG_PASSWORD")) {
-				MessageBuilder.course_passwordfalse(MainTabView.instance, ref_id);
-			} else if (result.contains("PERMISSION_DENIED")) {
-				MessageBuilder.course_permissondenied(MainTabView.instance, ref_id);
-			} else {
-				MessageBuilder.QR_error(MainTabView.instance);
+				if (result.contains("JOINED")) {
+					if (MainActivity.instance.localDataProvider.settings.sync) {
+						// Nach Anmeldung, neu syncen. Durch null wird keine Sync-Meldung angezeigt
+						MainActivity.instance.sync(null);
+					}
+
+					// Bei erfolgreicher Anmeldung Schreibtisch anzeigen.
+					MainTabView.instance.changeViewTo(3);
+				} else if (result.contains("PASSWORD_NEEDED")) {
+					return result;
+				} else if (result.contains("JOIN_REQUEST_SENT")) {
+					MessageBuilder.course_join_request_send(MainTabView.instance);
+				} else if (result.contains("WAITING_FOR_CONFIRMATION")) {
+					MessageBuilder.course_waiting_for_confirm(MainTabView.instance);
+				} else if (result.contains("ALREADY_SUBSCRIBED")) {
+					MessageBuilder.course_alreadysignedin(MainTabView.instance);
+				} else if (result.contains("not a course object")) {
+					MessageBuilder.course_notexist(MainTabView.instance, ref_id);
+				} else if (result.contains("WRONG_PASSWORD")) {
+					MessageBuilder.course_passwordfalse(MainTabView.instance, ref_id);
+				} else if (result.contains("PERMISSION_DENIED")) {
+					MessageBuilder.course_permissondenied(MainTabView.instance, ref_id);
+				} else {
+					MessageBuilder.QR_error(MainTabView.instance);
+				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -79,24 +89,29 @@ public class LocalCourseProvider {
 		try {
 			// Result enthaelt die Ergebnisnachricht des http-Requests. Mit get() wird auf das Ende des
 			// asnyc. Aufrufs gewartet.
-			String result = courseProv.get();
-			
-			if(result == null) {
-				throw new NetworkException("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.");
-			}
+			Object response = courseProv.get();
 
-			if (result.contains("not a course object")) {
-				throw new JoinCourseException("Der Kurs ist nicht vorhanden");
-			} else if (result.contains("PERMISSION_DENIED")) {
-				throw new JoinCourseException("Zugriff verweigert");
-			} else {
-				if (MainActivity.instance.localDataProvider.settings.sync) {
-					// Nach Abmeldung, neu syncen. Durch null wird keine Sync-Meldung angezeigt
-					MainActivity.instance.sync(null);
+			if (!(response instanceof String)) {
+				if (response instanceof HttpHostConnectException) {
+					throw new NetworkException("Es konnte keine Verbindung zum Server hergestellt werden");
+				} else {
+					throw new NetworkException("Es ist ein Fehler bei der Abmeldung aufgetreten. Bitte versuchen Sie es erneut.");
 				}
+			} else {
+				String result = (String) response;
+				if (result.contains("not a course object")) {
+					throw new JoinCourseException("Der Kurs ist nicht vorhanden");
+				} else if (result.contains("PERMISSION_DENIED")) {
+					throw new JoinCourseException("Zugriff verweigert");
+				} else {
+					if (MainActivity.instance.localDataProvider.settings.sync) {
+						// Nach Abmeldung, neu syncen. Durch null wird keine Sync-Meldung angezeigt
+						MainActivity.instance.sync(null);
+					}
 
-				MainTabView.instance.update();
-				return "LEFT";
+					MainTabView.instance.update();
+					return "LEFT";
+				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

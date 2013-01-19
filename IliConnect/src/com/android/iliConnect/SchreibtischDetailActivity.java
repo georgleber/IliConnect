@@ -99,13 +99,12 @@ public class SchreibtischDetailActivity extends FragmentActivity implements IliO
 			try {
 				courseProv.leaveCourse(selectedCourse);
 			} catch (NetworkException e) {
-				// TODO Fehlermeldung anzeigen
-				e.printStackTrace();
+				MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 			}
 			// neuer Sync und View update wird noch leaveCourse gemacht
 
 		} catch (JoinCourseException e) {
-			// TODO Fehlermeldung einbauen
+			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
 			e.printStackTrace();
 		}
 		this.finish();

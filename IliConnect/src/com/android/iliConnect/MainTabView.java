@@ -274,6 +274,8 @@ public class MainTabView extends FragmentActivity implements TabHost.OnTabChange
 		this.mViewPager.setCurrentItem(i);
 
 	}
+	
+	
 
 
 	 private boolean hasBackCam() {

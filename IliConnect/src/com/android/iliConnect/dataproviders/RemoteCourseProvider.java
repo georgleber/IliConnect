@@ -7,14 +7,21 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.MainTabView;
@@ -24,26 +31,30 @@ import com.android.iliConnect.ssl.HttpsClient;
 
 import android.os.AsyncTask;
 
-public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String> {
+public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, Object> {
 		
 	@Override
-	protected String doInBackground(CourseData... crs)  { 		
+	protected Object doInBackground(CourseData... crs)  { 		
 
 		// nur ersten Kurs verarbeiten
 		CourseData course = crs[0];
 		
 		// Creating HTTP client
-		HttpClient httpClient = new DefaultHttpClient();
+		HttpParams params = new BasicHttpParams();
+		// Timeout für Verbindungsaufbau definieren
+		HttpConnectionParams.setConnectionTimeout(params, 5000);
+		HttpClient httpClient = new DefaultHttpClient(params);
 		
 		// mache aus http einen httpsClient
 		HttpClient httpsClient = HttpsClient.createHttpsClient(httpClient);
-		
+
 		// Url für Request erstellen
 		String url = course.getUrlSrc() + course.getApiPath() + "?action=" + course.getAction() + "&ref_id=" + course.getCourseId();
 
 		// Creating HTTP Post
 		HttpPost httpPost = new HttpPost(url);
-				
+		
+						
 		// Building post parameters, key and value pair
 	    List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 		nameValuePair.add(new BasicNameValuePair("username", course.getUserId()));
@@ -65,21 +76,24 @@ public class RemoteCourseProvider extends AsyncTask<CourseData, Integer, String>
 			// Http-Request ausfuehren
 			HttpResponse response = httpsClient.execute(httpPost);
 			
-			// Anwortnachricht aus Response auslesen
+			StatusLine status = response.getStatusLine();
+			if(status.getStatusCode() < 200 || status.getStatusCode() > 207) {
+				throw new HttpException(status.getReasonPhrase());
+			}
+			
+			// Antwortnachricht aus Response auslesen
 			responseMessage = this.getResponseMessage(response);
 			
-		} catch (ClientProtocolException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-			
+			return e;
+		} 			
 		// Mit return wird das Ergebnis im result bereitgestellt 
 		return responseMessage;
 	}
 	
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(Object result) {
 		super.onPostExecute(result);
 
 		MainTabView.instance.update();

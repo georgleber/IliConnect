@@ -31,7 +31,7 @@ import com.android.iliConnect.models.Item;
 
 public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 
-	private String selectedCourse = "";
+	//private String selectedCourse = "";
 
 	private class DesktopViews {
 		TextView title;
@@ -208,13 +208,21 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		v.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				parentItem.changed = false;
 				String s = v.getTag().toString();
 
-				if (parentItem.getType().equalsIgnoreCase("CRS")) {
+				/*if (parentItem.getType().equalsIgnoreCase("CRS")) {
 					// ref_id für ggf. Abmeldung merken
 					selectedCourse = parentItem.getRef_id();
+					// Item als gelesen markieren
+					item.changed = false;
 					toggleVisibility(parentItem, v);
-				} else if (parentItem.getType().equalsIgnoreCase("FOLD")) {
+				}*/
+				if (parentItem.getType().equalsIgnoreCase("FOLD") || parentItem.getType().equalsIgnoreCase("CRS")) {
+					/*if(parentItem.getType().equalsIgnoreCase("CRS")) {
+						selectedCourse = parentItem.getRef_id();
+					}*/
+					
 					// TODO:
 					// repository.php callen... mit ref_id und cmd=view
 					//toggleVisibility(parentItem, v);
@@ -223,15 +231,17 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 					// doStuff
 					final Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
 					intentMain.putExtra("CourseName", item.title);
+					intentMain.putExtra("CourseId", item.ref_id);
 					// -1 hat keine Auswrikung auf die SchreibtischDetailActivity
 					intentMain.putExtra("position", -1);
 					intentMain.putExtra("Item", parentItem);
 					
-
+					
 					MainActivity.instance.runOnUiThread(new Runnable() {
 						public void run() {
 							MainActivity.currentActivity.startActivity(intentMain);
-
+							// Item als gelesen markieren
+							
 							MainActivity.instance.iliasNotifier(MainActivity.currentActivity, item);		
 						}
 					});
@@ -245,22 +255,6 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 
 					// Ilias Im Bowser aufrufen
 					MainActivity.instance.showBrowserContent(iliasUrl);
-
-				} else if (parentItem.getType().equalsIgnoreCase("UNSIGN")) {
-					LocalCourseProvider courseProv = new LocalCourseProvider();
-					try {
-						try {
-							courseProv.leaveCourse(selectedCourse);
-						} catch (NetworkException e) {
-							// TODO Fehlermeldung anzeigen
-							e.printStackTrace();
-						}
-						// neuer Sync und View update wird noch leaveCourse gemacht
-
-					} catch (JoinCourseException e) {
-						// TODO Fehlermeldung einbauen
-						e.printStackTrace();
-					}
 				}
 			}
 		});

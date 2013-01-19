@@ -373,7 +373,7 @@ public class MainActivity extends Activity {
 				final String extension = ext;
 				
 
-				
+				progressDialog.dismiss();
 				MainActivity.instance.runOnUiThread(new Runnable() {
 					public void run() {
 						if (MainTabView.getInstance() != null)
@@ -384,7 +384,7 @@ public class MainActivity extends Activity {
 						}
 						
 						if(downloadError) {
-							MessageBuilder.download_error(instance, item.getTitle());
+							MessageBuilder.download_error(MainActivity.instance, item.getTitle());
 						}
 						if(appError) {
 							try {

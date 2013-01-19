@@ -285,7 +285,7 @@ public class MainActivity extends Activity {
 
 		progressDialog = ProgressDialog.show(instance, "Download", "Bitte warten");
 
-		download = new FileDownloadProvider();
+		download = new FileDownloadProvider(progressDialog);
 
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
@@ -349,21 +349,19 @@ public class MainActivity extends Activity {
 				final boolean errorOccured = fileError;
 				
 
-				
+				progressDialog.dismiss();
 
 				MainActivity.instance.runOnUiThread(new Runnable() {
 					public void run() {
 						if (MainTabView.getInstance() != null)
 							MainTabView.getInstance().update();
-							progressDialog.dismiss();
 						if(errorOccured) {
 							// TODO: Error-Message wird nicht mehr angezeigt!! Kann nicht mehr in dem 
 							// oberen Thread aufgerufen werden, da RuntimeException geworfen wird.
-							MessageBuilder.download_error(instance, item.getTitle());
+							MessageBuilder.download_error(MainActivity.instance, item.getTitle());
 						}
 					}
 				});
-				
 			}
 			// }
 		}).start();

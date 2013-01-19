@@ -1,5 +1,6 @@
 package com.android.iliConnect.models;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,10 +8,13 @@ import java.util.Date;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.android.iliConnect.dataproviders.PersistableObject;
 
 @Element
-public class Item extends PersistableObject{
+public class Item extends PersistableObject implements Serializable {
 	
 	@Element (required = false)	
 	public String title = "";
@@ -66,7 +70,8 @@ public class Item extends PersistableObject{
 			   (o instanceof Item) &&
 			   (this.ref_id.equals(((Item)o).ref_id));
 	}
-	
+
+
 	
 
 	

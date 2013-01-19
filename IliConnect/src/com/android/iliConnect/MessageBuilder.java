@@ -436,7 +436,7 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-				listener.onWarnMessageClose();
+				listener.onMessageClose();
 				return;
 			}
 		});
@@ -457,7 +457,7 @@ public class MessageBuilder {
 		alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-				listener.onCriticalMessageClose();
+				listener.onMessageClose();
 				return;
 			}
 		});

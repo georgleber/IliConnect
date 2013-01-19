@@ -174,8 +174,6 @@ public class MainActivity extends Activity {
 			} else {
 				remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");
 			}
-			NotificationWatchThread wt = new NotificationWatchThread();
-			wt.showNotificationPopups(false, false);
 		}
 	}
 
@@ -351,7 +349,7 @@ public class MainActivity extends Activity {
 						// falls Dateiendung unbekannt
 						intent.setData(Uri.fromFile(file));
 						PackageManager pm = instance.getPackageManager();
-						List<ResolveInfo> apps = pm.queryIntentActivities(intent, pm.MATCH_DEFAULT_ONLY);
+						List<ResolveInfo> apps = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
 						// Prüfen, ob Apps vorhanden sind die die Datei öffnen könnten
 						if (apps.size() == 0) {

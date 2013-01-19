@@ -23,8 +23,7 @@ public class NotificationWatchThread implements NotificationClickListener {
 	public TimerTask doAsynchronousTask;
 	private Timer timer = new Timer();
 	public static NotificationWatchThread instance;
-	private static boolean warnMessageVisible;
-	private static boolean criticalMessageVisible;
+	public static int visibleMsgCount = 0;
 
 	public void startTimer() {
 		final Handler handler = new Handler();
@@ -37,7 +36,7 @@ public class NotificationWatchThread implements NotificationClickListener {
 				handler.post(new Runnable() {
 					public void run() {
 						try {
-							showNotificationPopups(warnMessageVisible, criticalMessageVisible);
+							showNotificationPopups();
 						} catch (Exception e) {
 
 						}
@@ -52,15 +51,11 @@ public class NotificationWatchThread implements NotificationClickListener {
 		timer.schedule(doAsynchronousTask, 0, MainActivity.instance.localDataProvider.settings.interval * 60 * 1000);
 	}
 
-	public void onWarnMessageClose() {
-		warnMessageVisible = false;
+	public void onMessageClose() {
+		visibleMsgCount--;
 	}
 
-	public void onCriticalMessageClose() {
-		criticalMessageVisible = false;
-	}
-
-	public void showNotificationPopups(boolean warnMessageVisible, boolean criticalMessageVisible) {
+	private void showNotificationPopups() {
 		// LocalDataProvider localDataProvider = MainActivity.instance.localDataProvider;
 		Notifications notifications = MainActivity.instance.localDataProvider.notifications;// localDataProvider.notifications;
 
@@ -72,8 +67,9 @@ public class NotificationWatchThread implements NotificationClickListener {
 		ArrayList<Notification> nextNotifications = notifications.Notifications;
 		if (nextNotifications != null) {
 			Collections.sort(nextNotifications, new NotificationComparator(false));
+			int count = 0;
 			for (Notification notification : nextNotifications) {
-				if (!handler.isNotificationMarked(notification.getRef_id())) {
+				if (!handler.isNotificationMarked(notification.getRef_id()) && !handler.isNotificationShown(notification.getRef_id())) {
 					Date currentDate = new Date(System.currentTimeMillis());
 
 					// FIXME: Workaround conversion PHP Timestamp to Java Timestamp
@@ -88,20 +84,26 @@ public class NotificationWatchThread implements NotificationClickListener {
 						AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_CRITICAL);
 						notiBuilder.showNotification();
 
-						if (!criticalMessageVisible) {
+						if (visibleMsgCount == count) {
 							String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
 							MessageBuilder.critical_message(MainTabView.instance, messageText, this);
-							criticalMessageVisible = true;
+
+							handler.setNotificationShown(notification.getRef_id());
+							visibleMsgCount++;
+							count++;
 						}
 					} else if (daysBetween <= warning) {
 						String notificationText = "Frist endet " + notification.getDate() + "Uhr";
 						AndroidNotificationBuilder notiBuilder = new AndroidNotificationBuilder(title, notificationText, AndroidNotificationBuilder.STATUS_WARNING);
 						notiBuilder.showNotification();
 
-						if (!warnMessageVisible) {
+						if (visibleMsgCount == count) {
 							String messageText = "Termin " + notification.getTitle() + " endet " + notification.getDate() + " Uhr";
 							MessageBuilder.warning_message(MainTabView.instance, messageText, this);
-							warnMessageVisible = true;
+							
+							handler.setNotificationShown(notification.getRef_id());
+							visibleMsgCount++;
+							count++;
 						}
 					}
 				}

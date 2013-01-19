@@ -14,6 +14,7 @@ public class NotificationHandler {
 	public List<Notification> loadNotifications(boolean checkSettings) {
 		List<Notification> notifications = new ArrayList<Notification>();
 		List<Notification> loadedNotifications = null;
+
 		if (MainActivity.instance.localDataProvider != null && MainActivity.instance.localDataProvider.notifications.Notifications != null) {
 			loadedNotifications = MainActivity.instance.localDataProvider.notifications.Notifications;
 		}

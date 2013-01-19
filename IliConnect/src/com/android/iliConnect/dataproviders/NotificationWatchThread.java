@@ -3,7 +3,6 @@ package com.android.iliConnect.dataproviders;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -84,7 +83,6 @@ public class NotificationWatchThread implements NotificationClickListener {
 						Long date = Long.valueOf(notification.date) * 1000;
 						Date notiDate = new Date(date);
 
-						String title = "IliConnect: " + notification.getTitle();
 						long daysBetween = TimeUnit.MILLISECONDS.toDays(notiDate.getTime() - currentDate.getTime());
 						if (daysBetween <= critical) {
 							criticalNotificationCount++;

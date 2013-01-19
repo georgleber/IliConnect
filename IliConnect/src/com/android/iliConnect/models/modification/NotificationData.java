@@ -14,6 +14,9 @@ import com.android.iliConnect.dataproviders.PersistableObject;
 public class NotificationData extends PersistableObject {
 	@ElementList(required = false)
 	public List<NotificationItem> NotificationItems;
+	
+	@ElementList(required = false)
+	public List<NotificationMessage> NotificationMessages;
 
 	@Override
 	public void load() {

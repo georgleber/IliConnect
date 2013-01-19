@@ -8,7 +8,7 @@ import com.android.iliConnect.MainActivity;
 import com.android.iliConnect.dataproviders.PersistableObject;
 
 @Element
-public class NotificationItem extends PersistableObject {
+public class NotificationMessage extends PersistableObject {
 	@Element
 	private String ref_id;
 

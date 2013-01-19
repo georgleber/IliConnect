@@ -14,7 +14,7 @@ public class DataDownloadThread {
 
 	public TimerTask doAsynchronousTask;
 	private Timer timer = new Timer();
-	private static int notificationThreadStartCount = 0;
+	private static boolean startNotificationThread = false;
 
 	public void startTimer() {
 		final Handler handler = new Handler();
@@ -37,12 +37,12 @@ public class DataDownloadThread {
 								}
 
 								// Notification-Thread erst beim zweiten Sync-Lauf starten
-								if (notificationThreadStartCount == 1) {
+								if (startNotificationThread == true) {
 									if (MainActivity.instance.notificationThread.doAsynchronousTask == null) {
 										MainActivity.instance.notificationThread.startTimer();
 									}
 								} else {
-									notificationThreadStartCount++;
+									startNotificationThread = true;
 								}
 
 							}

@@ -2,12 +2,14 @@ package com.android.iliConnect;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -283,7 +285,7 @@ public class MainActivity extends Activity {
 		// progressDialog.setTitle("SDownload");
 		// progressDialog.setMessage("Bitte warten...");
 
-		progressDialog = ProgressDialog.show(instance, "Download", "Bitte warten");
+		
 
 		download = new FileDownloadProvider(progressDialog);
 
@@ -303,6 +305,8 @@ public class MainActivity extends Activity {
 			file.delete();
 		
 		if (!file.exists()) {
+			// Download Dialog erst anzeigen, wenn Datei auch heruntergeladen werden muss.
+			progressDialog = ProgressDialog.show(instance, "Download", "Bitte warten");
 			download.execute(new String[] { localDataProvider.auth.url_src + "repository.php?ref_id=" + item.getRef_id() + "&cmd=sendfile", filePath });
 		}
 		new Thread(new Runnable() {
@@ -313,53 +317,81 @@ public class MainActivity extends Activity {
 
 				Date start = new Date();
 				long timeout = 5000;
-				
+				Intent intent = null;
 				boolean fileError;
+				boolean openFileError;
 
 				while (!file.exists()) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 
 					}
 					if (new Date().getTime() - start.getTime() > timeout)
 						break;
 				}
-				
+
 				fileError = false;
+				openFileError = false;
 				if (file.exists()) {
 
-					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent = new Intent(Intent.ACTION_VIEW);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+					MimeTypeMap mime = MimeTypeMap.getSingleton();			
 					
-					MimeTypeMap mime = MimeTypeMap.getSingleton();
-					String ext = MimeTypeMap.getFileExtensionFromUrl(filePath);
+					// Funktioniert nicht zu 100%
+					//String ext = MimeTypeMap.getFileExtensionFromUrl(filePath);
+					
+					int dot = filePath.lastIndexOf(".");
+					String ext = filePath.substring(dot+1, filePath.length());
+					
 					String mimeType = mime.getMimeTypeFromExtension(ext);
-					if(mimeType != null && mimeType.equals("")) {
-						mimeType = "application/*";
+					if (mimeType == null || mimeType.equals("")) {
+						// falls Dateiendung unbekannt
+						intent.setData(Uri.fromFile(file));
+						PackageManager pm = instance.getPackageManager();
+						List<ResolveInfo> apps = pm.queryIntentActivities(intent, pm.MATCH_DEFAULT_ONLY);
+
+						// Prüfen, ob Apps vorhanden sind die die Datei öffnen könnten
+						if (apps.size() == 0) {
+							openFileError = true;
+						}
+					} else {
+						intent.setDataAndType(Uri.fromFile(file), mimeType);	
 					}
-					intent.setDataAndType(Uri.fromFile(file), mimeType);					
-	
-					MainActivity.instance.startActivity(Intent.createChooser(intent, "Datei öffnen..."));
 
 				} else {
 					fileError = true;
 				}
 				
-				final boolean errorOccured = fileError;
+				// Werte für UI Thread definieren
+				final boolean downloadError = fileError;
+				final boolean appError = openFileError;
+				final Intent appIntent = intent;
 				
 
-				progressDialog.dismiss();
-
+				
 				MainActivity.instance.runOnUiThread(new Runnable() {
 					public void run() {
 						if (MainTabView.getInstance() != null)
 							MainTabView.getInstance().update();
-						if(errorOccured) {
-							// TODO: Error-Message wird nicht mehr angezeigt!! Kann nicht mehr in dem 
-							// oberen Thread aufgerufen werden, da RuntimeException geworfen wird.
-							MessageBuilder.download_error(MainActivity.instance, item.getTitle());
+	
+						if(progressDialog != null) {
+							progressDialog.dismiss();	
 						}
+						
+						if(downloadError) {
+							MessageBuilder.download_error(instance, item.getTitle());
+						}
+						if(appError) {
+							MessageBuilder.application_error(instance, item.getTitle());
+						}
+						
+						if(appIntent != null && appError == false) {
+							MainActivity.instance.startActivity(Intent.createChooser(appIntent, "Datei öffnen..."));
+						}
+						
 					}
 				});
 			}

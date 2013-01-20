@@ -1,18 +1,16 @@
 package com.android.iliConnect;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.android.iliConnect.handler.NotificationHandler;
-import com.android.iliConnect.models.Notification;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.android.iliConnect.handler.NotificationHandler;
+import com.android.iliConnect.models.Notification;
 
 public class Uebersicht extends Fragment implements Redrawable {
 	

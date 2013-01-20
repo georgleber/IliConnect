@@ -21,6 +21,8 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -168,18 +170,23 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 				}
 
 				if (logout) {
+					// Logout soll nach Bestätigung der Fehlermeldung durchgeführt werden
 					doLogout = true;
 					errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
 							" die Serveradresse und versuchen Sie es erneut.";
 					errTtl = "Verbindung fehlgeschlagen";
 				}
-			} else if ( e instanceof NoHttpResponseException || e instanceof HttpException) {
+			} else if (e instanceof NoHttpResponseException || e instanceof HttpException ) {
 				doLogout = true;
 				errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
 						" Ihre Internetverbindung und die Serveradresse und versuchen Sie es erneut.";
 				errTtl = "Verbindung fehlgeschlagen";
+			} else if(e instanceof HttpHostConnectException || e instanceof ConnectTimeoutException) {
+				errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
+						" Ihre Internetverbindung und die Serveradresse und versuchen Sie es erneut.";
+				errTtl = "Verbindung fehlgeschlagen";
 			} else if (e instanceof AuthException) {
-				// Logout soll nach Bestätigung durchgeführt werden
+				// Logout soll nach Bestätigung der Fehlermeldung durchgeführt werden
 				doLogout = true;
 				MainActivity.instance.localDataProvider.deleteAuthentication();
 				errMsg = "Ihr Benutzername oder Kennwort ist falsch.";
@@ -190,13 +197,17 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 
 			if (errMsg != null) {
 				//TODO: connection_failed
-				MessageBuilder.sync_exception(MainTabView.instance, errTtl, errMsg, (IliOnClickListener) instance);
+				// Wenn kein Progress Dialog angeizegt wird, wird Sync im Hintergrund durchgeführt, dann Meldung bei Verbindungsproblemen nicht anzeigen
+				// Ist ein Fehler aufgetreten, bei dem der Benutezr ausgeloggt werden soll, muss Meldung auch angeizegt werden. 
+				if(pDialog != null || doLogout) {
+					MessageBuilder.sync_exception(MainTabView.instance, errTtl, errMsg, (IliOnClickListener) instance);
+				}
+				
 			} 
 		}
 		else {
 			MainActivity.instance.localDataProvider.updateLocalData();
 		}
-
 
 		if (pDialog != null && pDialog.isShowing()) {
 			pDialog.dismiss();

@@ -16,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -132,7 +133,7 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, Exception> 
 		
 		if(e != null) {
 			String errMsg = null;
-			if(e instanceof HttpHostConnectException) {
+			if(e instanceof HttpHostConnectException || e instanceof ConnectTimeoutException) {
 				errMsg = "Es konnte keine Verbindung hergestellt werden.";
 			}
 			else {

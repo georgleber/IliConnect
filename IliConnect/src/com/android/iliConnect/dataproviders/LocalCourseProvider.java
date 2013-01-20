@@ -2,6 +2,7 @@ package com.android.iliConnect.dataproviders;
 
 import java.util.concurrent.ExecutionException;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 
 import com.android.iliConnect.MainActivity;
@@ -35,7 +36,7 @@ public class LocalCourseProvider {
 			Object response = courseProv.get();
 			
 			if(!(response instanceof String)) {
-				if(response instanceof HttpHostConnectException) {
+				if(response instanceof HttpHostConnectException || response instanceof ConnectTimeoutException) {
 					throw new NetworkException("Es konnte keine Verbindung zum Server hergestellt werden");
 				}
 				else {

@@ -231,7 +231,6 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 					// doStuff
 					final Intent intentMain = new Intent(MainTabView.instance, SchreibtischDetailActivity.class);
 					intentMain.putExtra("CourseName", item.title);
-					intentMain.putExtra("CourseId", item.ref_id);
 					// -1 hat keine Auswrikung auf die SchreibtischDetailActivity
 					intentMain.putExtra("position", -1);
 					intentMain.putExtra("Item", parentItem);

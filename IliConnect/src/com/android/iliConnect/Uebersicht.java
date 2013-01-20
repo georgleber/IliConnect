@@ -26,7 +26,9 @@ public class Uebersicht extends Fragment implements Redrawable {
 		
 		List<Notification> items = handler.loadNotifications(true);
 		lv1 = (ListView) v.findViewById(R.id.listNotifications);
-		lv1.setSelector( R.drawable.list_selector);
+		lv1.setClickable(false);
+
+		//lv1.setSelector( R.drawable.list_selector);
 		if(items.size() == 0) {
 			Notification empty = new Notification();
 			empty.title = "Kein Termin vorhanden!";
@@ -35,9 +37,10 @@ public class Uebersicht extends Fragment implements Redrawable {
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
 		lv1.setAdapter(noteAdapter);
 		
-		lv2 =(ListView) v.findViewById(R.id.listViewNewFiles);
+		lv2 = (ListView) v.findViewById(R.id.listViewNewFiles);
+		
 		lv2.setSelector( R.drawable.list_selector);
-		DesktopDetailArrayAdapter fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
+		UebersichtArrayAdapter fileAdapter = new UebersichtArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
 		lv2.setAdapter(fileAdapter);
 	
 		
@@ -73,7 +76,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 			items.add(empty);
 		}
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-		DesktopDetailArrayAdapter fileAdapter = new DesktopDetailArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
+		UebersichtArrayAdapter fileAdapter = new UebersichtArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
 		lv1.setAdapter(noteAdapter);
 		lv1.setSelector( R.drawable.list_selector);
 		lv2.setSelector( R.drawable.list_selector);

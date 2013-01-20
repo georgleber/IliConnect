@@ -36,6 +36,7 @@ public class NoteArrayAdapter extends ArrayAdapter<Notification> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		View v = convertView;
+		
 		NoteViews noteViews = new NoteViews();
 		if (v == null) {
 			LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -44,7 +45,8 @@ public class NoteArrayAdapter extends ArrayAdapter<Notification> {
 			noteViews.title = (TextView) v.findViewById(R.id.title);
 			noteViews.description = (TextView) v.findViewById(R.id.description);
 			noteViews.date = (TextView) v.findViewById(R.id.date);
-
+			
+			
 			v.setTag(noteViews);
 		} else
 			noteViews = (NoteViews) v.getTag();

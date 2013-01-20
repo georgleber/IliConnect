@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:padding="10dp"
     android:orientation="vertical"
-    >
-
+    android:padding="10dp" >
+
+
+
+
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -22,7 +23,13 @@
         android:text="12.10. 21:20"
         android:textColorHint="@color/darkmint"
         android:textColorLink="@color/darkmint" />
-
+
+
+
+
+
+
+
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"

@@ -208,7 +208,9 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 		v.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				parentItem.changed = false;
+				// Item als gelesen markieren
+				item.changed = false;
+				
 				String s = v.getTag().toString();
 
 				/*if (parentItem.getType().equalsIgnoreCase("CRS")) {
@@ -239,14 +241,24 @@ public class DesktopDetailArrayAdapter extends ArrayAdapter<Item> {
 					MainActivity.instance.runOnUiThread(new Runnable() {
 						public void run() {
 							MainActivity.currentActivity.startActivity(intentMain);
-							// Item als gelesen markieren
-							
+						
 							MainActivity.instance.iliasNotifier(MainActivity.currentActivity, item);		
 						}
 					});
 
 				} else if (parentItem.getType().equalsIgnoreCase("FILE")) {
 					MainActivity.instance.openFileOrDownload(MainActivity.currentActivity, item);
+					
+					MainActivity.instance.runOnUiThread(new Runnable() {
+						public void run() {						
+							MainActivity.instance.iliasNotifier(MainActivity.currentActivity, item);					
+						}
+					});
+
+					
+					
+					
+					
 				} else if (parentItem.getType().equalsIgnoreCase("TST") || parentItem.getType().equalsIgnoreCase("EXC")) {
 					String url_src = MainActivity.instance.localDataProvider.auth.url_src;
 					String iliasUrl = url_src + "login.php";

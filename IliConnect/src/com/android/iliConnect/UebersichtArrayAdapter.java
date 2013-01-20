@@ -64,7 +64,11 @@ public class UebersichtArrayAdapter extends ArrayAdapter<Item> {
 			view.description.setVisibility(View.INVISIBLE);
 		}
 
+		if(item.getType().equals("")) {
+			view.type.setVisibility(View.INVISIBLE);
+		}
 		view.type.setText("Datei");
+		
 		
 		v.setClickable(false);
 		v.findViewById(R.id.itemOwner).setVisibility(View.GONE);

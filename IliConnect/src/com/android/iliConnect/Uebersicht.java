@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.android.iliConnect.handler.NotificationHandler;
+import com.android.iliConnect.models.Item;
 import com.android.iliConnect.models.Notification;
 
 public class Uebersicht extends Fragment implements Redrawable {
@@ -18,7 +20,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 	ListView lv2;
 	
 	
-	private NotificationHandler handler;
+	private NotificationHandler handler = new NotificationHandler();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class Uebersicht extends Fragment implements Redrawable {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(null);
 
 		handler = new NotificationHandler();
 	}
@@ -76,11 +78,28 @@ public class Uebersicht extends Fragment implements Redrawable {
 			items.add(empty);
 		}
 		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(MainActivity.currentActivity, R.layout.noteitem, items);
-		UebersichtArrayAdapter fileAdapter = new UebersichtArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
+		
+		List<Item> files = MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles;
+		if(files.size() == 0) {
+			Item empty = new Item();
+			empty.title = "Keine Dateien vorhanden!";
+			files.add(empty);
+		}
+		UebersichtArrayAdapter fileAdapter = new UebersichtArrayAdapter(MainActivity.instance, R.layout.item, files);
 		lv1.setAdapter(noteAdapter);
 		lv1.setSelector( R.drawable.list_selector);
 		lv2.setSelector( R.drawable.list_selector);
 		lv2.setAdapter(fileAdapter);
 		
 	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		this.refreshViews();
+		super.onResume();
+	}
+	
+	
+	
 }

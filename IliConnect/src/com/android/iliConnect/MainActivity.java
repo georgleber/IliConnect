@@ -409,10 +409,18 @@ public class MainActivity extends Activity {
 							}							
 							
 						}
-						
 						if(appIntent != null && appError == false) {
 							MainActivity.instance.startActivity(Intent.createChooser(appIntent, "Datei öffnen..."));
 						}
+						
+						if(!downloadError) {
+							// Datei aus ChangedFiles-Liste löschen
+							List<Item> files = MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles;
+							files.remove(item);
+						}
+
+						// Views updaten
+						MainTabView.instance.update();
 						
 					}
 				});

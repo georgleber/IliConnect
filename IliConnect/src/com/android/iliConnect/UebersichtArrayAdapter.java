@@ -41,6 +41,7 @@ public class UebersichtArrayAdapter extends ArrayAdapter<Item> {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 
+		
 		UebersichtView view = new UebersichtView();
 		if (v == null) {
 			LayoutInflater vi = (LayoutInflater) MainActivity.instance.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,7 +52,7 @@ public class UebersichtArrayAdapter extends ArrayAdapter<Item> {
 			view.description = (TextView) v.findViewById(R.id.itemDescription);		
 			view.type = (TextView) v.findViewById(R.id.itemType);
 			
-			
+			v.setClickable(false);
 			v.setTag(view);
 		} else
 			view = (UebersichtView) v.getTag();

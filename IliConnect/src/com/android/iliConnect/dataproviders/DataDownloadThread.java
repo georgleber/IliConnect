@@ -26,11 +26,12 @@ public class DataDownloadThread {
 				handler.post(new Runnable() {
 					public void run() {
 						try {
-							if (MainActivity.instance.localDataProvider.settings.sync) {
+							ConnectivityManager cM = (ConnectivityManager) MainActivity.instance.getSystemService(Context.CONNECTIVITY_SERVICE);
+							NetworkInfo nInfo = cM.getActiveNetworkInfo();
+							if (MainActivity.instance.localDataProvider.settings.sync && nInfo != null)  {
 								MainActivity.instance.remoteDataProvider = new RemoteDataProvider();
 
-								ConnectivityManager cM = (ConnectivityManager) MainActivity.instance.getSystemService(Context.CONNECTIVITY_SERVICE);
-								NetworkInfo nInfo = cM.getActiveNetworkInfo();
+								
 								// WIFI-only sync ?
 								if (!MainActivity.instance.localDataProvider.settings.sync_wlanonly || nInfo.getType() == ConnectivityManager.TYPE_WIFI) {
 									MainActivity.instance.remoteDataProvider.execute(MainActivity.instance.localDataProvider.remoteData.getSyncUrl() + "?action=sync");

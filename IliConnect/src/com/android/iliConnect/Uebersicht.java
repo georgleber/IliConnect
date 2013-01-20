@@ -28,7 +28,6 @@ public class Uebersicht extends Fragment implements Redrawable {
 		
 		List<Notification> items = handler.loadNotifications(true);
 		lv1 = (ListView) v.findViewById(R.id.listNotifications);
-		lv1.setClickable(false);
 
 		//lv1.setSelector( R.drawable.list_selector);
 		if(items.size() == 0) {
@@ -40,9 +39,15 @@ public class Uebersicht extends Fragment implements Redrawable {
 		lv1.setAdapter(noteAdapter);
 		
 		lv2 = (ListView) v.findViewById(R.id.listViewNewFiles);
-		
-		lv2.setSelector( R.drawable.list_selector);
-		UebersichtArrayAdapter fileAdapter = new UebersichtArrayAdapter(MainActivity.instance, R.layout.item, MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles);
+
+		//lv2.setSelector( R.drawable.list_selector);
+		List<Item> files = MainActivity.instance.localDataProvider.remoteData.Current.Desktop.ChangedFiles;
+		if(files.size() == 0) {
+			Item empty = new Item();
+			empty.title = "Keine Dateien vorhanden!";
+			files.add(empty);
+		}
+		UebersichtArrayAdapter fileAdapter = new UebersichtArrayAdapter(MainActivity.instance, R.layout.item, files);
 		lv2.setAdapter(fileAdapter);
 	
 		

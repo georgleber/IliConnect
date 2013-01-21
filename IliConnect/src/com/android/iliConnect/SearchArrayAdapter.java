@@ -51,7 +51,7 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 		searchView.owner = (TextView) v.findViewById(R.id.itemOwner);
 		
 		searchView.title.setText(item.getTitle());
-		searchView.title.setLines(1);
+		searchView.title.setLines(2);
 		
 		searchView.description.setText(item.getDescription());
 		searchView.description.setLines(1);
@@ -59,16 +59,18 @@ public class SearchArrayAdapter extends DesktopDetailArrayAdapter implements Ili
 		searchView.owner.setTypeface(null, Typeface.BOLD);
 
 		// Falls Description leer ist, keine Leerzeile anzeigen
+		/*
 		if(searchView.description.getText().equals("")) {
 			v.findViewById(R.id.itemDescription).setVisibility(View.INVISIBLE);
-		}
+		}*/
 		/*
 		if(searchView.owner.getText().equals("")) {
 			v.findViewById(R.id.itemOwner).setVisibility(View.GONE);
 		}
 		*/
 		
-		// Date und Type in der Ergebnislist ausblenden
+		// Desc., Date und Type in der Ergebnislist ausblenden
+		v.findViewById(R.id.itemDescription).setVisibility(View.GONE);
 		v.findViewById(R.id.itemDate).setVisibility(View.GONE);
 		v.findViewById(R.id.itemType).setVisibility(View.GONE);
 		

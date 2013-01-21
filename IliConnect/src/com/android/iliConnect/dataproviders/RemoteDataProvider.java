@@ -177,7 +177,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 					errTtl = "Verbindung fehlgeschlagen";
 				}
 			} else if (e instanceof NoHttpResponseException || e instanceof HttpException ) {
-				doLogout = true;
+				//doLogout = true;
 				errMsg = "Es konnte keine Verbindung zum ILIAS-Server hergestellt werden. Bitte überprüfen Sie" +
 						" Ihre Internetverbindung und die Serveradresse und versuchen Sie es erneut.";
 				errTtl = "Verbindung fehlgeschlagen";

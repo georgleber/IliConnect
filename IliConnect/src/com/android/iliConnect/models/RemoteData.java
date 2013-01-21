@@ -35,7 +35,7 @@ public class RemoteData extends PersistableObject {
 			super.serialize(MainActivity.instance.localDataProvider.remoteDataFileName);
 
 		} catch (Exception e) {
-			Toast t = Toast.makeText(MainActivity.instance, "Fehler beim speichern der Einstellungen, nutze Standardkonfiguration.", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(MainActivity.instance, "Fehler beim Speichern der Einstellungen, verwende Standardkonfiguration.", Toast.LENGTH_LONG);
 			t.show();
 		}
 	}

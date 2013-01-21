@@ -141,9 +141,11 @@ public class LocalDataProvider {
 
 		} catch (Exception e) {
 
-			// MainActivity.instance.showToast(e.getMessage());
-			MessageBuilder.exception_message(MainTabView.instance, e.getMessage());
-			MainActivity.instance.logout();
+			MessageBuilder.exception_message(MainTabView.instance, "Es ist ein Fehler während der Synchronisation aufgetreten.");
+			// Datei löschen, falls beim Erzeugen ein Fehler aufgetreten ist.
+			File remoteDataFile = new File(MainActivity.instance.getFilesDir() + "/" + MainActivity.instance.localDataProvider.remoteDataFileName);
+			remoteDataFile.delete();
+			//MainActivity.instance.logout();
 
 			return false;
 		}

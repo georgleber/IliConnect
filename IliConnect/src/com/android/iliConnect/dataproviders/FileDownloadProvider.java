@@ -30,14 +30,13 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.android.iliConnect.MainActivity;
-import com.android.iliConnect.MainTabView;
 import com.android.iliConnect.MessageBuilder;
 import com.android.iliConnect.ssl.HttpsClient;
 
 public class FileDownloadProvider extends AsyncTask<String, Integer, Exception> {
 
-	ProgressDialog progressDialog;
-	private Activity instance; 
+	ProgressDialog progressDialog = null;
+	private Activity instance = null; 
 	public boolean isRunning = false;
 	
 
@@ -45,6 +44,10 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, Exception> 
 		this.progressDialog = progressDialog;
 		this.instance = instance;
 		
+	}
+	
+	public FileDownloadProvider(Activity instance) {
+		this.instance = instance;
 	}
 	
 	public FileDownloadProvider() {

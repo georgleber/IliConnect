@@ -289,7 +289,8 @@ public class MainActivity extends Activity {
 		NetworkInfo mobile = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		
 		
-		download = new FileDownloadProvider(progressDialog, instance);
+		//download = new FileDownloadProvider(progressDialog, instance);
+		download = new FileDownloadProvider();
 
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
@@ -300,7 +301,7 @@ public class MainActivity extends Activity {
 			f.mkdirs();
 		}
 
-		final String filePath = dirPath + "/" + item.getTitle();
+		final String filePath = dirPath + "/" + item.getRef_id() + item.getTitle();
 		final File file = new File(filePath);
 		
 

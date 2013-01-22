@@ -53,6 +53,7 @@ public class AndroidNotificationBuilder {
 
 	public static void cancelNotification() {
 		NotificationManager notificationManager = (NotificationManager) MainActivity.instance.getSystemService(NOTIFICATION_SERVICE);
-		notificationManager.cancel(0);
+		notificationManager.cancel(STATUS_WARNING);
+		notificationManager.cancel(STATUS_CRITICAL);
 	}
 }

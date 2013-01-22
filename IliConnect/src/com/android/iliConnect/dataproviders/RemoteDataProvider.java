@@ -85,7 +85,7 @@ public class RemoteDataProvider extends AsyncTask<String, Integer, Exception> im
 			if (this.nameValuePairs != null) {
 				nameValuePairs.addAll(this.nameValuePairs);
 			}
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 
 			// Execute HTTP Post Request
 			HttpResponse response = httpsClient.execute(httppost);

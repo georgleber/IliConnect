@@ -56,7 +56,7 @@ public class DesktopItemAdapter extends ArrayAdapter<Item> {
 		if (item != null) {
 
 			desktopViews.title.setText(item.getTitle());
-			desktopViews.title.setLines(1);
+			desktopViews.title.setLines(2);
 			
 			if (item.changed == true) {
 				desktopViews.description.setText("'Inhalt geändert'");

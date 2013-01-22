@@ -88,7 +88,7 @@ public class QR extends Fragment implements Redrawable, IliOnClickListener {
 				}
 
 				// ref_id darf nur aus Zahlen bestehen
-				if (courseId.matches("[0-9]+") && courseName.matches("[a-zA-z][a-zA-Z0-9]*")) {
+				if (courseId.matches("[0-9]+") && courseName.matches("[a-zA-Z0-9 ]+")) {
 					MessageBuilder.course_login(MainTabView.instance, courseName, courseId, (IliOnClickListener) insancte);
 				} else {
 					MessageBuilder.QR_error(MainTabView.instance);

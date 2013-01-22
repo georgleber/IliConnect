@@ -135,6 +135,8 @@ public class FileDownloadProvider extends AsyncTask<String, Integer, Exception> 
 			String errMsg = null;
 			if(e instanceof HttpHostConnectException || e instanceof ConnectTimeoutException) {
 				errMsg = "Es konnte keine Verbindung hergestellt werden.";
+			} else if(e instanceof IOException) {
+				errMsg = "Datei konnte nicht gespeichert werden.";
 			}
 			else {
 				errMsg = "Es ist ein Fehler während des Downloads aufgetreten.";

@@ -26,6 +26,7 @@ if(isset($_POST['action'])) {
     require_once('Modules/Exercise/classes/class.ilObjExerciseAccess.php');
     require_once('Modules/Exercise/classes/class.ilObjExerciseGUI.php');
     require_once('Modules/Exercise/classes/class.ilExAssignment.php');
+    require_once('Services/Tracking/classes/class.ilChangeEvent.php');
     $ilIConnect =  new IliConnect();
   } else {
     sleep(1);

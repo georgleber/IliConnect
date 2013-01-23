@@ -234,6 +234,34 @@ class IliConnect{
     echo $xml->asXML();
   }
 
+  /*function searchMagazin() {
+    global $ilUser, $tree, $ilAccess;
+
+    $xml = new SimpleXMLElement("<Iliconnect/>");
+
+    $current = $xml->addChild("Current");
+    
+    $results = $current->addChild("Results");
+
+    $needle = $_REQUEST['searchfor'];
+    $courses = $tree->getChildsByType($tree->getRootId(), "crs");
+    foreach($courses as &$course) {
+        $owner = ilObjectFactory::getInstanceByObjId($course["owner"]);
+        if((stristr($course["title"], $needle) !== false ||
+            stristr($owner->getFullName(), $needle) !== false) &&
+            $ilAccess->checkAccess("visible", "show", $course["ref_id"], "crs", $course["obj_id"])) {
+            $item = $results->addChild("Item");
+            foreach(array("title", "description", "ref_id", "type") as $attribute)
+                $item->addChild($attribute, $course[$attribute]);
+            $item->addChild("owner", $owner->getFullName());
+        }
+    }
+
+    ## AUSGABE DER XML STRUKTUR
+    header ("Content-Type:text/xml");
+    echo $xml->asXML();
+  }*/
+
   ## Der (un)uebersichtlichkeit halber in eine eigene funktion gepackt.
   ## erzeugt einen eintrag innerhalb des NOTIFICATIONS tag
   function notification2Xml($a,$nxml)
@@ -276,6 +304,9 @@ class IliConnect{
   function desktopItem2Xml($array,$sxml,$notifications){
     global $ilAccess, $ilUser;
 
+    if(!$ilAccess->checkAccess("visible", "show", $array["ref_id"]))
+        return;
+
     if(strstr("file|fold|crs|tst|exc",$array["type"]))
     {
       $item = $sxml->addChild("Item");
@@ -311,10 +342,6 @@ class IliConnect{
         $subitems = $item->addChild("Items");
         foreach($children as $child)
         {
-	  //if($ilAccess->checkAccess("read", "show", $children["ref_id"], $children["type"], $children["obj_id"]) ||
-	    //($ilAccess->checkAccess("write", "show", $children["ref_id"], $children["type"], $children["obj_id"])) ||
-	    //($ilAccess->checkAccess("visible", "show", $children["ref_id"], $children["type"], $children["obj_id"])) ||
-	    //($ilAccess->checkAccess("edit_permission", "show", $children["ref_id"], $children["type"], $children["obj_id"])))
             $this->desktopItem2Xml($child, $subitems, $notifications);
         }
       }
